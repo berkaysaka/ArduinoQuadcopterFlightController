@@ -1,6 +1,5 @@
 unsigned long last_time;
 float current_time, delta_time;
-
 double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
 
 void calculateMotorPowers() {
