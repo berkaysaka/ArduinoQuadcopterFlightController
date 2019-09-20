@@ -1,7 +1,8 @@
 #include <Servo.h>
 #include <Wire.h>
 #include <FUTABA_SBUS.h>
-/////////////////////////////////////////////////////////////////////////////////////
+
+//-----------CONFIGURATION-----------
 #define ACCELEROMETER_TRUSTABILITY  0.002
 #define ANGLE_DEGREE_LIMIT_PITCH_ROLL 15
 #define ANGLE_DEGREE_LIMIT_YAW 2
@@ -34,24 +35,9 @@
 #define MIN_MOTOR_PULSE_WIDTH 800
 #define MAX_MOTOR_PULSE_WIDTH 2200
 
-////////////////////////////////////////////////////////////////////////////
-
-long roll_control_signal, pitch_control_signal, yaw_control_signal;
-double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
-
-unsigned long last_time;
-float current_time, delta_time;
-
-int throttleRaw, yawRaw, rollRaw, pitchRaw;
-int throttle;
-double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
-
-Servo frontLeftMotor;
-Servo frontRightMotor;
-Servo rearLeftMotor;
-Servo rearRightMotor;
-
-FUTABA_SBUS sbus;
-
+//-----------GLOBAL VARIABLES-----------
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
 double pitchAngle, rollAngle, yawAngle, yawAnglePrevious;
+int throttle;
+double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
+int throttleRaw, yawRaw, rollRaw, pitchRaw;

@@ -1,3 +1,5 @@
+FUTABA_SBUS sbus;
+
 void initializeReceiver() {
   sbus.begin();
 }

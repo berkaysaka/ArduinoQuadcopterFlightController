@@ -1,3 +1,8 @@
+Servo frontLeftMotor;
+Servo frontRightMotor;
+Servo rearLeftMotor;
+Servo rearRightMotor;
+
 void initializeMotors() {
   frontLeftMotor.attach(FRONT_LEFT_MOTOR_PIN, MIN_MOTOR_PULSE_WIDTH, MAX_MOTOR_PULSE_WIDTH);
   frontLeftMotor.write(0);
