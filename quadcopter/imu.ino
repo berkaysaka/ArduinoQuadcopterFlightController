@@ -1,21 +1,40 @@
 //Gyro Variables
 float elapsedTime, time, timePrev;        //Variables for time control
 int gyro_error = 0;                       //We use this variable to only calculate once the gyro data error
-float Gyr_rawX, Gyr_rawY, Gyr_rawZ;     //Here we store the raw data read
-float Gyro_angle_x, Gyro_angle_y, Gyro_angle_z;         //Here we store the angle value obtained with Gyro data
+float Gyr_rawX, Gyr_rawY, Gyr_rawZ;       //Here we store the raw data read
+float Gyro_angle_x, Gyro_angle_y, Gyro_angle_z;             //Here we store the angle value obtained with Gyro data
 float Gyro_raw_error_x, Gyro_raw_error_y, Gyro_raw_error_z; //Here we store the initial gyro data error
 
 //Acc Variables
-int acc_error = 0;                       //We use this variable to only calculate once the Acc data error
-float rad_to_deg = 180 / 3.141592654;    //This value is for pasing from radians to degrees values
-float Acc_rawX, Acc_rawY, Acc_rawZ;    //Here we store the raw data read
-float Acc_angle_x, Acc_angle_y;          //Here we store the angle value obtained with Acc data
+int acc_error = 0;                          //We use this variable to only calculate once the Acc data error
+float rad_to_deg = 180 / 3.141592654;       //This value is for pasing from radians to degrees values
+float Acc_rawX, Acc_rawY, Acc_rawZ;         //Here we store the raw data read
+float Acc_angle_x, Acc_angle_y;             //Here we store the angle value obtained with Acc data
 float Acc_angle_error_x, Acc_angle_error_y; //Here we store the initial Acc data error
 
-double accTrust = 0.02;
+void initializeIMU() {
+  ConfigureIMU();
+  delay(5000);    // give some time to IMU to warm up
+  CalibrateIMU();
+}
 
+void readIMUvalues() {
+  timePrev = time;                          // the previous time is stored before the actual time read
+  time = millis();                          // actual time read
+  elapsedTime = (time - timePrev) / 1000;   // divide by 1000 in order to obtain seconds
 
-void initializeGyro() {
+  ReadGyroValues();
+  ReadAccValues();
+  CalculateYawPitchRoll();
+}
+
+void CalculateYawPitchRoll() {
+  pitchAngle = (1 - ACCELEROMETER_TRUSTABILITY) * (pitchAngle + Gyro_angle_x) + ACCELEROMETER_TRUSTABILITY * Acc_angle_x;
+  rollAngle = (1 - ACCELEROMETER_TRUSTABILITY) * (rollAngle + Gyro_angle_y) + ACCELEROMETER_TRUSTABILITY * Acc_angle_y;
+  yawAngle += Gyro_angle_z;
+}
+
+void ConfigureIMU() {
   Wire.begin();                           //begin the wire comunication
 
   Wire.beginTransmission(0x68);           //begin, Send the slave adress (in this case 68)
@@ -33,18 +52,18 @@ void initializeGyro() {
   Wire.write(0x10);                       //Set the register bits as 00010000 (+/- 8g full scale range)
   Wire.endTransmission(true);
 
-  Wire.beginTransmission(0x68);                                      //Start communication with the address found during search
-  Wire.write(0x1A);                                                  //We want to write to the CONFIG register (1A hex)
-  Wire.write(0x03);                                                  //Set the register bits as 00000011 (Set Digital Low Pass Filter to ~43Hz)
-  Wire.endTransmission();                                            //End the transmission with the gyro
+  Wire.beginTransmission(0x68);           //Start communication with the address found during search
+  Wire.write(0x1A);                       //We want to write to the CONFIG register (1A hex)
+  Wire.write(0x03);                       //Set the register bits as 00000011 (Set Digital Low Pass Filter to ~43Hz)
+  Wire.endTransmission();                 //End the transmission with the gyro
+}
 
-delay(5000);
+void CalibrateIMU() {
   time = millis();                        //Start counting time in milliseconds
-
 
   /*Here we calculate the acc data error before we start the loop
      I make the mean of 'x' values, that should be enough*/
-  int loopCount = 1000;
+  int loopCount = 2000;
   if (acc_error == 0)
   {
     for (int a = 0; a < loopCount; a++)
@@ -91,16 +110,9 @@ delay(5000);
     Gyro_raw_error_z = Gyro_raw_error_z / loopCount;
     gyro_error = 1;
   }//end of gyro error calculation
-
 }
 
-void readGyroValues() {
-  timePrev = time;                        // the previous time is stored before the actual time read
-  time = millis();                        // actual time read
-  elapsedTime = (time - timePrev) / 1000; //divide by 1000 in order to obtain seconds
-
-  //////////////////////////////////////Gyro read/////////////////////////////////////
-
+void ReadGyroValues() {
   Wire.beginTransmission(0x68);            //begin, Send the slave adress (in this case 68)
   Wire.write(0x43);                        //First adress of the Gyro data
   Wire.endTransmission(false);
@@ -120,9 +132,9 @@ void readGyroValues() {
   Gyro_angle_x = Gyr_rawX * elapsedTime;
   Gyro_angle_y = Gyr_rawY * elapsedTime;
   Gyro_angle_z = Gyr_rawZ * elapsedTime;
+}
 
-  //////////////////////////////////////Acc read/////////////////////////////////////
-
+void ReadAccValues() {
   Wire.beginTransmission(0x68);     //begin, Send the slave adress (in this case 68)
   Wire.write(0x3B);                 //Ask for the 0x3B register- correspond to AcX
   Wire.endTransmission(false);      //keep the transmission and next
@@ -141,10 +153,4 @@ void readGyroValues() {
     after that we substract the error value found before*/
   Acc_angle_x = (atan((Acc_rawY) / sqrt(pow((Acc_rawX), 2) + pow((Acc_rawZ), 2))) * rad_to_deg) - Acc_angle_error_x;
   Acc_angle_y = (atan(-1 * (Acc_rawX) / sqrt(pow((Acc_rawY), 2) + pow((Acc_rawZ), 2))) * rad_to_deg) - Acc_angle_error_y;
-
-
-  //////////////////////////////////////Total angle and filter/////////////////////////////////////
-  pitchAngle = (1 - ACCELEROMETER_TRUSTABILITY) * (pitchAngle + Gyro_angle_x) + ACCELEROMETER_TRUSTABILITY * Acc_angle_x;
-  rollAngle = (1 - ACCELEROMETER_TRUSTABILITY) * (rollAngle + Gyro_angle_y) + ACCELEROMETER_TRUSTABILITY * Acc_angle_y;
-  yawAngle += Gyro_angle_z;
 }
