@@ -1,7 +1,7 @@
 void setup() {
   initializeMotors();
   initializeReceiver();
-  initializeGyro();
+  initializeIMU();
 
   Serial.begin(115200);
 }
@@ -13,7 +13,7 @@ void loop() {
   calculateDesiredValues();
   //printDesiredValues();
 
-  readGyroValues();
+  readIMUvalues();
   //printGyroValues();
   printGraphGyroValues();
 
