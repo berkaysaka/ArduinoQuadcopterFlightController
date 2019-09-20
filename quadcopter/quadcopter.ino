@@ -1,7 +1,3 @@
-#include <Servo.h>
-#include <Wire.h>
-#include <FUTABA_SBUS.h>
-
 //-----------CONFIGURATION-----------
 #define ACCELEROMETER_TRUSTABILITY  0.002
 #define ANGLE_DEGREE_LIMIT_PITCH_ROLL 15

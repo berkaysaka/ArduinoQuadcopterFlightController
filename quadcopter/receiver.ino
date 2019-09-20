@@ -1,3 +1,5 @@
+#include <FUTABA_SBUS.h>
+
 FUTABA_SBUS sbus;
 
 void initializeReceiver() {
@@ -19,10 +21,10 @@ void readReceiverValues() {
   yawRaw = centralize(constrain(sbus.channels[3], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE));  //prevent small moves while in center to change yaw
 }
 
-int centralize(int val){
+int centralize(int val) {
   int center = (MAX_RAW_RECEIVER_VALUE + MIN_RAW_RECEIVER_VALUE) / 2;
   int tolerance = 6;
-  if(abs(val - center) <= tolerance)
+  if (abs(val - center) <= tolerance)
     return center;
   else
     return val;

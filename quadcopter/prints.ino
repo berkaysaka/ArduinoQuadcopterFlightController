@@ -58,7 +58,7 @@ void printGyroValues() {
 long _lastTime = millis();
 void printGraphGyroValues() {
   long _currentTime = millis();
-  if(_currentTime - _lastTime < 10)
+  if (_currentTime - _lastTime < 10)
     return;
   _lastTime = _currentTime;
   Serial.print(pitchAngle);
