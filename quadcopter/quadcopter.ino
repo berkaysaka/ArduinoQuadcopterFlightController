@@ -1,10 +1,8 @@
 #include <Servo.h>
 #include <Wire.h>
-#include <MPU6050_tockn.h>
 #include <FUTABA_SBUS.h>
 /////////////////////////////////////////////////////////////////////////////////////
-
-#define ACCELEROMETER_TRUSTABILITY  0.0002
+#define ACCELEROMETER_TRUSTABILITY  0.002
 #define ANGLE_DEGREE_LIMIT_PITCH_ROLL 15
 #define ANGLE_DEGREE_LIMIT_YAW 2
 
@@ -54,7 +52,6 @@ Servo rearLeftMotor;
 Servo rearRightMotor;
 
 FUTABA_SBUS sbus;
-MPU6050 mpu6050(Wire, ACCELEROMETER_TRUSTABILITY, 1-ACCELEROMETER_TRUSTABILITY);
 
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
 double pitchAngle, rollAngle, yawAngle, yawAnglePrevious;

@@ -58,13 +58,13 @@ void printGyroValues() {
 long _lastTime = millis();
 void printGraphGyroValues() {
   long _currentTime = millis();
-  if(_currentTime - _lastTime < 20)
+  if(_currentTime - _lastTime < 10)
     return;
   _lastTime = _currentTime;
   Serial.print(pitchAngle);
   Serial.print("\t");
   Serial.print(rollAngle);
-  //Serial.print("\t");
-  //Serial.print(yawAngle);
+  Serial.print("\t");
+  Serial.print(yawAngle);
   Serial.println();
 }

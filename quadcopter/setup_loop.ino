@@ -1,5 +1,5 @@
 void setup() {
-  //initializeMotors();
+  initializeMotors();
   initializeReceiver();
   initializeGyro();
 
@@ -20,5 +20,5 @@ void loop() {
   calculateMotorPowers();
   //printMotorPowers();
   //printMotorPowersGraph();
-  //spinMotors();
+  spinMotors();
 }
