@@ -2,13 +2,11 @@
 
 //Gyro Variables
 float elapsedTime, time, timePrev;        //Variables for time control
-int gyro_error = 0;                       //We use this variable to only calculate once the gyro data error
 float Gyr_rawX, Gyr_rawY, Gyr_rawZ;       //Here we store the raw data read
 float Gyro_angle_x, Gyro_angle_y, Gyro_angle_z;             //Here we store the angle value obtained with Gyro data
 float Gyro_raw_error_x, Gyro_raw_error_y, Gyro_raw_error_z; //Here we store the initial gyro data error
 
 //Acc Variables
-int acc_error = 0;                          //We use this variable to only calculate once the Acc data error
 float rad_to_deg = 180 / 3.141592654;       //This value is for pasing from radians to degrees values
 float Acc_rawX, Acc_rawY, Acc_rawZ;         //Here we store the raw data read
 float Acc_angle_x, Acc_angle_y;             //Here we store the angle value obtained with Acc data
@@ -88,7 +86,6 @@ void CalibrateIMU() {
   }
   Acc_angle_error_x = Acc_angle_error_x / loopCount;
   Acc_angle_error_y = Acc_angle_error_y / loopCount;
-  acc_error = 1;
   //end of acc error calculation
 
 
@@ -112,8 +109,8 @@ void CalibrateIMU() {
   Gyro_raw_error_x = Gyro_raw_error_x / loopCount;
   Gyro_raw_error_y = Gyro_raw_error_y / loopCount;
   Gyro_raw_error_z = Gyro_raw_error_z / loopCount;
-  gyro_error = 1;
   //end of gyro error calculation
+
   tone(53, 900, 100);
   delay(200);
   tone(53, 600, 100);
