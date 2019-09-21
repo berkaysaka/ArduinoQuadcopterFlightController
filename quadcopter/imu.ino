@@ -16,8 +16,6 @@ float Acc_angle_error_x, Acc_angle_error_y; //Here we store the initial Acc data
 
 void initializeIMU() {
   ConfigureIMU();
-  delay(5000);    // give some time to IMU to warm up
-  CalibrateIMU();
 }
 
 void readIMUvalues() {
@@ -61,57 +59,71 @@ void ConfigureIMU() {
 }
 
 void CalibrateIMU() {
+  if ((millis() - IMUcalibrationTime) < 1000)
+    return; //receiver queues values after entering this function. Prevent to calibrate again after calibration finishes
+
+  IMUhasBeenCalibrated = false;
+  tone(53, 500, 100);
+  delay(200);
+  tone(53, 700, 100);
+  delay(1000);
   time = millis();                        //Start counting time in milliseconds
 
   /*Here we calculate the acc data error before we start the loop
      I make the mean of 'x' values, that should be enough*/
   int loopCount = 2000;
-  if (acc_error == 0)
+  for (int a = 0; a < loopCount; a++)
   {
-    for (int a = 0; a < loopCount; a++)
-    {
-      Wire.beginTransmission(0x68);
-      Wire.write(0x3B);                       //Ask for the 0x3B register- correspond to AcX
-      Wire.endTransmission(false);
-      Wire.requestFrom(0x68, 6, true);
+    Wire.beginTransmission(0x68);
+    Wire.write(0x3B);                       //Ask for the 0x3B register- correspond to AcX
+    Wire.endTransmission(false);
+    Wire.requestFrom(0x68, 6, true);
 
-      Acc_rawX = (Wire.read() << 8 | Wire.read()) / 4096.0 ; //each value needs two registres
-      Acc_rawY = (Wire.read() << 8 | Wire.read()) / 4096.0 ;
-      Acc_rawZ = (Wire.read() << 8 | Wire.read()) / 4096.0 ;
+    Acc_rawX = (Wire.read() << 8 | Wire.read()) / 4096.0 ; //each value needs two registres
+    Acc_rawY = (Wire.read() << 8 | Wire.read()) / 4096.0 ;
+    Acc_rawZ = (Wire.read() << 8 | Wire.read()) / 4096.0 ;
 
-      Acc_angle_error_x = Acc_angle_error_x + ((atan((Acc_rawY) / sqrt(pow((Acc_rawX), 2) + pow((Acc_rawZ), 2))) * rad_to_deg));
-      Acc_angle_error_y = Acc_angle_error_y + ((atan(-1 * (Acc_rawX) / sqrt(pow((Acc_rawY), 2) + pow((Acc_rawZ), 2))) * rad_to_deg));
-    }
-    Acc_angle_error_x = Acc_angle_error_x / loopCount;
-    Acc_angle_error_y = Acc_angle_error_y / loopCount;
-    acc_error = 1;
-  }//end of acc error calculation
+    Acc_angle_error_x = Acc_angle_error_x + ((atan((Acc_rawY) / sqrt(pow((Acc_rawX), 2) + pow((Acc_rawZ), 2))) * rad_to_deg));
+    Acc_angle_error_y = Acc_angle_error_y + ((atan(-1 * (Acc_rawX) / sqrt(pow((Acc_rawY), 2) + pow((Acc_rawZ), 2))) * rad_to_deg));
+  }
+  Acc_angle_error_x = Acc_angle_error_x / loopCount;
+  Acc_angle_error_y = Acc_angle_error_y / loopCount;
+  acc_error = 1;
+  //end of acc error calculation
 
 
   /*Here we calculate the gyro data error before we start the loop
      I make the mean of 'x' values, that should be enough*/
-  if (gyro_error == 0)
+  for (int i = 0; i < loopCount; i++)
   {
-    for (int i = 0; i < loopCount; i++)
-    {
-      Wire.beginTransmission(0x68);            //begin, Send the slave adress (in this case 68)
-      Wire.write(0x43);                        //First adress of the Gyro data
-      Wire.endTransmission(false);
-      Wire.requestFrom(0x68, 6, true);         //We ask for just 4 registers
+    Wire.beginTransmission(0x68);            //begin, Send the slave adress (in this case 68)
+    Wire.write(0x43);                        //First adress of the Gyro data
+    Wire.endTransmission(false);
+    Wire.requestFrom(0x68, 6, true);         //We ask for just 4 registers
 
-      Gyr_rawX = Wire.read() << 8 | Wire.read();
-      Gyr_rawY = Wire.read() << 8 | Wire.read();
-      Gyr_rawZ = Wire.read() << 8 | Wire.read();
+    Gyr_rawX = Wire.read() << 8 | Wire.read();
+    Gyr_rawY = Wire.read() << 8 | Wire.read();
+    Gyr_rawZ = Wire.read() << 8 | Wire.read();
 
-      Gyro_raw_error_x = Gyro_raw_error_x + (Gyr_rawX / 32.8);
-      Gyro_raw_error_y = Gyro_raw_error_y + (Gyr_rawY / 32.8);
-      Gyro_raw_error_z = Gyro_raw_error_z + (Gyr_rawZ / 32.8);
-    }
-    Gyro_raw_error_x = Gyro_raw_error_x / loopCount;
-    Gyro_raw_error_y = Gyro_raw_error_y / loopCount;
-    Gyro_raw_error_z = Gyro_raw_error_z / loopCount;
-    gyro_error = 1;
-  }//end of gyro error calculation
+    Gyro_raw_error_x = Gyro_raw_error_x + (Gyr_rawX / 32.8);
+    Gyro_raw_error_y = Gyro_raw_error_y + (Gyr_rawY / 32.8);
+    Gyro_raw_error_z = Gyro_raw_error_z + (Gyr_rawZ / 32.8);
+  }
+  Gyro_raw_error_x = Gyro_raw_error_x / loopCount;
+  Gyro_raw_error_y = Gyro_raw_error_y / loopCount;
+  Gyro_raw_error_z = Gyro_raw_error_z / loopCount;
+  gyro_error = 1;
+  //end of gyro error calculation
+  tone(53, 900, 100);
+  delay(200);
+  tone(53, 600, 100);
+  delay(200);
+  tone(53, 800, 100);
+  delay(200);
+  tone(53, 500, 100);
+  delay(1000);
+  IMUhasBeenCalibrated = true;
+  IMUcalibrationTime = millis();
 }
 
 void ReadGyroValues() {
