@@ -3,7 +3,8 @@ void setup() {
   initializeReceiver();
   initializeIMU();
 
-  Serial.begin(115200);
+  Serial2.begin(38400);
+  //Serial.begin(115200);
 }
 
 void loop() {
@@ -15,11 +16,13 @@ void loop() {
 
   readIMUvalues();
   //printGyroValues();
-  printGraphGyroValues();
+  //printGraphGyroValues();
 
   calculateMotorPowers();
   //printMotorPowers();
   //printMotorPowersGraph();
 
   spinMotors();
+
+  sendTelemetryInfo();
 }
