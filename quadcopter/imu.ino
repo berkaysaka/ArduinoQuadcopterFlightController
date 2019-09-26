@@ -103,14 +103,3 @@ void ConfigureIMU() {
     // (if it's going to break, usually the code will be 1)
   }
 }
-
-void CalibrateIMU() {
-  if ((millis() - IMUcalibrationTime) < 1000)
-    return; //receiver queues values after entering this function. Prevent to calibrate again after calibration finishes
-
-  //pitchAngleError = pitchAngle;
-  //rollAngleError = rollAngle;
-
-  IMUhasBeenCalibrated = true;
-  IMUcalibrationTime = millis();
-}
