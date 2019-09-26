@@ -33,7 +33,7 @@
 
 //-----------GLOBAL VARIABLES-----------
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
-double pitchAngle, rollAngle, yawAngle, yawAnglePrevious;
+double pitchAngle, rollAngle, yawAngle;
 int throttle;
 double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
 int throttleRaw, yawRaw, rollRaw, pitchRaw;

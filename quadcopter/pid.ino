@@ -1,5 +1,4 @@
-double getControlSignal(double current_angle, double desired_angle, double kp, double ki, double kd, double& pid_i, double& last_error, double integral_limit) {
-  double error = desired_angle - current_angle;
+double getControlSignal(double error, double kp, double ki, double kd, double& pid_i, double& last_error, double integral_limit) {
   double pid_p = kp * error;
   pid_i += ki * error;
   pid_i = constrain(pid_i, (-1 * integral_limit), integral_limit);

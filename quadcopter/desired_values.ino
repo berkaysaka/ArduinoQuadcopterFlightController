@@ -5,7 +5,7 @@ void calculateDesiredValues() {
 
   desired_pitch_angle = calculateDesiredAngle(pitchRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
   desired_roll_angle = calculateDesiredAngle(rollRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
-  desired_yaw_angle = calculateDesiredAngle(yawRaw, ANGLE_DEGREE_LIMIT_YAW);
+  desired_yaw_angle = yawAngle + calculateDesiredAngle(yawRaw, ANGLE_DEGREE_LIMIT_YAW);
 }
 
 double calculateDesiredAngle(int rawReceiverValue, int angleDegreeLimit) {
