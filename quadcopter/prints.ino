@@ -65,8 +65,8 @@ void printGraphGyroValues() {
   //Serial.print("\t");
   //Serial.print(rollAngle);
   //Serial.print("\t");
-  //Serial.print(yawAngle);
-  //Serial.println();
+  Serial.print(yawAngle);
+  Serial.println();
 }
 
 void sendTelemetryInfo(){
