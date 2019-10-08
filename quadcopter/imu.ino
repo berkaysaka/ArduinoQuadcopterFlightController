@@ -56,7 +56,7 @@ void readIMUvalues() {
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     // pitch-roll swapped somehow, investigate.
     yawAngle = ypr[0] * 180 / M_PI;
-    rollAngle = ypr[1] * 180 / M_PI;
+    rollAngle = ypr[1] * 180 / M_PI *-1;//-1 for changing rotation
     pitchAngle = ypr[2] * 180 / M_PI;
   }
 }
@@ -71,12 +71,12 @@ void ConfigureIMU() {
   mpu.initialize();
   devStatus = mpu.dmpInitialize();
 
-  mpu.setXGyroOffset(15);
-  mpu.setYGyroOffset(3);
-  mpu.setZGyroOffset(-21);
-  mpu.setXAccelOffset(-5353);
-  mpu.setYAccelOffset(4992);
-  mpu.setZAccelOffset(10567); // 1688 factory default for my test chip
+  mpu.setXGyroOffset(27);
+  mpu.setYGyroOffset(1);
+  mpu.setZGyroOffset(-25);
+  mpu.setXAccelOffset(-5444);
+  mpu.setYAccelOffset(5010);
+  mpu.setZAccelOffset(10471); // 1688 factory default for my test chip
 
   // make sure it worked (returns 0 if so)
   if (devStatus == 0) {

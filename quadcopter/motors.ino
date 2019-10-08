@@ -17,8 +17,6 @@ void initializeMotors() {
 }
 
 void spinMotors() {
-  if (IMUhasBeenCalibrated == false)
-    return;
   frontLeftMotor.write(frontLeftMotorPower);
   frontRightMotor.write(frontRightMotorPower);
   rearLeftMotor.write(rearLeftMotorPower);

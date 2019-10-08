@@ -1,11 +1,22 @@
 void calculateDesiredValues() {
   throttle = map(throttleRaw, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, MIN_THROTTLE, MAX_THROTTLE);
-  if (throttle < THROTTLE_START_POINT)
+  if (throttle < THROTTLE_START_POINT){
     throttle = MIN_THROTTLE;
+    desired_yaw_angle = yawAngle;  
+  }
 
+    
   desired_pitch_angle = calculateDesiredAngle(pitchRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
   desired_roll_angle = calculateDesiredAngle(rollRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
-  desired_yaw_angle = yawAngle + calculateDesiredAngle(yawRaw, ANGLE_DEGREE_LIMIT_YAW);
+  
+  double tmpDesired = desired_yaw_angle + calculateDesiredAngle(yawRaw, ANGLE_DEGREE_LIMIT_YAW);
+  double diff = abs(tmpDesired - yawAngle);
+  if (diff > 180)
+    diff -= 360;
+  else if (diff < -180)
+    diff += 360;
+  if(diff < (ANGLE_DEGREE_LIMIT_YAW*2))
+    desired_yaw_angle = tmpDesired;
 }
 
 double calculateDesiredAngle(int rawReceiverValue, int angleDegreeLimit) {
