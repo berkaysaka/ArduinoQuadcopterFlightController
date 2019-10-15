@@ -27,8 +27,8 @@
 #define REAR_LEFT_MOTOR_PIN 6
 #define REAR_RIGHT_MOTOR_PIN 7
 
-#define MIN_MOTOR_PULSE_WIDTH 800
-#define MAX_MOTOR_PULSE_WIDTH 2200
+#define MIN_MOTOR_PULSE_WIDTH 1000
+#define MAX_MOTOR_PULSE_WIDTH 2000
 
 //-----------GLOBAL VARIABLES-----------
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
