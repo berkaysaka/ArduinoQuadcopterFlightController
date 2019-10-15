@@ -6,9 +6,9 @@
 #define MAX_THROTTLE 140
 #define THROTTLE_START_POINT 15
 
-#define KP_roll_pitch 0.60//0.50
-#define KI_roll_pitch 0.01//0.01
-#define KD_roll_pitch 0.20//0.15
+#define KP_roll_pitch 0.50 //0.50
+#define KI_roll_pitch 0.01 //0.01
+#define KD_roll_pitch 0.15 //0.15
 
 #define KP_yaw 1.5
 #define KI_yaw 0.05
@@ -36,5 +36,3 @@ double pitchAngle, rollAngle, yawAngle;
 int throttle;
 double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
 int throttleRaw, yawRaw, rollRaw, pitchRaw;
-long IMUcalibrationTime;
-bool IMUhasBeenCalibrated = false;
