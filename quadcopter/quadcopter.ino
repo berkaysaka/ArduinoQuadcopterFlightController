@@ -4,7 +4,7 @@
 
 #define MIN_THROTTLE 0
 #define MAX_THROTTLE 140
-#define THROTTLE_START_POINT 10
+#define THROTTLE_START_POINT 15
 
 #define KP_roll_pitch 0.60//0.50
 #define KI_roll_pitch 0.01//0.01
