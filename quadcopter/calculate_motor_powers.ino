@@ -3,7 +3,8 @@ float current_time, delta_time;
 double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
 
 void calculateMotorPowers() {
-  if (millis() - last_time < PID_SAMPLING_FREQUENCY)
+  unsigned long elapsed_time = millis() - last_time;
+  if (elapsed_time < PID_SAMPLING_FREQUENCY)
     return;
 
   updateCurrentTimeVariables();
