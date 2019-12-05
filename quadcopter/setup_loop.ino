@@ -1,10 +1,9 @@
 void setup() {
+  //Serial.begin(115200);
+  //Serial2.begin(38400);
   initializeMotors();
   initializeReceiver();
   initializeIMU();
-
-  Serial2.begin(38400);
-  //Serial.begin(115200);
 }
 
 void loop() {
@@ -24,5 +23,5 @@ void loop() {
 
   spinMotors();
 
-  sendTelemetryInfo();
+  //sendTelemetryInfo();
 }
