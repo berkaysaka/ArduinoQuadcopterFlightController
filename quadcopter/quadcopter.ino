@@ -22,13 +22,16 @@
 #define MIN_RAW_RECEIVER_VALUE 300
 #define MAX_RAW_RECEIVER_VALUE 1700
 
-#define FRONT_LEFT_MOTOR_PIN 5
-#define FRONT_RIGHT_MOTOR_PIN 4
+#define FRONT_LEFT_MOTOR_PIN 7
+#define FRONT_RIGHT_MOTOR_PIN 5
 #define REAR_LEFT_MOTOR_PIN 6
-#define REAR_RIGHT_MOTOR_PIN 7
+#define REAR_RIGHT_MOTOR_PIN 4
 
 #define MIN_MOTOR_PULSE_WIDTH 1000
 #define MAX_MOTOR_PULSE_WIDTH 2000
+
+#define LED_PIN 13
+#define BUZZER_PIN 12
 
 //-----------GLOBAL VARIABLES-----------
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
