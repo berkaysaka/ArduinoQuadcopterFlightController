@@ -24,8 +24,7 @@ void loop() {
   //printMotorPowers();
   //printMotorPowersGraph();
 
-  updateMotorsWithStaticThrottle();
-  //spinMotors();
+  spinMotors();
 
   //sendTelemetryInfo();
 }
