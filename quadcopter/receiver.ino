@@ -6,7 +6,6 @@ void initializeReceiver() {
   sbus.begin();
 }
 
-bool receiver_failure = false;
 unsigned long last_receiver_communication_time = millis();
 
 void readReceiverValues() {

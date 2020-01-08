@@ -17,7 +17,7 @@ void calculateMotorPowers() {
   rearLeftMotorPower = throttle + roll_control_signal - pitch_control_signal + yaw_control_signal;
   rearRightMotorPower = throttle - roll_control_signal - pitch_control_signal - yaw_control_signal;
 
-  if (throttle == MIN_THROTTLE) {
+  if (throttle == MIN_THROTTLE || receiver_failure == true) {
     frontLeftMotorPower = MIN_THROTTLE;
     frontRightMotorPower = MIN_THROTTLE;
     rearLeftMotorPower = MIN_THROTTLE;
