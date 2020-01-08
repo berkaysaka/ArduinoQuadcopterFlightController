@@ -12,7 +12,7 @@
 
 #define KP_yaw 2.5
 #define KI_yaw 0.05
-#define KD_yaw 0.1
+#define KD_yaw 0.00
 
 #define YAW_INTEGRAL_LIMIT 4
 #define ROLL_PITCH_INTEGRAL_LIMIT 2
