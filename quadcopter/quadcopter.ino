@@ -1,3 +1,6 @@
+//-----------EXECUTION---------------
+#define TEST_MODE true
+
 //-----------CONFIGURATION-----------
 #define ANGLE_DEGREE_LIMIT_PITCH_ROLL 25
 #define ANGLE_DEGREE_LIMIT_YAW 5.0

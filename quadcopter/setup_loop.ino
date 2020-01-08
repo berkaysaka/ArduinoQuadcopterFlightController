@@ -1,4 +1,9 @@
 void setup() {
+  if(TEST_MODE == true){
+    Serial.begin(115200);
+    run_tests();
+    return;
+  }
   //Serial.begin(115200);
   Serial2.begin(38400);
   initializeOutputSignals();
@@ -8,6 +13,10 @@ void setup() {
 }
 
 void loop() {
+  if(TEST_MODE == true){
+    return;    
+  }
+  
   //syncOutputSignals();
   
   readReceiverValues();
