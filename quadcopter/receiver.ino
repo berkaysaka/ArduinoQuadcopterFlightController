@@ -6,10 +6,20 @@ void initializeReceiver() {
   sbus.begin();
 }
 
+bool receiver_failure = false;
+unsigned long last_receiver_communication_time = millis();
+
 void readReceiverValues() {
   sbus.FeedLine();
-  if (sbus.toChannels != 1)
+  if (sbus.toChannels != 1){
+    if(millis() - last_receiver_communication_time > 1000){
+      receiver_failure = true;
+    }
     return;
+  }else{
+    last_receiver_communication_time = millis();
+    receiver_failure = false;
+  }
 
   sbus.UpdateServos();
   sbus.UpdateChannels();
