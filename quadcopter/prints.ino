@@ -71,7 +71,7 @@ void printGraphGyroValues() {
 
 void sendTelemetryInfo(){
   long _currentTime = millis();
-  if (_currentTime - _lastTime < 10)
+  if (_currentTime - _lastTime < 100)
     return;
   _lastTime = _currentTime;
 
@@ -82,6 +82,10 @@ void sendTelemetryInfo(){
   Serial2.print(yawAngle);
   Serial2.print("\t");
   Serial2.print(throttle);
+  Serial2.print("\t");
+  Serial2.print(desired_pitch_angle);
+  Serial2.print("\t");
+  Serial2.print(desired_roll_angle);
   Serial2.print("\t");
   Serial2.print(desired_yaw_angle);
   Serial2.println();
