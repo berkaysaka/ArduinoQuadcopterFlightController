@@ -71,12 +71,12 @@ void ConfigureIMU() {
   mpu.initialize();
   devStatus = mpu.dmpInitialize();
 
-  mpu.setXGyroOffset(38);//27
-  mpu.setYGyroOffset(0);//1
-  mpu.setZGyroOffset(-40);//-25
-  mpu.setXAccelOffset(-5338);
-  mpu.setYAccelOffset(5195);
-  mpu.setZAccelOffset(10467); // 1688 factory default for my test chip
+  mpu.setXGyroOffset(-45);
+  mpu.setYGyroOffset(159);
+  mpu.setZGyroOffset(-63);
+  mpu.setXAccelOffset(-3731);
+  mpu.setYAccelOffset(1826);
+  mpu.setZAccelOffset(1057);
 
   // make sure it worked (returns 0 if so)
   if (devStatus == 0) {
