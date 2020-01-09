@@ -9,11 +9,13 @@ void reset_test_parameters(){
   yawAngle = 0;
 }
 void run_tests(){
+  Serial.println("----------------RUNNING TESTS--------------");
   test_calculate_motor_powers();
+  Serial.println("----------------FINISHED--------------");
 }
 
 void test_calculate_motor_powers(){
-  test_calculate_motor_powers_should_set_throttle_to_min_if_receiver_is_unplugged();
+  test_calculate_motor_powers_should_set_turn_off_motors_if_receiver_is_unplugged();
   test_calculate_motor_powers_should_turn_off_motors_if_throttle_is_zero();
 }
 
