@@ -27,6 +27,7 @@ void test_calculate_motor_powers(){
   test_calculate_motor_powers_should_run_left_motors_faster_to_go_right();
   test_calculate_motor_powers_should_run_right_turning_motors_faster_to_turn_left();
   test_calculate_motor_powers_should_run_left_turning_motors_faster_to_turn_right();
+  test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_throttle();
 }
 
 void test_calculate_motor_powers_should_set_turn_off_motors_if_receiver_is_unplugged(){
@@ -82,7 +83,6 @@ void test_calculate_motor_powers_should_run_right_motors_faster_to_go_left(){
   
   bool passed = (frontLeftMotorPower == rearLeftMotorPower) && (frontRightMotorPower == rearRightMotorPower) && (rearRightMotorPower > rearLeftMotorPower);
   Serial.println(String(passed) + " => test_calculate_motor_powers_should_run_right_motors_faster_to_go_left");
-  printCurrentMotorPowers();
 }
 
 void test_calculate_motor_powers_should_run_left_motors_faster_to_go_right(){
@@ -93,7 +93,6 @@ void test_calculate_motor_powers_should_run_left_motors_faster_to_go_right(){
   
   bool passed = (frontLeftMotorPower == rearLeftMotorPower) && (frontRightMotorPower == rearRightMotorPower) && (rearRightMotorPower < rearLeftMotorPower);
   Serial.println(String(passed) + " => test_calculate_motor_powers_should_run_left_motors_faster_to_go_right");
-  printCurrentMotorPowers();
 }
 
 void test_calculate_motor_powers_should_run_right_turning_motors_faster_to_turn_left(){
@@ -104,7 +103,6 @@ void test_calculate_motor_powers_should_run_right_turning_motors_faster_to_turn_
   
   bool passed = (frontLeftMotorPower == rearRightMotorPower) && (frontRightMotorPower == rearLeftMotorPower) && (rearRightMotorPower > rearLeftMotorPower);
   Serial.println(String(passed) + " => test_calculate_motor_powers_should_run_right_turning_motors_faster_to_turn_left");
-  printCurrentMotorPowers();
 }
 
 void test_calculate_motor_powers_should_run_left_turning_motors_faster_to_turn_right(){
@@ -115,7 +113,16 @@ void test_calculate_motor_powers_should_run_left_turning_motors_faster_to_turn_r
   
   bool passed = (frontLeftMotorPower == rearRightMotorPower) && (frontRightMotorPower == rearLeftMotorPower) && (rearRightMotorPower < rearLeftMotorPower);
   Serial.println(String(passed) + " => test_calculate_motor_powers_should_run_left_turning_motors_faster_to_turn_right");
-  printCurrentMotorPowers();
+}
+
+void test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_throttle(){
+  reset_test_parameters();
+  throttle = 20;
+  desired_yaw_angle = -5;
+  calculateMotorPowers();
+  
+  bool passed = frontLeftMotorPower + rearRightMotorPower + frontRightMotorPower + rearLeftMotorPower == throttle * 4;
+  Serial.println(String(passed) + " => test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_throttle");
 }
 
 void printCurrentMotorPowers(){
