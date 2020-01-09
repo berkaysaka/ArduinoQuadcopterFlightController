@@ -71,12 +71,12 @@ void ConfigureIMU() {
   mpu.initialize();
   devStatus = mpu.dmpInitialize();
 
-  mpu.setXGyroOffset(-45);
-  mpu.setYGyroOffset(159);
-  mpu.setZGyroOffset(-63);
-  mpu.setXAccelOffset(-3731);
-  mpu.setYAccelOffset(1826);
-  mpu.setZAccelOffset(1057);
+  mpu.setXGyroOffset(90);
+  mpu.setYGyroOffset(-93);
+  mpu.setZGyroOffset(37);
+  mpu.setXAccelOffset(170);
+  mpu.setYAccelOffset(1622);
+  mpu.setZAccelOffset(377);
 
   // make sure it worked (returns 0 if so)
   if (devStatus == 0) {
