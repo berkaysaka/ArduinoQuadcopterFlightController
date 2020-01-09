@@ -12,11 +12,11 @@ void calculateMotorPowers() {
   double roll_control_signal = getControlSignal(desired_roll_angle - rollAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
   double pitch_control_signal = getControlSignal(desired_pitch_angle - pitchAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
   double yaw_control_signal = getControlSignal(calculateErrorForYaw(desired_yaw_angle, yawAngle), KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
-
-  frontLeftMotorPower = throttle + roll_control_signal + pitch_control_signal - yaw_control_signal;
-  frontRightMotorPower = throttle - roll_control_signal + pitch_control_signal + yaw_control_signal;
-  rearLeftMotorPower = throttle + roll_control_signal - pitch_control_signal + yaw_control_signal;
-  rearRightMotorPower = throttle - roll_control_signal - pitch_control_signal - yaw_control_signal;
+  
+  frontLeftMotorPower = round(throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
+  frontRightMotorPower = round(throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
+  rearLeftMotorPower = round(throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
+  rearRightMotorPower = round(throttle - roll_control_signal - pitch_control_signal - yaw_control_signal);
 
   if (throttle == MIN_THROTTLE || receiver_failure == true) {
     frontLeftMotorPower = MIN_THROTTLE;
