@@ -1,5 +1,6 @@
-unsigned long last_time;
-float current_time, delta_time;
+unsigned long last_time = millis(); 
+unsigned long current_time = millis();
+int delta_time;
 double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
 
 void calculateMotorPowers() {
@@ -37,7 +38,7 @@ double calculateErrorForYaw(double desired, double actual) {
 
 void updateCurrentTimeVariables() {
   current_time = millis();
-  delta_time = (current_time - last_time) / 1000;
+  delta_time = (current_time - last_time);
 }
 
 void updateLastTimeVariables() {
