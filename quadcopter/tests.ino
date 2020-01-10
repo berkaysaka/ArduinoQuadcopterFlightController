@@ -14,6 +14,7 @@ void reset_test_parameters(){
 void run_tests(){
   Serial.println("----------------RUNNING TESTS--------------");
   test_calculate_motor_powers();
+  test_reduceMotorPowers();
   Serial.println("----------------FINISHED--------------");
 }
 
@@ -28,6 +29,10 @@ void test_calculate_motor_powers(){
   test_calculate_motor_powers_should_run_right_turning_motors_faster_to_turn_left();
   test_calculate_motor_powers_should_run_left_turning_motors_faster_to_turn_right();
   test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_throttle();
+}
+
+void test_reduceMotorPowers(){
+  test_reduceMotorPowers_should_reduce_motor_powers_if_max_throttle_exceeds();
 }
 
 void test_calculate_motor_powers_should_set_turn_off_motors_if_receiver_is_unplugged(){
@@ -124,6 +129,20 @@ void test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_t
   bool passed = frontLeftMotorPower + rearRightMotorPower + frontRightMotorPower + rearLeftMotorPower == throttle * 4;
   Serial.println(String(passed) + " => test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_throttle");
 }
+
+void test_reduceMotorPowers_should_reduce_motor_powers_if_max_throttle_exceeds(){
+  reset_test_parameters();
+  throttle = 20;
+  frontLeftMotorPower = 350;
+  frontRightMotorPower = 200;
+  rearLeftMotorPower = 100;
+  rearRightMotorPower = 50;
+  reduceMotorPowers();
+  
+  bool passed = frontLeftMotorPower == 175 && frontRightMotorPower == 100 && rearLeftMotorPower == 50 && rearRightMotorPower == 25;
+  Serial.println(String(passed) + " => test_reduceMotorPowers_should_reduce_motor_powers_if_max_throttle_exceeds");
+}
+
 
 void printCurrentMotorPowers(){
   Serial.println("frontLeftMotorPower=" + String(frontLeftMotorPower));

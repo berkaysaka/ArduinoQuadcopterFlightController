@@ -13,6 +13,7 @@ void calculateMotorPowers() {
   double pitch_control_signal = getControlSignal(desired_pitch_angle - pitchAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
   double yaw_control_signal = getControlSignal(calculateErrorForYaw(desired_yaw_angle, yawAngle), KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
 
+  // limit control gains
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   pitch_control_signal = constrain(pitch_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   yaw_control_signal = constrain(yaw_control_signal, -MAX_YAW_CONTROL_GAIN, MAX_YAW_CONTROL_GAIN);
@@ -22,21 +23,9 @@ void calculateMotorPowers() {
   rearLeftMotorPower = round(throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
   rearRightMotorPower = round(throttle - roll_control_signal - pitch_control_signal - yaw_control_signal);
 
-  // reduce motor powers if necessary (to preserve balance if MAX_THROTTLE limit exceeds)
-  int maxMotorPower = max(max(frontLeftMotorPower, frontRightMotorPower), max(rearLeftMotorPower, rearRightMotorPower));
-  if (maxMotorPower > MAX_THROTTLE){
-    double power_reduction_rate = (double)maxMotorPower / (double)MAX_THROTTLE;
-    frontLeftMotorPower = round((double)frontLeftMotorPower / power_reduction_rate);
-    frontRightMotorPower = round((double)frontRightMotorPower / power_reduction_rate);
-    rearLeftMotorPower = round((double)rearLeftMotorPower / power_reduction_rate);
-    rearRightMotorPower = round((double)rearRightMotorPower / power_reduction_rate);
-  }
+  reduceMotorPowers();
 
-  // ensure motors always run
-  frontLeftMotorPower = max(frontLeftMotorPower, THROTTLE_START_POINT);
-  frontRightMotorPower = max(frontRightMotorPower, THROTTLE_START_POINT);
-  rearLeftMotorPower = max(rearLeftMotorPower, THROTTLE_START_POINT);
-  rearRightMotorPower = max(rearRightMotorPower, THROTTLE_START_POINT);
+  ensureMotorsAlwaysRun();
  
   if (throttle == MIN_THROTTLE || receiver_failure == true) {
     frontLeftMotorPower = MIN_THROTTLE;
@@ -54,6 +43,24 @@ double calculateErrorForYaw(double desired, double actual) {
   else if (error < -180)
     error += 360;
   return error;
+}
+
+void reduceMotorPowers(){ // to preserve balance if MAX_THROTTLE limit exceeds)
+  int maxMotorPower = max(max(frontLeftMotorPower, frontRightMotorPower), max(rearLeftMotorPower, rearRightMotorPower));
+  if (maxMotorPower > MAX_THROTTLE){
+    double power_reduction_rate = (double)maxMotorPower / (double)MAX_THROTTLE;
+    frontLeftMotorPower = round((double)frontLeftMotorPower / power_reduction_rate);
+    frontRightMotorPower = round((double)frontRightMotorPower / power_reduction_rate);
+    rearLeftMotorPower = round((double)rearLeftMotorPower / power_reduction_rate);
+    rearRightMotorPower = round((double)rearRightMotorPower / power_reduction_rate);
+  }
+}
+
+void ensureMotorsAlwaysRun(){
+  frontLeftMotorPower = max(frontLeftMotorPower, THROTTLE_START_POINT);
+  frontRightMotorPower = max(frontRightMotorPower, THROTTLE_START_POINT);
+  rearLeftMotorPower = max(rearLeftMotorPower, THROTTLE_START_POINT);
+  rearRightMotorPower = max(rearRightMotorPower, THROTTLE_START_POINT);
 }
 
 void updateCurrentTimeVariables() {
