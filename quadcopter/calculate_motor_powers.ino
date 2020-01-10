@@ -18,6 +18,11 @@ void calculateMotorPowers() {
   rearLeftMotorPower = round(throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
   rearRightMotorPower = round(throttle - roll_control_signal - pitch_control_signal - yaw_control_signal);
 
+  if(frontLeftMotorPower < THROTTLE_START_POINT) frontLeftMotorPower = THROTTLE_START_POINT;
+  if(frontRightMotorPower < THROTTLE_START_POINT) frontRightMotorPower = THROTTLE_START_POINT;
+  if(rearLeftMotorPower < THROTTLE_START_POINT) rearLeftMotorPower = THROTTLE_START_POINT;
+  if(rearRightMotorPower < THROTTLE_START_POINT) rearRightMotorPower = THROTTLE_START_POINT;
+
   if (throttle == MIN_THROTTLE || receiver_failure == true) {
     frontLeftMotorPower = MIN_THROTTLE;
     frontRightMotorPower = MIN_THROTTLE;
