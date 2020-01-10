@@ -6,7 +6,7 @@
 #define ANGLE_DEGREE_LIMIT_YAW 5.0
 
 #define MIN_THROTTLE 0
-#define MAX_THROTTLE 140
+#define MAX_THROTTLE 130
 #define THROTTLE_START_POINT 15
 
 #define KP_roll_pitch 0.50 //0.50
