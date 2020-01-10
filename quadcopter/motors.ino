@@ -22,10 +22,3 @@ void spinMotors() {
   rearLeftMotor.write(rearLeftMotorPower);
   rearRightMotor.write(rearRightMotorPower);
 }
-
-void updateMotorsWithStaticThrottle() {
-  frontLeftMotor.write(throttle);
-  frontRightMotor.write(throttle);
-  rearLeftMotor.write(throttle);
-  rearRightMotor.write(throttle);
-}
