@@ -17,8 +17,8 @@
 #define KI_yaw 0.05
 #define KD_yaw 0.00
 
-#define YAW_INTEGRAL_LIMIT 2
-#define ROLL_PITCH_INTEGRAL_LIMIT 1
+#define YAW_INTEGRAL_LIMIT 100.00
+#define ROLL_PITCH_INTEGRAL_LIMIT 100.00
 
 #define PID_SAMPLING_FREQUENCY 1 //milliseconds
 
