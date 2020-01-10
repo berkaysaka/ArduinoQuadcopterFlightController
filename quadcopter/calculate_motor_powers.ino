@@ -15,6 +15,7 @@ void calculateMotorPowers() {
 
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   pitch_control_signal = constrain(pitch_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
+  yaw_control_signal = constrain(yaw_control_signal, -MAX_YAW_CONTROL_GAIN, MAX_YAW_CONTROL_GAIN);
   
   frontLeftMotorPower = round(throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
   frontRightMotorPower = round(throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
