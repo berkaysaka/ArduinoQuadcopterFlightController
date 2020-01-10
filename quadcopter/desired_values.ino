@@ -1,5 +1,5 @@
 void calculateDesiredValues() {
-  throttle = map(throttleRaw, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, MIN_THROTTLE, MAX_THROTTLE);
+  throttle = map(throttleRaw, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, MIN_THROTTLE, THROTTLE_LIMIT_POINT);
   if (throttle < THROTTLE_START_POINT){
     throttle = MIN_THROTTLE;
     desired_yaw_angle = yawAngle;  
