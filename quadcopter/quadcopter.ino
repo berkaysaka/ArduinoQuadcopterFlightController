@@ -13,7 +13,7 @@
 #define KI_roll_pitch 0.01 //0.01
 #define KD_roll_pitch 0.15 //0.15
 
-#define KP_yaw 2.5
+#define KP_yaw 2.00
 #define KI_yaw 0.05
 #define KD_yaw 0.00
 
