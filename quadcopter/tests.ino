@@ -1,7 +1,9 @@
+double center = (MIN_RAW_RECEIVER_VALUE + MAX_RAW_RECEIVER_VALUE) / 2;
+
 void reset_test_parameters(){
   throttle = 0;
   receiver_failure = false;
-  rollRaw = 0; pitchRaw = 0; yawRaw = 0;
+  rollRaw = center; pitchRaw = center; yawRaw = center;
   desired_roll_angle = 0; desired_pitch_angle = 0;desired_yaw_angle = 0;
   rollAngle = 0; pitchAngle = 0; yawAngle = 0;
   roll_pid_i = 0; roll_last_error = 0; pitch_pid_i = 0; pitch_last_error = 0; yaw_pid_i = 0; yaw_last_error = 0;
@@ -167,7 +169,6 @@ void test_applySafetyRules_should_set_throttle_to_MIN_THROTTLE_if_receiver_is_un
 
 void test_calculateDesiredValues_should_set_desired_roll_pitch_yaw_angles_to_0_if_transmitter_sticks_are_centered(){
   reset_test_parameters();
-  double center = (MIN_RAW_RECEIVER_VALUE + MAX_RAW_RECEIVER_VALUE) / 2;
   pitchRaw = center;
   rollRaw = center;
   yawRaw = center;
