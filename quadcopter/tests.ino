@@ -39,6 +39,9 @@ void test_calculateDesiredValuesWithSafetyChecks(){
   test_applySafetyRules_should_throttle_stay_as_is_if_greater_or_equal_than_THROTTLE_START_POINT();
   test_applySafetyRules_should_set_throttle_to_MIN_THROTTLE_if_receiver_is_unplugged();
   test_calculateDesiredValues_should_set_desired_roll_pitch_yaw_angles_to_0_if_transmitter_sticks_are_centered();
+  test_calculateDesiredYawAngle_should_return_prev_desired_yaw_angle_if_0_angle_change_asked();
+  test_calculateDesiredYawAngle_should_return_desired_angle_based_on_yaw_angle();
+  test_calculateDesiredYawAngle_should_handle_360_degrees_properly();
 }
 
 void test_calculate_motor_powers_should_turn_off_motors_if_throttle_is_zero(){
@@ -175,6 +178,35 @@ void test_calculateDesiredValues_should_set_desired_roll_pitch_yaw_angles_to_0_i
   calculateDesiredValues();
   bool passed = desired_pitch_angle == 0 && desired_roll_angle == 0 && desired_yaw_angle == 0;
   Serial.println(String(passed) + " => test_calculateDesiredValues_should_set_desired_roll_pitch_yaw_angles_to_0_if_transmitter_sticks_are_centered");
+}
+
+void test_calculateDesiredYawAngle_should_return_prev_desired_yaw_angle_if_0_angle_change_asked(){
+  reset_test_parameters();
+  bool passed = calculateDesiredYawAngle(-3, 0) == -3 && calculateDesiredYawAngle(1, 0) == 1;
+  Serial.println(String(passed) + " => test_calculateDesiredYawAngle_should_return_prev_desired_yaw_angle_if_0_angle_change_asked");
+}
+
+void test_calculateDesiredYawAngle_should_return_desired_angle_based_on_yaw_angle(){
+  reset_test_parameters();
+  yawAngle = 0;
+  bool passed = calculateDesiredYawAngle(3, -2) == -2
+             && calculateDesiredYawAngle(3, 2) == 2;
+  Serial.println(String(passed) + " => test_calculateDesiredYawAngle_should_return_desired_angle_based_on_yaw_angle");
+}
+
+void test_calculateDesiredYawAngle_should_handle_360_degrees_properly(){
+  reset_test_parameters();
+  yawAngle = 179;
+  bool passed1 = calculateDesiredYawAngle(yawAngle, 2) == -179
+             && calculateDesiredYawAngle(yawAngle, -360) == yawAngle
+             && calculateDesiredYawAngle(yawAngle,  360) == yawAngle;
+  reset_test_parameters();
+  yawAngle = -179;
+  bool passed2 = calculateDesiredYawAngle(yawAngle, -2) == 179
+             && calculateDesiredYawAngle(yawAngle, -360) == yawAngle
+             && calculateDesiredYawAngle(yawAngle,  360) == yawAngle;
+             
+  Serial.println(String(passed1 && passed2) + " => test_calculateDesiredYawAngle_should_handle_360_degrees_properly");
 }
 
 

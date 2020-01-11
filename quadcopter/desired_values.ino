@@ -25,16 +25,10 @@ double calculateDesiredAngle(int rawReceiverValue, int angleDegreeLimit) {
   return desired_angle;
 }
 
-double calculateDesiredYawAngle(double previouslyAskedYawAngle, double askedYawAngle){
-  //170 - 3 =167
-  //167 - 173= -6
-  double tmpDesiredYawAngle = fixYaw360degrees(previouslyAskedYawAngle + askedYawAngle);
-  double yawError = calculateErrorForYaw(tmpDesiredYawAngle, yawAngle);
-  if(yawError < -ANGLE_DEGREE_LIMIT_YAW){
-    return fixYaw360degrees(tmpDesiredYawAngle - (yawError+ANGLE_DEGREE_LIMIT_YAW));
-  }else if(yawError > ANGLE_DEGREE_LIMIT_YAW){
-    return fixYaw360degrees(tmpDesiredYawAngle - (yawError-ANGLE_DEGREE_LIMIT_YAW));
-  }else{
-    return tmpDesiredYawAngle;
+double calculateDesiredYawAngle(double prev_desired_yaw_angle, double askedYawAngleChange){
+  if(askedYawAngleChange == 0){
+    return prev_desired_yaw_angle;
   }
+  double tmpDesiredYawAngle = fixYaw360degrees(yawAngle + askedYawAngleChange);
+  return tmpDesiredYawAngle;
 }
