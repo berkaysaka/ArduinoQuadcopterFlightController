@@ -27,7 +27,7 @@ void calculateMotorPowers() {
 
   ensureMotorsAlwaysRun();
  
-  if (throttle == MIN_THROTTLE || receiver_failure == true) {
+  if (throttle == MIN_THROTTLE) {
     frontLeftMotorPower = MIN_THROTTLE;
     frontRightMotorPower = MIN_THROTTLE;
     rearLeftMotorPower = MIN_THROTTLE;

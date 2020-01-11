@@ -22,7 +22,7 @@ void loop() {
   readReceiverValues();
   //printRawReceiverValues();
 
-  calculateDesiredValues();
+  calculateDesiredValuesWithSafetyChecks();
   //printDesiredValues();
 
   readIMUvalues();

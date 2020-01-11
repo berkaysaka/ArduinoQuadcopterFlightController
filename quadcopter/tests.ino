@@ -15,11 +15,11 @@ void run_tests(){
   Serial.println("----------------RUNNING TESTS--------------");
   test_calculate_motor_powers();
   test_reduceMotorPowers();
+  test_calculateDesiredValuesWithSafetyChecks();
   Serial.println("----------------FINISHED--------------");
 }
 
 void test_calculate_motor_powers(){
-  test_calculate_motor_powers_should_set_turn_off_motors_if_receiver_is_unplugged();
   test_calculate_motor_powers_should_turn_off_motors_if_throttle_is_zero();
   test_calculate_motor_powers_should_send_power_to_the_motors_if_throttle_is_not_minimum();
   test_calculate_motor_powers_should_run_rear_motors_faster_to_go_forward();
@@ -35,13 +35,10 @@ void test_reduceMotorPowers(){
   test_reduceMotorPowers_should_reduce_motor_powers_if_max_throttle_exceeds();
 }
 
-void test_calculate_motor_powers_should_set_turn_off_motors_if_receiver_is_unplugged(){
-  reset_test_parameters();
-  throttle = 100;
-  receiver_failure = true;
-  calculateMotorPowers();
-  bool passed = (frontLeftMotorPower == 0 && frontRightMotorPower == 0 && rearLeftMotorPower == 0 && rearRightMotorPower == 0);
-  Serial.println(String(passed) + " => test_calculate_motor_powers_should_set_turn_off_motors_if_receiver_is_unplugged");
+void test_calculateDesiredValuesWithSafetyChecks(){
+  test_applySafetyRules_should_set_throttle_to_MIN_THROTTLE_if_lower_than_THROTTLE_START_POINT();
+  test_applySafetyRules_should_throttle_stay_as_is_if_greater_or_equal_than_THROTTLE_START_POINT();
+  test_applySafetyRules_should_set_throttle_to_MIN_THROTTLE_if_receiver_is_unplugged();
 }
 
 void test_calculate_motor_powers_should_turn_off_motors_if_throttle_is_zero(){
@@ -141,6 +138,33 @@ void test_reduceMotorPowers_should_reduce_motor_powers_if_max_throttle_exceeds()
   
   bool passed = frontLeftMotorPower == 175 && frontRightMotorPower == 100 && rearLeftMotorPower == 50 && rearRightMotorPower == 25;
   Serial.println(String(passed) + " => test_reduceMotorPowers_should_reduce_motor_powers_if_max_throttle_exceeds");
+}
+
+void test_applySafetyRules_should_set_throttle_to_MIN_THROTTLE_if_lower_than_THROTTLE_START_POINT(){
+  reset_test_parameters();
+  throttle = THROTTLE_START_POINT-1;
+  applySafetyRules();
+  
+  bool passed = throttle == MIN_THROTTLE;
+  Serial.println(String(passed) + " => test_applySafetyRules_should_set_throttle_to_MIN_THROTTLE_if_lower_than_THROTTLE_START_POINT");
+}
+
+void test_applySafetyRules_should_throttle_stay_as_is_if_greater_or_equal_than_THROTTLE_START_POINT(){
+  reset_test_parameters();
+  throttle = THROTTLE_START_POINT;
+  applySafetyRules();
+  
+  bool passed = throttle == THROTTLE_START_POINT;
+  Serial.println(String(passed) + " => test_applySafetyRules_should_throttle_stay_as_is_if_greater_or_equal_than_THROTTLE_START_POINT");
+}
+
+void test_applySafetyRules_should_set_throttle_to_MIN_THROTTLE_if_receiver_is_unplugged(){
+  reset_test_parameters();
+  throttle = 100;
+  receiver_failure = true;
+  applySafetyRules();
+  bool passed = throttle == MIN_THROTTLE;
+  Serial.println(String(passed) + " => test_applySafetyRules_should_set_throttle_to_MIN_THROTTLE_if_receiver_is_unplugged");
 }
 
 
