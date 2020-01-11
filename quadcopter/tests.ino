@@ -37,7 +37,7 @@ void test_reduceMotorPowers(){
 
 void test_calculate_motor_powers_should_set_turn_off_motors_if_receiver_is_unplugged(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   receiver_failure = true;
   calculateMotorPowers();
   bool passed = (frontLeftMotorPower == 0 && frontRightMotorPower == 0 && rearLeftMotorPower == 0 && rearRightMotorPower == 0);
@@ -54,7 +54,7 @@ void test_calculate_motor_powers_should_turn_off_motors_if_throttle_is_zero(){
 
 void test_calculate_motor_powers_should_send_power_to_the_motors_if_throttle_is_not_minimum(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   calculateMotorPowers();
   bool passed = (frontLeftMotorPower > 0 && frontRightMotorPower > 0 && rearLeftMotorPower > 0 && rearRightMotorPower > 0);
   Serial.println(String(passed) + " => test_calculate_motor_powers_should_send_power_to_the_motors_if_throttle_is_not_minimum");
@@ -62,7 +62,7 @@ void test_calculate_motor_powers_should_send_power_to_the_motors_if_throttle_is_
 
 void test_calculate_motor_powers_should_run_rear_motors_faster_to_go_forward(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   desired_pitch_angle = -5;
   calculateMotorPowers();
   
@@ -72,7 +72,7 @@ void test_calculate_motor_powers_should_run_rear_motors_faster_to_go_forward(){
 
 void test_calculate_motor_powers_should_run_front_motors_faster_to_go_backwards(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   desired_pitch_angle = 5;
   calculateMotorPowers();
   
@@ -82,7 +82,7 @@ void test_calculate_motor_powers_should_run_front_motors_faster_to_go_backwards(
 
 void test_calculate_motor_powers_should_run_right_motors_faster_to_go_left(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   desired_roll_angle = -5;
   calculateMotorPowers();
   
@@ -92,7 +92,7 @@ void test_calculate_motor_powers_should_run_right_motors_faster_to_go_left(){
 
 void test_calculate_motor_powers_should_run_left_motors_faster_to_go_right(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   desired_roll_angle = 5;
   calculateMotorPowers();
   
@@ -102,7 +102,7 @@ void test_calculate_motor_powers_should_run_left_motors_faster_to_go_right(){
 
 void test_calculate_motor_powers_should_run_right_turning_motors_faster_to_turn_left(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   desired_yaw_angle = -5;
   calculateMotorPowers();
   
@@ -112,7 +112,7 @@ void test_calculate_motor_powers_should_run_right_turning_motors_faster_to_turn_
 
 void test_calculate_motor_powers_should_run_left_turning_motors_faster_to_turn_right(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   desired_yaw_angle = 5;
   calculateMotorPowers();
   
@@ -122,7 +122,7 @@ void test_calculate_motor_powers_should_run_left_turning_motors_faster_to_turn_r
 
 void test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_throttle(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   desired_yaw_angle = -5;
   calculateMotorPowers();
   
@@ -132,7 +132,7 @@ void test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_t
 
 void test_reduceMotorPowers_should_reduce_motor_powers_if_max_throttle_exceeds(){
   reset_test_parameters();
-  throttle = 20;
+  throttle = 100;
   frontLeftMotorPower = 350;
   frontRightMotorPower = 200;
   rearLeftMotorPower = 100;
