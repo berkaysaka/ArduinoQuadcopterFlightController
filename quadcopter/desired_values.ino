@@ -7,15 +7,18 @@ void calculateDesiredValues() {
 
   desired_pitch_angle = calculateDesiredAngle(pitchRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
   desired_roll_angle = calculateDesiredAngle(rollRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
-  
-  double tmpDesired = desired_yaw_angle + calculateDesiredAngle(yawRaw, ANGLE_DEGREE_LIMIT_YAW);
-  double diff = abs(tmpDesired - yawAngle);
-  if (diff > 180)
-    diff -= 360;
-  else if (diff < -180)
-    diff += 360;
-  if(diff < (ANGLE_DEGREE_LIMIT_YAW*2))
-    desired_yaw_angle = tmpDesired;
+  //170 - 3 =167
+  //167 - 173= -6
+  double tmpDesiredYawAngle = fixYaw360degrees(desired_yaw_angle + calculateDesiredAngle(yawRaw, ANGLE_DEGREE_LIMIT_YAW));
+  double yawError = calculateErrorForYaw(tmpDesiredYawAngle, yawAngle);
+  if(yawError < -ANGLE_DEGREE_LIMIT_YAW){
+    desired_yaw_angle = fixYaw360degrees(tmpDesiredYawAngle - (yawError+ANGLE_DEGREE_LIMIT_YAW));
+  }else if(yawError > ANGLE_DEGREE_LIMIT_YAW){
+    desired_yaw_angle = fixYaw360degrees(tmpDesiredYawAngle - (yawError-ANGLE_DEGREE_LIMIT_YAW));
+  }else{
+    desired_yaw_angle = tmpDesiredYawAngle;
+  }
+
 }
 
 double calculateDesiredAngle(int rawReceiverValue, int angleDegreeLimit) {

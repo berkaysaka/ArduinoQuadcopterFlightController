@@ -38,11 +38,15 @@ void calculateMotorPowers() {
 
 double calculateErrorForYaw(double desired, double actual) {
   double error = desired - actual;
-  if (error > 180)
-    error -= 360;
-  else if (error < -180)
-    error += 360;
-  return error;
+  return fixYaw360degrees(error);
+}
+
+double fixYaw360degrees(double angle){
+  if (angle > 180)
+    angle -= 360;
+  else if (angle < -180)
+    angle += 360;
+  return angle;
 }
 
 void reduceMotorPowers(){ // to preserve balance if MAX_THROTTLE limit exceeds)
