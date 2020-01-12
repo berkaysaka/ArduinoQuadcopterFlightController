@@ -33,7 +33,7 @@ void readReceiverValues() {
 //prevent small receiver value changes to affect yaw while joystick is in the center
 int centralize(int val) {
   int center = (MAX_RAW_RECEIVER_VALUE + MIN_RAW_RECEIVER_VALUE) / 2;
-  int tolerance = 6;
+  int tolerance = 10;
   if (abs(val - center) <= tolerance)
     return center;
   else
