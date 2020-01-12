@@ -37,7 +37,7 @@ void calculateMotorPowers() {
 }
 
 double calculateErrorForYaw(double desired, double actual) {
-  double error = desired - actual;
+  double error = (desired+360) - (actual+360);
   return fixYaw360degrees(error);
 }
 
