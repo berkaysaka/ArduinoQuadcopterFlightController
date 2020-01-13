@@ -8,6 +8,10 @@ void calculateMotorPowers() {
   if (elapsed_time < PID_SAMPLING_FREQUENCY)
     return;
 
+  if (fresh_imu_data_available == false)
+    return;
+  
+  fresh_imu_data_available = false;
   updateCurrentTimeVariables();
   double roll_control_signal = getControlSignal(desired_roll_angle - rollAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT, ROLL_PITCH_INTEGRAL_ACTIVATION_THRESHOLD);
   double pitch_control_signal = getControlSignal(desired_pitch_angle - pitchAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT, ROLL_PITCH_INTEGRAL_ACTIVATION_THRESHOLD);
