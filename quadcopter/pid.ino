@@ -2,7 +2,7 @@ double getControlSignal(double error, double kp, double ki, double kd, double& p
   pid_i += error * delta_time;
   pid_i = constrain(pid_i, -integral_limit, integral_limit);
   if ((error<0. && last_error>0.) || (error>0. && last_error<0.)){
-    pid_i = 0; // fix integral wind-up isuue by resetting integral to zero in order to prevent unnecessary overshoots)
+    pid_i = 0; // fix integral wind-up issue by resetting integral to zero in order to prevent unnecessary overshoots)
   }
   if (abs(error) > integral_activation_threshold){
     pid_i = 0; // don't start counting integral early
