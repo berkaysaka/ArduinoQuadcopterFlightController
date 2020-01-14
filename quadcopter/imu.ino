@@ -36,7 +36,8 @@ void readIMUvalues() {
   if (!dmpReady) return;
 
   // wait for MPU interrupt or extra packet(s) available
-  while (!mpuInterrupt && fifoCount < packetSize) {
+  if (!mpuInterrupt && fifoCount < packetSize) {
+    return;
   }
 
   // reset interrupt flag and get INT_STATUS byte
