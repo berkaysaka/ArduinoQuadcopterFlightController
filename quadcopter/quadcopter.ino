@@ -10,9 +10,9 @@
 #define THROTTLE_START_POINT 15
 #define THROTTLE_LIMIT_POINT 140
 
-#define KP_roll_pitch 0.3
+#define KP_roll_pitch 0.5
 #define KI_roll_pitch 0.05
-#define KD_roll_pitch 90.00
+#define KD_roll_pitch 100.00
 
 #define KP_yaw 5.00
 #define KI_yaw 0.1
