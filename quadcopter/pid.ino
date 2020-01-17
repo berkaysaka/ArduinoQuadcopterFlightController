@@ -15,7 +15,7 @@ double getControlSignal(double error, double kp, double ki, double kd, double& p
     pid_d = 0; // prevent derivative kicks
   }
   
-  double control_signal = (kp*pid_p) + (kd*pid_d) + (ki*pid_i);
+  double control_signal = (kp*pid_p) + (ki*pid_i) + (kd*pid_d);
   last_error = error;
   return control_signal;
 }
