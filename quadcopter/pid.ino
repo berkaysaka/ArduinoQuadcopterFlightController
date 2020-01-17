@@ -11,7 +11,7 @@ double getControlSignal(double error, double kp, double ki, double kd, double& p
   double pid_p = error;
   
   double pid_d = (error - last_error) / delta_time;
-  if ((error > 0. && (error - last_error) > 0.) || (error < 0. && (error - last_error) < 0.)){
+  if ((error > 5. && (error - last_error) > 0.) || (error < -5. && (error - last_error) < 0.)){
     pid_d = 0; // prevent derivative kicks
   }
   
