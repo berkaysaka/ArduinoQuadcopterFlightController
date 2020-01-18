@@ -9,6 +9,7 @@ void reset_test_parameters(){
   roll_pid_i = 0; roll_last_error = 0; pitch_pid_i = 0; pitch_last_error = 0; yaw_pid_i = 0; yaw_last_error = 0;
   last_time = millis() - 1;
   frontLeftMotorPower = 0; rearRightMotorPower = 0; frontRightMotorPower = 0; rearLeftMotorPower = 0;
+  fresh_imu_data_available = true;
 }
 void run_tests(){
   Serial.println("----------------RUNNING TESTS--------------");
