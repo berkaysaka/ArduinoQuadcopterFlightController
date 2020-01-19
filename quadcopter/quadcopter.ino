@@ -11,21 +11,21 @@
 #define THROTTLE_LIMIT_POINT 140
 
 #define KP_roll_pitch 0.5
-#define KI_roll_pitch 0.05
-#define KD_roll_pitch 100.00
+#define KI_roll_pitch 0.0001
+#define KD_roll_pitch 110.00
 
-#define KP_yaw 5.00
-#define KI_yaw 0.1
+#define KP_yaw 3.00
+#define KI_yaw 0.02
 #define KD_yaw 800.00
 
-#define YAW_INTEGRAL_ACTIVATION_THRESHOLD 100.00
-#define ROLL_PITCH_INTEGRAL_ACTIVATION_THRESHOLD 100.00
+#define YAW_INTEGRAL_ACTIVATION_THRESHOLD 15.00
+#define ROLL_PITCH_INTEGRAL_ACTIVATION_THRESHOLD 7.00
 
-#define YAW_INTEGRAL_LIMIT 20.00
-#define ROLL_PITCH_INTEGRAL_LIMIT 3.00
+#define YAW_INTEGRAL_LIMIT 5.00
+#define ROLL_PITCH_INTEGRAL_LIMIT 1.00
 
 #define MAX_ROLL_PITCH_CONTROL_GAIN 50.00
-#define MAX_YAW_CONTROL_GAIN 30.00
+#define MAX_YAW_CONTROL_GAIN 20.00
 
 #define PID_SAMPLING_FREQUENCY 1 //milliseconds
 
