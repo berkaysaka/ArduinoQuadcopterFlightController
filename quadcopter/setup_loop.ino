@@ -5,7 +5,7 @@ void setup() {
     return;
   }
   //Serial.begin(115200);
-  Serial2.begin(38400);
+  //Serial2.begin(38400);
   initializeOutputSignals();
   initializeMotors();
   initializeReceiver();
