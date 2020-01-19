@@ -29,6 +29,11 @@ double calculateDesiredYawAngle(double prev_desired_yaw_angle, double askedYawAn
   if(askedYawAngleChange == 0){
     return prev_desired_yaw_angle;
   }
+  if(askedYawAngleChange > 0){
+    askedYawAngleChange += YAW_ANGLE_BOOSTER;
+  }else if(askedYawAngleChange < 0){
+    askedYawAngleChange -= YAW_ANGLE_BOOSTER;
+  }
   double tmpDesiredYawAngle = fixYaw360degrees(yawAngle + askedYawAngleChange);
   return tmpDesiredYawAngle;
 }
