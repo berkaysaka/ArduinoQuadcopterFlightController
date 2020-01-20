@@ -69,32 +69,23 @@ void printGraphGyroValues() {
   Serial.println();
 }
 
-void sendTelemetryInfo(){
+void sendTelemetryInfo() {
   unsigned long _currentTime = millis();
   if (_currentTime - _lastTime < 100)
     return;
   _lastTime = _currentTime;
 
-  Serial2.print(_currentTime);
-  Serial2.print("\t");
-  Serial2.print(pitchAngle);
-  Serial2.print("\t");
-  Serial2.print(rollAngle);
-  Serial2.print("\t");
-  Serial2.print(yawAngle);
-  Serial2.print("\t");
-  Serial2.print(throttle);
-  Serial2.print("\t");
-  Serial2.print(desired_pitch_angle);
-  Serial2.print("\t");
-  Serial2.print(desired_roll_angle);
-  Serial2.print("\t");
-  Serial2.print(desired_yaw_angle);
-  Serial2.print("\t");
-  Serial2.print(pitch_control_signal);
-  Serial2.print("\t");
-  Serial2.print(roll_control_signal);
-  Serial2.print("\t");
-  Serial2.print(yaw_control_signal);
-  Serial2.println();
+  Serial2.println(
+    String(_currentTime)
+    + "\t" + pitchAngle
+    + "\t" + rollAngle
+    + "\t" + yawAngle
+    + "\t" + throttle
+    + "\t" + desired_pitch_angle
+    + "\t" + desired_roll_angle
+    + "\t" + desired_yaw_angle
+    + "\t" + pitch_control_signal
+    + "\t" + roll_control_signal
+    + "\t" + yaw_control_signal
+  );
 }
