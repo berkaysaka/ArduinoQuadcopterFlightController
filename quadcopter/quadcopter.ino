@@ -1,5 +1,7 @@
 //-----------EXECUTION---------------
 #define TEST_MODE false
+#define DEBUG_MODE true
+#define TELEMETRY_ENABLED true
 
 //-----------CONFIGURATION-----------
 #define ANGLE_DEGREE_LIMIT_PITCH_ROLL 20
@@ -13,7 +15,7 @@
 #define THROTTLE_LIMIT_POINT 140
 
 #define KP_roll_pitch 0.4
-#define KI_roll_pitch 0.05
+#define KI_roll_pitch 0.00
 #define KD_roll_pitch 100.00
 
 #define KP_yaw 3.00
@@ -21,7 +23,7 @@
 #define KD_yaw 800.00
 
 #define YAW_INTEGRAL_LIMIT 10.00
-#define ROLL_PITCH_INTEGRAL_LIMIT 1.00
+#define ROLL_PITCH_INTEGRAL_LIMIT 2.00
 
 #define MAX_ROLL_PITCH_CONTROL_GAIN 30.00
 #define MAX_YAW_CONTROL_GAIN 25.00
