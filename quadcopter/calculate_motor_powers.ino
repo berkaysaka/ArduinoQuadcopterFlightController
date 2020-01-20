@@ -7,11 +7,7 @@ void calculateMotorPowers() {
   unsigned long elapsed_time = millis() - last_time;
   if (elapsed_time < PID_SAMPLING_FREQUENCY)
     return;
-
-  if (fresh_imu_data_available == false)
-    return;
   
-  fresh_imu_data_available = false;
   updateCurrentTimeVariables();
   
   roll_control_signal = getControlSignal(desired_roll_angle - rollAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);

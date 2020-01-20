@@ -1,7 +1,7 @@
 //-----------EXECUTION---------------
 #define TEST_MODE false
-#define DEBUG_MODE true
-#define TELEMETRY_ENABLED true
+#define DEBUG_MODE false
+#define TELEMETRY_ENABLED false
 
 //-----------CONFIGURATION-----------
 #define ANGLE_DEGREE_LIMIT_PITCH_ROLL 20
@@ -51,5 +51,4 @@ int throttle;
 double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
 int throttleRaw, yawRaw, rollRaw, pitchRaw;
 bool receiver_failure = false;
-bool fresh_imu_data_available = false;
 double roll_control_signal, pitch_control_signal, yaw_control_signal;

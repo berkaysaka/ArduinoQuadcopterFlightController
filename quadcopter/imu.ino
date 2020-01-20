@@ -67,7 +67,6 @@ void readIMUvalues() {
     yawAngle = ypr[0] * 180 / M_PI;
     rollAngle = ypr[1] * 180 / M_PI;
     pitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
-    fresh_imu_data_available = true;
   }
 }
 
