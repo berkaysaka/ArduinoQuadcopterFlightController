@@ -1,11 +1,9 @@
 #include "I2Cdev.h"
-#include "MPU6050_6Axis_MotionApps_V6_12.h"
+#include "MPU6050_6Axis_MotionApps20.h"
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
 #include "Wire.h"
 #endif
 MPU6050 mpu;
-
-#define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
@@ -38,11 +36,8 @@ void readIMUvalues() {
   if (!dmpReady) return;
 
   // wait for MPU interrupt or extra packet(s) available
-  while (!mpuInterrupt && fifoCount < packetSize) {
-    if (mpuInterrupt && fifoCount < packetSize) {
-      // try to get out of the infinite loop
-      fifoCount = mpu.getFIFOCount();
-    }
+  if (!mpuInterrupt && fifoCount < packetSize) {
+    return;
   }
 
   // reset interrupt flag and get INT_STATUS byte
@@ -50,12 +45,9 @@ void readIMUvalues() {
   mpuIntStatus = mpu.getIntStatus();
 
   fifoCount = mpu.getFIFOCount();
-  // check for overflow (this should never happen unless our code is too inefficient)
-  if ((mpuIntStatus & _BV(MPU6050_INTERRUPT_FIFO_OFLOW_BIT)) || fifoCount >= 1024) {
+  if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
     mpu.resetFIFO();
-    fifoCount = mpu.getFIFOCount();
-  } else if (mpuIntStatus & _BV(MPU6050_INTERRUPT_DMP_INT_BIT)) {// otherwise, check for DMP data ready interrupt (this should happen frequently)
-    // wait for correct available data length, should be a VERY short wait
+  } else if (mpuIntStatus & 0x02) {
     while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
     mpu.getFIFOBytes(fifoBuffer, packetSize);
     fifoCount -= packetSize;
@@ -66,20 +58,19 @@ void readIMUvalues() {
     // pitch-roll swapped somehow, investigate.
     yawAngle = ypr[0] * 180 / M_PI;
     rollAngle = ypr[1] * 180 / M_PI;
-    pitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+    pitchAngle = ypr[2] * 180 / M_PI *-1;//-1 for changing rotation
+    fresh_imu_data_available = true;
   }
 }
 
 void ConfigureIMU() {
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
-  //TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
-  Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
+  TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
 #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
   Fastwire::setup(400, true);
 #endif
   mpu.initialize();
-  pinMode(INTERRUPT_PIN, INPUT);
   devStatus = mpu.dmpInitialize();
 
   mpu.setXGyroOffset(90);
@@ -92,7 +83,7 @@ void ConfigureIMU() {
   // make sure it worked (returns 0 if so)
   if (devStatus == 0) {
     mpu.setDMPEnabled(true);
-    attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
+    attachInterrupt(0, dmpDataReady, RISING);
     mpuIntStatus = mpu.getIntStatus();
     dmpReady = true;
 
