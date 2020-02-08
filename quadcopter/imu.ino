@@ -56,9 +56,9 @@ void readIMUvalues() {
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     // pitch-roll swapped somehow, investigate.
-    yawAngle = ypr[0] * 180 / M_PI;
-    rollAngle = ypr[1] * 180 / M_PI;
-    pitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+    yawAngle = ypr[0] * 180.0 / M_PI;
+    rollAngle = ypr[1] * 180.0 / M_PI;
+    pitchAngle = ypr[2] * 180.0 / M_PI * -1; //-1 for changing rotation
     fresh_imu_data_available = true;
   }
 }
