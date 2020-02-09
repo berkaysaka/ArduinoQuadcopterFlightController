@@ -13,7 +13,9 @@ void calculateDesiredValues() {
 void applySafetyRules(){
   if (throttle < THROTTLE_START_POINT || receiver_failure == true){
     throttle = MIN_THROTTLE;
-    desired_yaw_angle = yawAngle;  
+    desired_yaw_angle = yawAngle;
+    desired_pitch_angle = 0;
+    desired_roll_angle = 0;
   }
 }
 
