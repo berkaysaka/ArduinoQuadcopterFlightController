@@ -4,6 +4,7 @@
 #include "Wire.h"
 #endif
 MPU6050 mpu;
+#define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
@@ -35,30 +36,24 @@ void initializeIMU() {
 void readIMUvalues() {
   if (!dmpReady) return;
 
-  // wait for MPU interrupt or extra packet(s) available
-  if (!mpuInterrupt && fifoCount < packetSize) {
-    return;
-  }
-
-  // reset interrupt flag and get INT_STATUS byte
-  mpuInterrupt = false;
-  mpuIntStatus = mpu.getIntStatus();
-
-  fifoCount = mpu.getFIFOCount();
-  if ((mpuIntStatus & 0x10) || fifoCount == 1024) {
-    mpu.resetFIFO();
-  } else if (mpuIntStatus & 0x02) {
-    while (fifoCount < packetSize) fifoCount = mpu.getFIFOCount();
-    mpu.getFIFOBytes(fifoBuffer, packetSize);
-    fifoCount -= packetSize;
+  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
 
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     // pitch-roll swapped somehow, investigate.
-    yawAngle = ypr[0] * 180.0 / M_PI;
-    rollAngle = ypr[1] * 180.0 / M_PI;
-    pitchAngle = ypr[2] * 180.0 / M_PI * -1; //-1 for changing rotation
+    double newYawAngle = ypr[0] * 180 / M_PI;
+    double newRollAngle = ypr[1] * 180 / M_PI;
+    double newPitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+
+    if(newYawAngle == yawAngle && newRollAngle == rollAngle && newPitchAngle == pitchAngle){
+      return; //ignore if they are all equal.
+    }
+    
+    yawAngle = newYawAngle;
+    rollAngle = newRollAngle;
+    pitchAngle = newPitchAngle;
+
     fresh_imu_data_available = true;
   }
 }
@@ -71,19 +66,25 @@ void ConfigureIMU() {
   Fastwire::setup(400, true);
 #endif
   mpu.initialize();
+  pinMode(INTERRUPT_PIN, INPUT);
   devStatus = mpu.dmpInitialize();
 
-  mpu.setXGyroOffset(90);
-  mpu.setYGyroOffset(-93);
-  mpu.setZGyroOffset(37);
-  mpu.setXAccelOffset(170);
-  mpu.setYAccelOffset(1622);
-  mpu.setZAccelOffset(377);
+  mpu.setXGyroOffset(91);
+  mpu.setYGyroOffset(-92);
+  mpu.setZGyroOffset(38);
+  mpu.setXAccelOffset(182);
+  mpu.setYAccelOffset(1620);
+  mpu.setZAccelOffset(397);
 
   // make sure it worked (returns 0 if so)
   if (devStatus == 0) {
+    /*mpu.CalibrateAccel(6);
+    mpu.CalibrateGyro(6);
+    mpu.PrintActiveOffsets();
+    syncOutputSignals();*/
+    
     mpu.setDMPEnabled(true);
-    attachInterrupt(0, dmpDataReady, RISING);
+    attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
     mpuIntStatus = mpu.getIntStatus();
     dmpReady = true;
 
