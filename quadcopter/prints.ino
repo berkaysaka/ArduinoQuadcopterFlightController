@@ -55,7 +55,7 @@ void printGyroValues() {
   Serial.println(" ");
 }
 
-long _lastTime = millis();
+unsigned long _lastTime = millis();
 void printGraphGyroValues() {
   long _currentTime = millis();
   if (_currentTime - _lastTime < 10)
