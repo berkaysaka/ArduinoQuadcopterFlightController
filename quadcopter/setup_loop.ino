@@ -9,9 +9,11 @@ void setup() {
   if (TELEMETRY_ENABLED == true) {
     Serial2.begin(38400);
   }
+  //Serial.begin(115200);
   initializeOutputSignals();
   initializeMotors();
   initializeReceiver();
+  initializeOutputSignals();
   initializeIMU();
 }
 
@@ -127,7 +129,7 @@ void debug_loop() {
     totalsendTelemetryInfo += diff;
   }
 
-  if (counter < 1001)
+  if (counter < 101)
     return;
 
   Serial.println("-readReceiverValues-" + String(totalreadReceiverValues / counter) + "-" + String(minreadReceiverValues) + "-" + String(maxreadReceiverValues));
