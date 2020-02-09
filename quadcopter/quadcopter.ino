@@ -1,7 +1,7 @@
 //-----------EXECUTION---------------
 #define TEST_MODE false
 #define DEBUG_MODE false
-#define TELEMETRY_ENABLED false
+#define TELEMETRY_ENABLED true
 
 //-----------CONFIGURATION-----------
 #define ANGLE_DEGREE_LIMIT_PITCH_ROLL 20
