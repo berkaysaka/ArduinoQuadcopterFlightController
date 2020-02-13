@@ -16,14 +16,14 @@
 
 #define KP_roll_pitch 0.4
 #define KI_roll_pitch 0.001
-#define KD_roll_pitch 50.00
+#define KD_roll_pitch 40.00
 
 #define KP_yaw 3.00
 #define KI_yaw 0.05
-#define KD_yaw 500.00
+#define KD_yaw 1000.00
 
 #define YAW_INTEGRAL_LIMIT 10.00
-#define ROLL_PITCH_INTEGRAL_LIMIT 0.00
+#define ROLL_PITCH_INTEGRAL_LIMIT 0.50
 
 #define MAX_ROLL_PITCH_CONTROL_GAIN 30.00
 #define MAX_YAW_CONTROL_GAIN 25.00

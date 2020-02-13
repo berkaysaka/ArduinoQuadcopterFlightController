@@ -14,11 +14,9 @@ void calculateMotorPowers() {
   fresh_imu_data_available = false;
   updateCurrentTimeVariables();
 
-  
-    roll_control_signal = getControlSignal(desired_roll_angle - rollAngle, rollAngle - prev_rollAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  
-    pitch_control_signal = getControlSignal(desired_pitch_angle - pitchAngle, pitchAngle - prev_pitchAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  yaw_control_signal = getControlSignal(calculateErrorForYaw(desired_yaw_angle, yawAngle), calculateErrorForYaw(yawAngle, prev_yawAngle), KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
+  roll_control_signal = getControlSignal(desired_roll_angle - rollAngle, rollAngle - prev_rollAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
+  pitch_control_signal = getControlSignal(desired_pitch_angle - pitchAngle, pitchAngle - prev_pitchAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
+  yaw_control_signal = getControlSignalForYaw(calculateErrorForYaw(desired_yaw_angle, yawAngle), KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
 
   // limit control gains
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
