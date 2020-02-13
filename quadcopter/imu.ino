@@ -49,6 +49,10 @@ void readIMUvalues() {
     if(newYawAngle == yawAngle && newRollAngle == rollAngle && newPitchAngle == pitchAngle){
       return; //ignore if they are all equal.
     }
+
+    prev_yawAngle = yawAngle;
+    prev_rollAngle = rollAngle;
+    prev_pitchAngle = pitchAngle;
     
     yawAngle = newYawAngle;
     rollAngle = newRollAngle;

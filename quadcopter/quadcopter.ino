@@ -14,16 +14,16 @@
 #define THROTTLE_START_POINT 15
 #define THROTTLE_LIMIT_POINT 140
 
-#define KP_roll_pitch 0.5
-#define KI_roll_pitch 0.01
-#define KD_roll_pitch 100.00
+#define KP_roll_pitch 0.4
+#define KI_roll_pitch 0.001
+#define KD_roll_pitch 50.00
 
 #define KP_yaw 3.00
 #define KI_yaw 0.05
-#define KD_yaw 1200.00
+#define KD_yaw 500.00
 
 #define YAW_INTEGRAL_LIMIT 10.00
-#define ROLL_PITCH_INTEGRAL_LIMIT 0.3
+#define ROLL_PITCH_INTEGRAL_LIMIT 0.00
 
 #define MAX_ROLL_PITCH_CONTROL_GAIN 30.00
 #define MAX_YAW_CONTROL_GAIN 25.00
@@ -47,6 +47,7 @@
 //-----------GLOBAL VARIABLES-----------
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
 double pitchAngle, rollAngle, yawAngle;
+double prev_pitchAngle, prev_rollAngle, prev_yawAngle;
 int throttle;
 double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
 int throttleRaw, yawRaw, rollRaw, pitchRaw;
