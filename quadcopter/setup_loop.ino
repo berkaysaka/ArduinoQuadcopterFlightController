@@ -29,6 +29,7 @@ void loop() {
 }
 
 void release_loop() {
+  syncOutputSignals();
   readReceiverValues();
   calculateDesiredValuesWithSafetyChecks();
   readIMUvalues();

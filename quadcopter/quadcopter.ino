@@ -1,7 +1,7 @@
 //-----------EXECUTION---------------
 #define TEST_MODE false
 #define DEBUG_MODE false
-#define TELEMETRY_ENABLED true
+#define TELEMETRY_ENABLED false
 
 //-----------CONFIGURATION-----------
 #define ANGLE_DEGREE_LIMIT_PITCH_ROLL 20
@@ -14,15 +14,15 @@
 #define THROTTLE_START_POINT 15
 #define THROTTLE_LIMIT_POINT 140
 
-#define KP_roll_pitch 0.4
+#define KP_roll_pitch 0.3
 #define KI_roll_pitch 0.001
 #define KD_roll_pitch 40.00
 
-#define KP_yaw 3.00
+#define KP_yaw 2.00
 #define KI_yaw 0.05
-#define KD_yaw 1000.00
+#define KD_yaw 800.00
 
-#define YAW_INTEGRAL_LIMIT 10.00
+#define YAW_INTEGRAL_LIMIT 1.00
 #define ROLL_PITCH_INTEGRAL_LIMIT 0.50
 
 #define MAX_ROLL_PITCH_CONTROL_GAIN 30.00
@@ -33,10 +33,10 @@
 #define MIN_RAW_RECEIVER_VALUE 300
 #define MAX_RAW_RECEIVER_VALUE 1700
 
-#define FRONT_LEFT_MOTOR_PIN 7
-#define FRONT_RIGHT_MOTOR_PIN 5
-#define REAR_LEFT_MOTOR_PIN 6
-#define REAR_RIGHT_MOTOR_PIN 4
+#define FRONT_LEFT_MOTOR_PIN 4
+#define FRONT_RIGHT_MOTOR_PIN 6
+#define REAR_LEFT_MOTOR_PIN 5
+#define REAR_RIGHT_MOTOR_PIN 7
 
 #define MIN_MOTOR_PULSE_WIDTH 1000
 #define MAX_MOTOR_PULSE_WIDTH 2000
