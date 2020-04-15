@@ -4,7 +4,7 @@
 #include "Wire.h"
 #endif
 MPU6050 mpu;
-#define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
+#define INTERRUPT_PIN 3  // use pin 2 on Arduino Uno & most boards
 
 unsigned long lastImuDataAvailableTime = millis();
 
