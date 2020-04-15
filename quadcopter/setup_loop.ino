@@ -15,6 +15,7 @@ void setup() {
   initializeReceiver();
   initializeOutputSignals();
   initializeIMU();
+  delay(500);
 }
 
 
