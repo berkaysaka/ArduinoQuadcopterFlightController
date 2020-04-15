@@ -23,49 +23,15 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
-uint8_t teapotPacket[14] = { '$', 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0x00, 0x00, '\r', '\n' };
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
 void dmpDataReady() {
   mpuInterrupt = true;
 }
 
 void initializeIMU() {
-  ConfigureIMU();
-}
-
-void readIMUvalues() {
-  if (!dmpReady) return;
-
-  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
-
-    mpu.dmpGetQuaternion(&q, fifoBuffer);
-    mpu.dmpGetGravity(&gravity, &q);
-    mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    // pitch-roll swapped somehow, investigate.
-    double newYawAngle = ypr[0] * 180 / M_PI;
-    double newRollAngle = ypr[1] * 180 / M_PI;
-    double newPitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
-
-    if(newYawAngle == yawAngle && newRollAngle == rollAngle && newPitchAngle == pitchAngle){
-      return; //ignore if they are all equal.
-    }
-
-    prev_yawAngle = yawAngle;
-    prev_rollAngle = rollAngle;
-    prev_pitchAngle = pitchAngle;
-    
-    yawAngle = newYawAngle;
-    rollAngle = newRollAngle;
-    pitchAngle = newPitchAngle;
-
-    fresh_imu_data_available = true;
-  }
-}
-
-void ConfigureIMU() {
-#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+  #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
-  TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
+  Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
 #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
   Fastwire::setup(400, true);
 #endif
@@ -98,5 +64,33 @@ void ConfigureIMU() {
     // 1 = initial memory load failed
     // 2 = DMP configuration updates failed
     // (if it's going to break, usually the code will be 1)
+  }
+}
+
+void readIMUvalues() {
+  if (!dmpReady) return;
+
+  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
+    mpu.dmpGetQuaternion(&q, fifoBuffer);
+    mpu.dmpGetGravity(&gravity, &q);
+    mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    // pitch-roll swapped somehow, investigate.
+    double newYawAngle = ypr[0] * 180 / M_PI;
+    double newRollAngle = ypr[1] * 180 / M_PI;
+    double newPitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+
+    if(newYawAngle == yawAngle && newRollAngle == rollAngle && newPitchAngle == pitchAngle){
+      return; //ignore if they are all equal.
+    }
+
+    prev_yawAngle = yawAngle;
+    prev_rollAngle = rollAngle;
+    prev_pitchAngle = pitchAngle;
+    
+    yawAngle = newYawAngle;
+    rollAngle = newRollAngle;
+    pitchAngle = newPitchAngle;
+
+    fresh_imu_data_available = true;
   }
 }
