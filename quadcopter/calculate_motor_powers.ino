@@ -6,8 +6,7 @@ bool fresh_imu_data_available = false;
 
 void calculateMotorPowers() {
   if (imu_failure == true){
-    updateCurrentTimeVariables();
-    updateLastTimeVariables();
+    last_time = millis();
     return;
   }
   
