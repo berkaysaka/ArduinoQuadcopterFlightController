@@ -5,9 +5,7 @@ double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, ya
 
 void calculateMotorPowers() {
   unsigned long elapsed_time = millis() - last_time;
-  if (elapsed_time < PID_SAMPLING_FREQUENCY)
-    return;
-
+  
   if (fresh_imu_data_available == false)
     return;
   
