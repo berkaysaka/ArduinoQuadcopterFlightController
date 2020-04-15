@@ -176,7 +176,7 @@ void test_calculateDesiredValues_should_set_desired_roll_pitch_yaw_angles_to_0_i
   pitchRaw = center;
   rollRaw = center;
   yawRaw = center;
-  calculateDesiredValues();
+  calculateDesiredOrientation();
   bool passed = desired_pitch_angle == 0 && desired_roll_angle == 0 && desired_yaw_angle == 0;
   Serial.println(String(passed) + " => test_calculateDesiredValues_should_set_desired_roll_pitch_yaw_angles_to_0_if_transmitter_sticks_are_centered");
 }

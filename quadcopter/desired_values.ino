@@ -1,22 +1,8 @@
-void calculateDesiredValuesWithSafetyChecks(){
-  calculateDesiredValues();
-  applySafetyRules();
-}
-
-void calculateDesiredValues() {
+void calculateDesiredOrientation() {
   throttle = map(throttleRaw, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, MIN_THROTTLE, THROTTLE_LIMIT_POINT);
   desired_pitch_angle = calculateDesiredAngle(pitchRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
   desired_roll_angle = calculateDesiredAngle(rollRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
   desired_yaw_angle = calculateDesiredYawAngle(desired_yaw_angle, calculateDesiredAngle(yawRaw, ANGLE_DEGREE_LIMIT_YAW));
-}
-
-void applySafetyRules(){
-  if (throttle < THROTTLE_START_POINT || receiver_failure == true){
-    throttle = MIN_THROTTLE;
-    desired_yaw_angle = yawAngle;
-    desired_pitch_angle = 0;
-    desired_roll_angle = 0;
-  }
 }
 
 double calculateDesiredAngle(int rawReceiverValue, int angleDegreeLimit) {

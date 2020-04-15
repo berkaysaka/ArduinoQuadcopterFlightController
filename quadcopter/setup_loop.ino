@@ -31,16 +31,27 @@ void loop() {
 void release_loop() {
   syncOutputSignals();
   readReceiverValues();
-  calculateDesiredValuesWithSafetyChecks();
+  calculateDesiredOrientation();
   readIMUvalues();
   calculateMotorPowers();
+  applySafetyRules();
   spinMotors();
   if (TELEMETRY_ENABLED == true) {
     sendTelemetryInfo();
   }
 }
 
-
+void applySafetyRules(){
+  if (throttle < THROTTLE_START_POINT || receiver_failure == true || imu_failure == true){
+    frontLeftMotorPower = MIN_THROTTLE;
+    frontRightMotorPower = MIN_THROTTLE;
+    rearLeftMotorPower = MIN_THROTTLE;
+    rearRightMotorPower = MIN_THROTTLE;
+    desired_yaw_angle = yawAngle;
+    desired_pitch_angle = 0;
+    desired_roll_angle = 0;
+  }
+}
 
 
 long diff;
@@ -79,7 +90,7 @@ void debug_loop() {
   totalreadReceiverValues += diff;
   debugtime = currentMicros;
 
-  calculateDesiredValuesWithSafetyChecks();
+  calculateDesiredOrientation();
   currentMicros = micros();
   diff = currentMicros - debugtime;
   if (diff != 0 && diff < mincalculateDesiredValuesWithSafetyChecks)

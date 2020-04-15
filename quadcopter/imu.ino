@@ -6,6 +6,8 @@
 MPU6050 mpu;
 #define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 
+unsigned long lastImuDataAvailableTime = millis();
+
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -24,6 +26,7 @@ float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
+
 void dmpDataReady() {
   mpuInterrupt = true;
 }
@@ -69,7 +72,7 @@ void initializeIMU() {
 
 void readIMUvalues() {
   if (!dmpReady) return;
-
+  
   if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
@@ -78,10 +81,6 @@ void readIMUvalues() {
     double newYawAngle = ypr[0] * 180 / M_PI;
     double newRollAngle = ypr[1] * 180 / M_PI;
     double newPitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
-
-    if(newYawAngle == yawAngle && newRollAngle == rollAngle && newPitchAngle == pitchAngle){
-      return; //ignore if they are all equal.
-    }
 
     prev_yawAngle = yawAngle;
     prev_rollAngle = rollAngle;
@@ -92,5 +91,13 @@ void readIMUvalues() {
     pitchAngle = newPitchAngle;
 
     fresh_imu_data_available = true;
+    lastImuDataAvailableTime = millis();
+  }
+
+  unsigned long imuDataUnavailableTime = millis() - lastImuDataAvailableTime;
+  if(imuDataUnavailableTime > 30){
+      imu_failure = true;
+  }else{
+      imu_failure = false;
   }
 }

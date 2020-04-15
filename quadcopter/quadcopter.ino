@@ -50,5 +50,5 @@ int throttle;
 double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
 int throttleRaw, yawRaw, rollRaw, pitchRaw;
 bool receiver_failure = false;
-bool fresh_imu_data_available = false;
+bool imu_failure = false;
 double roll_control_signal, pitch_control_signal, yaw_control_signal;
