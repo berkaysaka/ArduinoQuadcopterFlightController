@@ -4,9 +4,9 @@
 #include "Wire.h"
 #endif
 MPU6050 mpu;
-#define INTERRUPT_PIN 3  // use pin 2 on Arduino Uno & most boards
+#define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 
-unsigned long lastImuDataAvailableTime = millis();
+unsigned long lastImuDataAvailableTime = 0;
 
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
@@ -33,15 +33,19 @@ void dmpDataReady() {
 
 void initializeIMU() {
   #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-  Wire.begin();
-  Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
-#elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-  Fastwire::setup(400, true);
-#endif
+    Wire.begin();
+    Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
+  #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+    Fastwire::setup(400, true);
+  #endif
+  
   mpu.initialize();
   pinMode(INTERRUPT_PIN, INPUT);
-  devStatus = mpu.dmpInitialize();
 
+  if(!mpu.testConnection()){
+    Serial.println("*imu test connection failed!");
+  }
+  devStatus = mpu.dmpInitialize();
   mpu.setXGyroOffset(91);
   mpu.setYGyroOffset(-92);
   mpu.setZGyroOffset(38);
@@ -55,7 +59,6 @@ void initializeIMU() {
     mpu.CalibrateGyro(6);
     mpu.PrintActiveOffsets();
     syncOutputSignals();*/
-    
     mpu.setDMPEnabled(true);
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
     mpuIntStatus = mpu.getIntStatus();
@@ -63,6 +66,7 @@ void initializeIMU() {
 
     packetSize = mpu.dmpGetFIFOPacketSize();
   } else {
+    Serial.println("*imu dmp initialize error!");
     // ERROR!
     // 1 = initial memory load failed
     // 2 = DMP configuration updates failed
@@ -93,7 +97,9 @@ void readIMUvalues() {
     fresh_imu_data_available = true;
     lastImuDataAvailableTime = millis();
   }
-
+  if(lastImuDataAvailableTime == 0)
+    return; //not initialized yet;
+    
   unsigned long imuDataUnavailableTime = millis() - lastImuDataAvailableTime;
   if(imuDataUnavailableTime > 30){
       imu_failure = true;
