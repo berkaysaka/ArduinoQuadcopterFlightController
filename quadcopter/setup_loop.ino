@@ -13,7 +13,6 @@ void setup() {
   initializeOutputSignals();
   initializeMotors();
   initializeReceiver();
-  initializeOutputSignals();
   initializeIMU();
   delay(20);
 }
