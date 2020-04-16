@@ -1,4 +1,7 @@
+#include <avr/wdt.h>
+
 void setup() {
+  wdt_enable(WDTO_1S);
   if (TEST_MODE == true) {
     Serial.begin(115200);
     run_tests();
@@ -14,6 +17,9 @@ void setup() {
   initializeMotors();
   initializeReceiver();
   initializeIMU();
+
+  wdt_disable();
+  wdt_enable(WDTO_30MS);
 }
 
 
@@ -38,6 +44,7 @@ void release_loop() {
   if (TELEMETRY_ENABLED == true) {
     sendTelemetryInfo();
   }
+  wdt_reset();
 }
 
 void applySafetyRules(){
