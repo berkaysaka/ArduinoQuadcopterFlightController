@@ -143,7 +143,7 @@ void debug_loop() {
     totalsendTelemetryInfo += diff;
   }
 
-  if (counter < 101)
+  if (counter < 1001)
     return;
 
   Serial.println("-readReceiverValues-" + String(totalreadReceiverValues / counter) + "-" + String(minreadReceiverValues) + "-" + String(maxreadReceiverValues));
