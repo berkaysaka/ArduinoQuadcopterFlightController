@@ -122,6 +122,7 @@ void debug_loop() {
   totalcalculateMotorPowers += diff;
 
   debugtime = currentMicros;
+  applySafetyRules();
   spinMotors();
   currentMicros = micros();
   diff = currentMicros - debugtime;
