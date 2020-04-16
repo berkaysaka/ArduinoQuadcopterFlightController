@@ -14,7 +14,6 @@ void setup() {
   initializeMotors();
   initializeReceiver();
   initializeIMU();
-  delay(20);
 }
 
 
