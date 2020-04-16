@@ -52,6 +52,9 @@ void applySafetyRules(){
     desired_pitch_angle = 0;
     desired_roll_angle = 0;
   }
+  if(imu_failure == true){
+    Serial.println("imu_failure");
+  }
 }
 
 
