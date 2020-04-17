@@ -1,7 +1,7 @@
 #include <avr/wdt.h>
 
 void setup() {
-  wdt_enable(WDTO_1S);
+  wdt_enable(WDTO_500MS);
   if (TEST_MODE == true) {
     Serial.begin(115200);
     run_tests();
