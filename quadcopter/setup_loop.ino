@@ -9,8 +9,8 @@ void setup() {
   } else if (DEBUG_MODE == true) {
     Serial.begin(2000000);
   }
-  if (TELEMETRY_ENABLED == true) {
-    Serial2.begin(38400);
+  if (TELEMETRY_ENABLED == true || REMOTE_PID_CONFIG_ENABLED == true) {
+    Serial2.begin(9600);
   }
   //Serial.begin(115200);
   initializeOutputSignals();
@@ -19,7 +19,7 @@ void setup() {
   initializeIMU();
 
   wdt_disable();
-  wdt_enable(WDTO_30MS);
+  wdt_enable(WDTO_60MS);
 }
 
 
@@ -43,6 +43,9 @@ void release_loop() {
   spinMotors();
   if (TELEMETRY_ENABLED == true) {
     sendTelemetryInfo();
+  }
+  if (REMOTE_PID_CONFIG_ENABLED == true) {
+    receivePidCommand();
   }
   wdt_reset();
 }
