@@ -65,6 +65,12 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.btnClearLogs = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.txt_YAW_ANGLE_BOOSTER = new System.Windows.Forms.TextBox();
+            this.txt_ANGLE_DEGREE_LIMIT_YAW = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.read_YAW_ANGLE_BOOSTER = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
+            this.read_ANGLE_DEGREE_LIMIT_YAW = new System.Windows.Forms.TextBox();
             this.txt_ANGLE_DEGREE_LIMIT_PITCH_ROLL = new System.Windows.Forms.TextBox();
             this.txt_MAX_YAW_CONTROL_GAIN = new System.Windows.Forms.TextBox();
             this.txt_MAX_ROLL_PITCH_CONTROL_GAIN = new System.Windows.Forms.TextBox();
@@ -74,12 +80,6 @@
             this.read_MAX_YAW_CONTROL_GAIN = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.read_MAX_ROLL_PITCH_CONTROL_GAIN = new System.Windows.Forms.TextBox();
-            this.txt_YAW_ANGLE_BOOSTER = new System.Windows.Forms.TextBox();
-            this.txt_ANGLE_DEGREE_LIMIT_YAW = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.read_YAW_ANGLE_BOOSTER = new System.Windows.Forms.TextBox();
-            this.label13 = new System.Windows.Forms.Label();
-            this.read_ANGLE_DEGREE_LIMIT_YAW = new System.Windows.Forms.TextBox();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -128,30 +128,30 @@
             // 
             // txt_rollpitch_I_limit
             // 
-            this.txt_rollpitch_I_limit.Location = new System.Drawing.Point(118, 133);
+            this.txt_rollpitch_I_limit.Location = new System.Drawing.Point(135, 134);
             this.txt_rollpitch_I_limit.Name = "txt_rollpitch_I_limit";
-            this.txt_rollpitch_I_limit.Size = new System.Drawing.Size(63, 22);
+            this.txt_rollpitch_I_limit.Size = new System.Drawing.Size(80, 22);
             this.txt_rollpitch_I_limit.TabIndex = 19;
             // 
             // txt_rollpitch_D
             // 
-            this.txt_rollpitch_D.Location = new System.Drawing.Point(118, 86);
+            this.txt_rollpitch_D.Location = new System.Drawing.Point(135, 85);
             this.txt_rollpitch_D.Name = "txt_rollpitch_D";
-            this.txt_rollpitch_D.Size = new System.Drawing.Size(63, 22);
+            this.txt_rollpitch_D.Size = new System.Drawing.Size(80, 22);
             this.txt_rollpitch_D.TabIndex = 18;
             // 
             // txt_rollpitch_I
             // 
-            this.txt_rollpitch_I.Location = new System.Drawing.Point(118, 58);
+            this.txt_rollpitch_I.Location = new System.Drawing.Point(135, 58);
             this.txt_rollpitch_I.Name = "txt_rollpitch_I";
-            this.txt_rollpitch_I.Size = new System.Drawing.Size(63, 22);
+            this.txt_rollpitch_I.Size = new System.Drawing.Size(80, 22);
             this.txt_rollpitch_I.TabIndex = 17;
             // 
             // txt_rollpitch_P
             // 
-            this.txt_rollpitch_P.Location = new System.Drawing.Point(118, 30);
+            this.txt_rollpitch_P.Location = new System.Drawing.Point(135, 30);
             this.txt_rollpitch_P.Name = "txt_rollpitch_P";
-            this.txt_rollpitch_P.Size = new System.Drawing.Size(63, 22);
+            this.txt_rollpitch_P.Size = new System.Drawing.Size(80, 22);
             this.txt_rollpitch_P.TabIndex = 16;
             // 
             // read_rollpitch_I_limit
@@ -159,7 +159,7 @@
             this.read_rollpitch_I_limit.Location = new System.Drawing.Point(49, 133);
             this.read_rollpitch_I_limit.Name = "read_rollpitch_I_limit";
             this.read_rollpitch_I_limit.ReadOnly = true;
-            this.read_rollpitch_I_limit.Size = new System.Drawing.Size(63, 22);
+            this.read_rollpitch_I_limit.Size = new System.Drawing.Size(80, 22);
             this.read_rollpitch_I_limit.TabIndex = 15;
             // 
             // label7
@@ -185,7 +185,7 @@
             this.read_rollpitch_D.Location = new System.Drawing.Point(49, 86);
             this.read_rollpitch_D.Name = "read_rollpitch_D";
             this.read_rollpitch_D.ReadOnly = true;
-            this.read_rollpitch_D.Size = new System.Drawing.Size(63, 22);
+            this.read_rollpitch_D.Size = new System.Drawing.Size(80, 22);
             this.read_rollpitch_D.TabIndex = 12;
             // 
             // label2
@@ -202,7 +202,7 @@
             this.read_rollpitch_I.Location = new System.Drawing.Point(49, 58);
             this.read_rollpitch_I.Name = "read_rollpitch_I";
             this.read_rollpitch_I.ReadOnly = true;
-            this.read_rollpitch_I.Size = new System.Drawing.Size(63, 22);
+            this.read_rollpitch_I.Size = new System.Drawing.Size(80, 22);
             this.read_rollpitch_I.TabIndex = 10;
             // 
             // label1
@@ -219,7 +219,7 @@
             this.read_rollpitch_P.Location = new System.Drawing.Point(49, 30);
             this.read_rollpitch_P.Name = "read_rollpitch_P";
             this.read_rollpitch_P.ReadOnly = true;
-            this.read_rollpitch_P.Size = new System.Drawing.Size(63, 22);
+            this.read_rollpitch_P.Size = new System.Drawing.Size(80, 22);
             this.read_rollpitch_P.TabIndex = 8;
             // 
             // groupBox2
@@ -245,30 +245,30 @@
             // 
             // txt_yaw_I_limit
             // 
-            this.txt_yaw_I_limit.Location = new System.Drawing.Point(118, 135);
+            this.txt_yaw_I_limit.Location = new System.Drawing.Point(135, 135);
             this.txt_yaw_I_limit.Name = "txt_yaw_I_limit";
-            this.txt_yaw_I_limit.Size = new System.Drawing.Size(63, 22);
+            this.txt_yaw_I_limit.Size = new System.Drawing.Size(80, 22);
             this.txt_yaw_I_limit.TabIndex = 21;
             // 
             // txt_yaw_D
             // 
-            this.txt_yaw_D.Location = new System.Drawing.Point(118, 86);
+            this.txt_yaw_D.Location = new System.Drawing.Point(135, 86);
             this.txt_yaw_D.Name = "txt_yaw_D";
-            this.txt_yaw_D.Size = new System.Drawing.Size(63, 22);
+            this.txt_yaw_D.Size = new System.Drawing.Size(80, 22);
             this.txt_yaw_D.TabIndex = 20;
             // 
             // txt_yaw_I
             // 
-            this.txt_yaw_I.Location = new System.Drawing.Point(118, 58);
+            this.txt_yaw_I.Location = new System.Drawing.Point(135, 58);
             this.txt_yaw_I.Name = "txt_yaw_I";
-            this.txt_yaw_I.Size = new System.Drawing.Size(63, 22);
+            this.txt_yaw_I.Size = new System.Drawing.Size(80, 22);
             this.txt_yaw_I.TabIndex = 19;
             // 
             // txt_yaw_P
             // 
-            this.txt_yaw_P.Location = new System.Drawing.Point(118, 30);
+            this.txt_yaw_P.Location = new System.Drawing.Point(135, 30);
             this.txt_yaw_P.Name = "txt_yaw_P";
-            this.txt_yaw_P.Size = new System.Drawing.Size(63, 22);
+            this.txt_yaw_P.Size = new System.Drawing.Size(80, 22);
             this.txt_yaw_P.TabIndex = 18;
             // 
             // read_yaw_I_limit
@@ -276,7 +276,7 @@
             this.read_yaw_I_limit.Location = new System.Drawing.Point(49, 135);
             this.read_yaw_I_limit.Name = "read_yaw_I_limit";
             this.read_yaw_I_limit.ReadOnly = true;
-            this.read_yaw_I_limit.Size = new System.Drawing.Size(63, 22);
+            this.read_yaw_I_limit.Size = new System.Drawing.Size(80, 22);
             this.read_yaw_I_limit.TabIndex = 17;
             // 
             // label8
@@ -302,7 +302,7 @@
             this.read_yaw_D.Location = new System.Drawing.Point(49, 86);
             this.read_yaw_D.Name = "read_yaw_D";
             this.read_yaw_D.ReadOnly = true;
-            this.read_yaw_D.Size = new System.Drawing.Size(63, 22);
+            this.read_yaw_D.Size = new System.Drawing.Size(80, 22);
             this.read_yaw_D.TabIndex = 12;
             // 
             // label5
@@ -319,7 +319,7 @@
             this.read_yaw_I.Location = new System.Drawing.Point(49, 58);
             this.read_yaw_I.Name = "read_yaw_I";
             this.read_yaw_I.ReadOnly = true;
-            this.read_yaw_I.Size = new System.Drawing.Size(63, 22);
+            this.read_yaw_I.Size = new System.Drawing.Size(80, 22);
             this.read_yaw_I.TabIndex = 10;
             // 
             // label6
@@ -336,7 +336,7 @@
             this.read_yaw_P.Location = new System.Drawing.Point(49, 30);
             this.read_yaw_P.Name = "read_yaw_P";
             this.read_yaw_P.ReadOnly = true;
-            this.read_yaw_P.Size = new System.Drawing.Size(63, 22);
+            this.read_yaw_P.Size = new System.Drawing.Size(80, 22);
             this.read_yaw_P.TabIndex = 8;
             // 
             // btn_READ
@@ -427,6 +427,54 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Other Parameters";
             // 
+            // txt_YAW_ANGLE_BOOSTER
+            // 
+            this.txt_YAW_ANGLE_BOOSTER.Location = new System.Drawing.Point(338, 142);
+            this.txt_YAW_ANGLE_BOOSTER.Name = "txt_YAW_ANGLE_BOOSTER";
+            this.txt_YAW_ANGLE_BOOSTER.Size = new System.Drawing.Size(63, 22);
+            this.txt_YAW_ANGLE_BOOSTER.TabIndex = 26;
+            // 
+            // txt_ANGLE_DEGREE_LIMIT_YAW
+            // 
+            this.txt_ANGLE_DEGREE_LIMIT_YAW.Location = new System.Drawing.Point(338, 114);
+            this.txt_ANGLE_DEGREE_LIMIT_YAW.Name = "txt_ANGLE_DEGREE_LIMIT_YAW";
+            this.txt_ANGLE_DEGREE_LIMIT_YAW.Size = new System.Drawing.Size(63, 22);
+            this.txt_ANGLE_DEGREE_LIMIT_YAW.TabIndex = 25;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(88, 145);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(170, 17);
+            this.label9.TabIndex = 24;
+            this.label9.Text = "YAW_ANGLE_BOOSTER";
+            // 
+            // read_YAW_ANGLE_BOOSTER
+            // 
+            this.read_YAW_ANGLE_BOOSTER.Location = new System.Drawing.Point(269, 142);
+            this.read_YAW_ANGLE_BOOSTER.Name = "read_YAW_ANGLE_BOOSTER";
+            this.read_YAW_ANGLE_BOOSTER.ReadOnly = true;
+            this.read_YAW_ANGLE_BOOSTER.Size = new System.Drawing.Size(63, 22);
+            this.read_YAW_ANGLE_BOOSTER.TabIndex = 23;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(56, 117);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(202, 17);
+            this.label13.TabIndex = 22;
+            this.label13.Text = "ANGLE_DEGREE_LIMIT_YAW";
+            // 
+            // read_ANGLE_DEGREE_LIMIT_YAW
+            // 
+            this.read_ANGLE_DEGREE_LIMIT_YAW.Location = new System.Drawing.Point(269, 114);
+            this.read_ANGLE_DEGREE_LIMIT_YAW.Name = "read_ANGLE_DEGREE_LIMIT_YAW";
+            this.read_ANGLE_DEGREE_LIMIT_YAW.ReadOnly = true;
+            this.read_ANGLE_DEGREE_LIMIT_YAW.Size = new System.Drawing.Size(63, 22);
+            this.read_ANGLE_DEGREE_LIMIT_YAW.TabIndex = 21;
+            // 
             // txt_ANGLE_DEGREE_LIMIT_PITCH_ROLL
             // 
             this.txt_ANGLE_DEGREE_LIMIT_PITCH_ROLL.Location = new System.Drawing.Point(338, 86);
@@ -498,54 +546,6 @@
             this.read_MAX_ROLL_PITCH_CONTROL_GAIN.ReadOnly = true;
             this.read_MAX_ROLL_PITCH_CONTROL_GAIN.Size = new System.Drawing.Size(63, 22);
             this.read_MAX_ROLL_PITCH_CONTROL_GAIN.TabIndex = 8;
-            // 
-            // txt_YAW_ANGLE_BOOSTER
-            // 
-            this.txt_YAW_ANGLE_BOOSTER.Location = new System.Drawing.Point(338, 142);
-            this.txt_YAW_ANGLE_BOOSTER.Name = "txt_YAW_ANGLE_BOOSTER";
-            this.txt_YAW_ANGLE_BOOSTER.Size = new System.Drawing.Size(63, 22);
-            this.txt_YAW_ANGLE_BOOSTER.TabIndex = 26;
-            // 
-            // txt_ANGLE_DEGREE_LIMIT_YAW
-            // 
-            this.txt_ANGLE_DEGREE_LIMIT_YAW.Location = new System.Drawing.Point(338, 114);
-            this.txt_ANGLE_DEGREE_LIMIT_YAW.Name = "txt_ANGLE_DEGREE_LIMIT_YAW";
-            this.txt_ANGLE_DEGREE_LIMIT_YAW.Size = new System.Drawing.Size(63, 22);
-            this.txt_ANGLE_DEGREE_LIMIT_YAW.TabIndex = 25;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(88, 145);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(170, 17);
-            this.label9.TabIndex = 24;
-            this.label9.Text = "YAW_ANGLE_BOOSTER";
-            // 
-            // read_YAW_ANGLE_BOOSTER
-            // 
-            this.read_YAW_ANGLE_BOOSTER.Location = new System.Drawing.Point(269, 142);
-            this.read_YAW_ANGLE_BOOSTER.Name = "read_YAW_ANGLE_BOOSTER";
-            this.read_YAW_ANGLE_BOOSTER.ReadOnly = true;
-            this.read_YAW_ANGLE_BOOSTER.Size = new System.Drawing.Size(63, 22);
-            this.read_YAW_ANGLE_BOOSTER.TabIndex = 23;
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(56, 117);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(202, 17);
-            this.label13.TabIndex = 22;
-            this.label13.Text = "ANGLE_DEGREE_LIMIT_YAW";
-            // 
-            // read_ANGLE_DEGREE_LIMIT_YAW
-            // 
-            this.read_ANGLE_DEGREE_LIMIT_YAW.Location = new System.Drawing.Point(269, 114);
-            this.read_ANGLE_DEGREE_LIMIT_YAW.Name = "read_ANGLE_DEGREE_LIMIT_YAW";
-            this.read_ANGLE_DEGREE_LIMIT_YAW.ReadOnly = true;
-            this.read_ANGLE_DEGREE_LIMIT_YAW.Size = new System.Drawing.Size(63, 22);
-            this.read_ANGLE_DEGREE_LIMIT_YAW.TabIndex = 21;
             // 
             // Form1
             // 
