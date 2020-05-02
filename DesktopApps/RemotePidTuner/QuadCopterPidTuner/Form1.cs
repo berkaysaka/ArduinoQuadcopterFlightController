@@ -196,7 +196,7 @@ namespace QuadCopterPidTuner
                         SetStatus(false);
                         Application.DoEvents();
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
                     }
                 }
@@ -237,7 +237,7 @@ namespace QuadCopterPidTuner
                     {
                         OpenPort();
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
                     }
                 }
@@ -260,7 +260,7 @@ namespace QuadCopterPidTuner
                 SetStatus(true);
                 readPidConfig();
             }
-            catch (Exception exception)
+            catch (Exception)
             {
             }
         }
