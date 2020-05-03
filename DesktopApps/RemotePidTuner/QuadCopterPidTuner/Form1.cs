@@ -98,7 +98,6 @@ namespace QuadCopterPidTuner
                     read_MAX_YAW_CONTROL_GAIN.Text = pidConfig[9];
                     read_ANGLE_DEGREE_LIMIT_PITCH_ROLL.Text = pidConfig[10];
                     read_ANGLE_DEGREE_LIMIT_YAW.Text = pidConfig[11];
-                    read_YAW_ANGLE_BOOSTER.Text = pidConfig[12];
 
                     if (txt_rollpitch_P.Text == string.Empty)
                     {
@@ -114,7 +113,6 @@ namespace QuadCopterPidTuner
                         txt_MAX_YAW_CONTROL_GAIN.Text = pidConfig[9];
                         txt_ANGLE_DEGREE_LIMIT_PITCH_ROLL.Text = pidConfig[10];
                         txt_ANGLE_DEGREE_LIMIT_YAW.Text = pidConfig[11];
-                        txt_YAW_ANGLE_BOOSTER.Text = pidConfig[12];
                     }
                 }));
                 AddLog("pid config received from quadcopter");
@@ -147,7 +145,7 @@ namespace QuadCopterPidTuner
 
         private void setPidConfig()
         {
-            SendCommand($"<setpid>{txt_rollpitch_P.Text}\t{txt_rollpitch_I.Text}\t{txt_rollpitch_D.Text}\t{txt_yaw_P.Text}\t{txt_yaw_I.Text}\t{txt_yaw_D.Text}\t{txt_yaw_I_limit.Text}\t{txt_rollpitch_I_limit.Text}\t{txt_MAX_ROLL_PITCH_CONTROL_GAIN.Text}\t{txt_MAX_YAW_CONTROL_GAIN.Text}\t{txt_ANGLE_DEGREE_LIMIT_PITCH_ROLL.Text}\t{txt_ANGLE_DEGREE_LIMIT_YAW.Text}\t{txt_YAW_ANGLE_BOOSTER.Text}</setpid>");
+            SendCommand($"<setpid>{txt_rollpitch_P.Text}\t{txt_rollpitch_I.Text}\t{txt_rollpitch_D.Text}\t{txt_yaw_P.Text}\t{txt_yaw_I.Text}\t{txt_yaw_D.Text}\t{txt_yaw_I_limit.Text}\t{txt_rollpitch_I_limit.Text}\t{txt_MAX_ROLL_PITCH_CONTROL_GAIN.Text}\t{txt_MAX_YAW_CONTROL_GAIN.Text}\t{txt_ANGLE_DEGREE_LIMIT_PITCH_ROLL.Text}\t{txt_ANGLE_DEGREE_LIMIT_YAW.Text}</setpid>");
         }
 
         private void AddLog(string message)

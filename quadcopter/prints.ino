@@ -103,7 +103,7 @@ void receivePidCommand()
       cmd.replace("</setpid>", "");
       double r = 0;
       int t = 0;
-      double pidValues[13];
+      double pidValues[12];
       for (int i = 0; i < cmd.length(); i++)
       {
         if (cmd.charAt(i) == '\t' || i == cmd.length()-1)
@@ -129,7 +129,6 @@ void receivePidCommand()
       MAX_YAW_CONTROL_GAIN = pidValues[9];
       ANGLE_DEGREE_LIMIT_PITCH_ROLL = pidValues[10];
       ANGLE_DEGREE_LIMIT_YAW = pidValues[11];
-      YAW_ANGLE_BOOSTER = pidValues[12];
       
       Serial2.print("<pidconfighasbeenset></pidconfighasbeenset>");
       Serial.println("<pidconfighasbeenset>");
@@ -148,7 +147,6 @@ void receivePidCommand()
         + "\t" + String(MAX_YAW_CONTROL_GAIN)
         + "\t" + String(ANGLE_DEGREE_LIMIT_PITCH_ROLL)
         + "\t" + String(ANGLE_DEGREE_LIMIT_YAW)
-        + "\t" + String(YAW_ANGLE_BOOSTER)
         + String("</pidconfig>")
       );
       Serial.println("<pidconfig>");

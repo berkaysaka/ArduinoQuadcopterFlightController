@@ -65,10 +65,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.btnClearLogs = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.txt_YAW_ANGLE_BOOSTER = new System.Windows.Forms.TextBox();
             this.txt_ANGLE_DEGREE_LIMIT_YAW = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.read_YAW_ANGLE_BOOSTER = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
             this.read_ANGLE_DEGREE_LIMIT_YAW = new System.Windows.Forms.TextBox();
             this.txt_ANGLE_DEGREE_LIMIT_PITCH_ROLL = new System.Windows.Forms.TextBox();
@@ -405,10 +402,7 @@
             // 
             // groupBox3
             // 
-            this.groupBox3.Controls.Add(this.txt_YAW_ANGLE_BOOSTER);
             this.groupBox3.Controls.Add(this.txt_ANGLE_DEGREE_LIMIT_YAW);
-            this.groupBox3.Controls.Add(this.label9);
-            this.groupBox3.Controls.Add(this.read_YAW_ANGLE_BOOSTER);
             this.groupBox3.Controls.Add(this.label13);
             this.groupBox3.Controls.Add(this.read_ANGLE_DEGREE_LIMIT_YAW);
             this.groupBox3.Controls.Add(this.txt_ANGLE_DEGREE_LIMIT_PITCH_ROLL);
@@ -427,36 +421,12 @@
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Other Parameters";
             // 
-            // txt_YAW_ANGLE_BOOSTER
-            // 
-            this.txt_YAW_ANGLE_BOOSTER.Location = new System.Drawing.Point(338, 142);
-            this.txt_YAW_ANGLE_BOOSTER.Name = "txt_YAW_ANGLE_BOOSTER";
-            this.txt_YAW_ANGLE_BOOSTER.Size = new System.Drawing.Size(63, 22);
-            this.txt_YAW_ANGLE_BOOSTER.TabIndex = 26;
-            // 
             // txt_ANGLE_DEGREE_LIMIT_YAW
             // 
             this.txt_ANGLE_DEGREE_LIMIT_YAW.Location = new System.Drawing.Point(338, 114);
             this.txt_ANGLE_DEGREE_LIMIT_YAW.Name = "txt_ANGLE_DEGREE_LIMIT_YAW";
             this.txt_ANGLE_DEGREE_LIMIT_YAW.Size = new System.Drawing.Size(63, 22);
             this.txt_ANGLE_DEGREE_LIMIT_YAW.TabIndex = 25;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(88, 145);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(170, 17);
-            this.label9.TabIndex = 24;
-            this.label9.Text = "YAW_ANGLE_BOOSTER";
-            // 
-            // read_YAW_ANGLE_BOOSTER
-            // 
-            this.read_YAW_ANGLE_BOOSTER.Location = new System.Drawing.Point(269, 142);
-            this.read_YAW_ANGLE_BOOSTER.Name = "read_YAW_ANGLE_BOOSTER";
-            this.read_YAW_ANGLE_BOOSTER.ReadOnly = true;
-            this.read_YAW_ANGLE_BOOSTER.Size = new System.Drawing.Size(63, 22);
-            this.read_YAW_ANGLE_BOOSTER.TabIndex = 23;
             // 
             // label13
             // 
@@ -625,10 +595,7 @@
         private System.Windows.Forms.TextBox read_MAX_YAW_CONTROL_GAIN;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox read_MAX_ROLL_PITCH_CONTROL_GAIN;
-        private System.Windows.Forms.TextBox txt_YAW_ANGLE_BOOSTER;
         private System.Windows.Forms.TextBox txt_ANGLE_DEGREE_LIMIT_YAW;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox read_YAW_ANGLE_BOOSTER;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox read_ANGLE_DEGREE_LIMIT_YAW;
     }

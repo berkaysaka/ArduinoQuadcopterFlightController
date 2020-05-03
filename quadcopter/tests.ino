@@ -172,7 +172,6 @@ void test_calculateDesiredYawAngle_should_return_prev_desired_yaw_angle_if_0_ang
 
 void test_calculateDesiredYawAngle_should_return_desired_angle_based_on_yaw_angle(){
   reset_test_parameters();
-  YAW_ANGLE_BOOSTER = 0;
   yawAngle = 0;
   bool passed = calculateDesiredYawAngle(3, -2) == -2
              && calculateDesiredYawAngle(3, 2) == 2;
@@ -181,7 +180,6 @@ void test_calculateDesiredYawAngle_should_return_desired_angle_based_on_yaw_angl
 
 void test_calculateDesiredYawAngle_should_handle_360_degrees_properly(){
   reset_test_parameters();
-  YAW_ANGLE_BOOSTER = 0;
   yawAngle = 179;
   bool passed1 = calculateDesiredYawAngle(yawAngle, 2) == -179
              && calculateDesiredYawAngle(yawAngle, -360) == yawAngle
