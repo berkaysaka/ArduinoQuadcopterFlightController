@@ -1,8 +1,8 @@
 //-----------EXECUTION---------------
-#define TEST_MODE false
+#define TEST_MODE true
 #define DEBUG_MODE false
 #define TELEMETRY_ENABLED false
-#define REMOTE_PID_CONFIG_ENABLED true
+#define REMOTE_PID_CONFIG_ENABLED false
 
 //-----------CONFIGURATION-----------
 #define MIN_THROTTLE 0

@@ -1,9 +1,9 @@
 #include <avr/wdt.h>
 
 void setup() {
-  wdt_enable(WDTO_500MS);
   if (TEST_MODE == true) {
     Serial.begin(115200);
+    initializeMotors();
     run_tests();
     return;
   } else if (DEBUG_MODE == true) {
@@ -12,7 +12,7 @@ void setup() {
   if (TELEMETRY_ENABLED == true || REMOTE_PID_CONFIG_ENABLED == true) {
     Serial2.begin(9600);
   }
-  //Serial.begin(115200);
+  wdt_enable(WDTO_500MS);
   initializeOutputSignals();
   initializeMotors();
   initializeReceiver();
