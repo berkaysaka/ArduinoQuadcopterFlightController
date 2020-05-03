@@ -4,6 +4,10 @@ int delta_time;
 double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
 bool fresh_imu_data_available = false;
 
+#define yaw_control_signal_series_length 400
+double yaw_control_signal_series[yaw_control_signal_series_length];
+double yaw_balancing_control_signal = 0;
+
 void calculateMotorPowers() {
   if (imu_failure == true || receiver_failure == true){
     last_time = millis();
@@ -19,14 +23,27 @@ void calculateMotorPowers() {
 
   roll_control_signal = getControlSignal(desired_roll_angle - rollAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
   pitch_control_signal = getControlSignal(desired_pitch_angle - pitchAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  
   yaw_control_signal = getControlSignal(calculateErrorForYaw(desired_yaw_angle, yawAngle), KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
 
   // limit control gains
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   pitch_control_signal = constrain(pitch_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   yaw_control_signal = constrain(yaw_control_signal, -MAX_YAW_CONTROL_GAIN, MAX_YAW_CONTROL_GAIN);
-  
+
+  //fix yaw imbalancing issue
+  if(receiverYawIsOnCenter && throttle > 50){
+    yaw_balancing_control_signal = 0;
+    for(int i=1; i<yaw_control_signal_series_length; i++){
+      yaw_control_signal_series[i-1] = yaw_control_signal_series[i];
+      yaw_balancing_control_signal += yaw_control_signal_series[i];
+    }
+    yaw_control_signal_series[yaw_control_signal_series_length-1] = yaw_control_signal;
+    yaw_balancing_control_signal += yaw_control_signal;
+    yaw_balancing_control_signal /= yaw_control_signal_series_length;
+    yaw_balancing_control_signal = constrain(yaw_balancing_control_signal, -4, 4);
+  }  
+  yaw_control_signal -= yaw_balancing_control_signal;
+    
   frontLeftMotorPower = round(throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
   frontRightMotorPower = round(throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
   rearLeftMotorPower = round(throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
