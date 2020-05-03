@@ -30,7 +30,6 @@ void test_calculate_motor_powers(){
   test_calculate_motor_powers_should_run_right_turning_motors_faster_to_turn_left();
   test_calculate_motor_powers_should_run_left_turning_motors_faster_to_turn_right();
   test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_throttle();
-  test_calculate_motor_powers_yaw_balancing_calculation();
 }
 
 void test_reduceMotorPowers(){
@@ -131,22 +130,6 @@ void test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_t
   applySafetyRules();
   bool passed = frontLeftMotorPower + rearRightMotorPower + frontRightMotorPower + rearLeftMotorPower == throttle * 4;
   Serial.println(String(passed) + " => test_calculate_motor_powers_total_motor_powers_should_be_equal_to_4_times_throttle");
-}
-
-void test_calculate_motor_powers_yaw_balancing_calculation(){
-  reset_test_parameters();
-  throttle = 100;
-  receiverYawIsOnCenter = true;
-  yaw_control_signal = 2.44;
-  for(int i=0; i<yaw_control_signal_series_length; i++){
-    if(i == (yaw_control_signal_series_length/2)){
-      yaw_control_signal = 2.56;    
-    }
-    balanceYaw();
-  }
-    
-  bool passed = yaw_balancing_control_signal > 2.49 && yaw_balancing_control_signal < 2.51;
-  Serial.println(String(passed) + " => test_calculate_motor_powers_yaw_balancing_calculation");
 }
 
 void test_reduceMotorPowers_should_reduce_motor_powers_if_max_throttle_exceeds(){
