@@ -10,22 +10,22 @@
 #define THROTTLE_START_POINT 15
 #define THROTTLE_LIMIT_POINT 140
 
-double KP_roll_pitch = 0.5;
-double KI_roll_pitch = 0.01;
-double KD_roll_pitch = 100.00;
+double KP_roll_pitch = 0.30;
+double KI_roll_pitch = 0.001;
+double KD_roll_pitch = 80.00;
 
-double KP_yaw = 1.00;
-double KI_yaw = 0.05;
-double KD_yaw = 1200.00;
+double KP_yaw = 2.00;
+double KI_yaw = 0.01;
+double KD_yaw = 800.00;
 
-double YAW_INTEGRAL_LIMIT = 1.00;
-double ROLL_PITCH_INTEGRAL_LIMIT = 0.20;
+double YAW_INTEGRAL_LIMIT = 0.01;
+double ROLL_PITCH_INTEGRAL_LIMIT = 0.30;
 
 double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
-double MAX_YAW_CONTROL_GAIN = 15.00;
+double MAX_YAW_CONTROL_GAIN = 10.00;
 
 double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
-double ANGLE_DEGREE_LIMIT_YAW = 10.00;
+double ANGLE_DEGREE_LIMIT_YAW = 7.00;
 
 double YAW_ANGLE_BOOSTER = 2.00;
 
