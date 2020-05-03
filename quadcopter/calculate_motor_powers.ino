@@ -29,20 +29,7 @@ void calculateMotorPowers() {
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   pitch_control_signal = constrain(pitch_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   yaw_control_signal = constrain(yaw_control_signal, -MAX_YAW_CONTROL_GAIN, MAX_YAW_CONTROL_GAIN);
-
-  //fix yaw imbalancing issue
-  if(receiverYawIsOnCenter && throttle > 50){
-    yaw_balancing_control_signal = 0;
-    for(int i=1; i<yaw_control_signal_series_length; i++){
-      yaw_control_signal_series[i-1] = yaw_control_signal_series[i];
-      yaw_balancing_control_signal += yaw_control_signal_series[i];
-    }
-    yaw_control_signal_series[yaw_control_signal_series_length-1] = yaw_control_signal;
-    yaw_balancing_control_signal += yaw_control_signal;
-    yaw_balancing_control_signal /= yaw_control_signal_series_length;
-    yaw_balancing_control_signal = constrain(yaw_balancing_control_signal, -4, 4);
-  }  
-  yaw_control_signal -= yaw_balancing_control_signal;
+  balanceYaw();
     
   frontLeftMotorPower = round(throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
   frontRightMotorPower = round(throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
@@ -54,6 +41,25 @@ void calculateMotorPowers() {
   ensureMotorsAlwaysRun();
  
   updateLastTimeVariables();
+}
+
+void balanceYaw(){
+   //fix yaw imbalancing issue
+  if(throttle > THROTTLE_START_POINT) {
+    if(receiverYawIsOnCenter){
+      yaw_balancing_control_signal = 0;
+      for(int i=1; i<yaw_control_signal_series_length; i++){
+        yaw_control_signal_series[i-1] = yaw_control_signal_series[i];
+        yaw_balancing_control_signal += yaw_control_signal_series[i];
+      }
+      yaw_control_signal_series[yaw_control_signal_series_length-1] = yaw_control_signal;
+      yaw_balancing_control_signal += yaw_control_signal;
+      yaw_balancing_control_signal /= yaw_control_signal_series_length;
+      yaw_balancing_control_signal = constrain(yaw_balancing_control_signal, -4, 4);
+    }else{
+      yaw_control_signal += yaw_balancing_control_signal;  
+    }
+  }
 }
 
 double calculateErrorForYaw(double desired, double actual) {
