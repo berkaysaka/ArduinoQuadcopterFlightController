@@ -19,8 +19,7 @@ void calculateMotorPowers() {
 
   roll_control_signal = getControlSignal(desired_roll_angle - rollAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
   pitch_control_signal = getControlSignal(desired_pitch_angle - pitchAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  double yawError = calculateErrorForYaw(desired_yaw_angle, yawAngle);
-  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
+  yaw_control_signal = getControlSignal(-desired_yaw_angle_change, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
 
   // limit control gains
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
@@ -37,19 +36,6 @@ void calculateMotorPowers() {
   ensureMotorsAlwaysRun();
  
   updateLastTimeVariables();
-}
-
-double calculateErrorForYaw(double desired, double actual) {
-  double error = (desired+360) - (actual+360);
-  return fixYaw360degrees(error);
-}
-
-double fixYaw360degrees(double angle){
-  if (angle > 180)
-    angle -= 360;
-  else if (angle < -180)
-    angle += 360;
-  return angle;
 }
 
 void reduceMotorPowers(){ // to preserve balance if MAX_THROTTLE limit exceeds)

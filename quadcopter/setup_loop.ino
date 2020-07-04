@@ -56,7 +56,7 @@ void applySafetyRules(){
     frontRightMotorPower = MIN_THROTTLE;
     rearLeftMotorPower = MIN_THROTTLE;
     rearRightMotorPower = MIN_THROTTLE;
-    desired_yaw_angle = yawAngle;
+    desired_yaw_angle_change = 0;
     desired_pitch_angle = 0;
     desired_roll_angle = 0;
   }

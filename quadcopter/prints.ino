@@ -42,7 +42,7 @@ void printDesiredValues() {
   Serial.print(desired_roll_angle);
   Serial.print("\t");
   Serial.print("desired_yaw_angle: ");
-  Serial.print(desired_yaw_angle);
+  Serial.print(desired_yaw_angle_change);
   Serial.println();
 }
 
@@ -83,7 +83,7 @@ void sendTelemetryInfo() {
     + "\t" + throttle
     + "\t" + desired_pitch_angle
     + "\t" + desired_roll_angle
-    + "\t" + desired_yaw_angle
+    + "\t" + desired_yaw_angle_change
     + "\t" + pitch_control_signal
     + "\t" + roll_control_signal
     + "\t" + yaw_control_signal

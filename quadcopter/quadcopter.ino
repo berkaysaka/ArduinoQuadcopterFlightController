@@ -14,18 +14,18 @@ double KP_roll_pitch = 0.30;
 double KI_roll_pitch = 0.001;
 double KD_roll_pitch = 80.00;
 
-double KP_yaw = 2.00;
-double KI_yaw = 0.01;
-double KD_yaw = 800.00;
+double KP_yaw = 1.00;
+double KI_yaw = 2.00;
+double KD_yaw = 0.00;
 
-double YAW_INTEGRAL_LIMIT = 0.01;
+double YAW_INTEGRAL_LIMIT = 10.00;
 double ROLL_PITCH_INTEGRAL_LIMIT = 0.30;
 
 double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
-double MAX_YAW_CONTROL_GAIN = 10.00;
+double MAX_YAW_CONTROL_GAIN = 15.00;
 
 double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
-double ANGLE_DEGREE_LIMIT_YAW = 7.00;
+double ANGLE_DEGREE_LIMIT_YAW = 5.00;
 
 #define MIN_RAW_RECEIVER_VALUE 300
 #define MAX_RAW_RECEIVER_VALUE 1700
@@ -46,7 +46,7 @@ int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMoto
 double pitchAngle, rollAngle, yawAngle;
 double prev_pitchAngle, prev_rollAngle, prev_yawAngle;
 int throttle;
-double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
+double desired_roll_angle, desired_pitch_angle, desired_yaw_angle_change;
 int throttleRaw, yawRaw, rollRaw, pitchRaw;
 bool receiverYawIsOnCenter;
 bool receiver_failure = false;
