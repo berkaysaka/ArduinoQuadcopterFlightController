@@ -1,31 +1,14 @@
-//-----------EXECUTION---------------
+//-----------EXECUTION MODES---------------
 #define TEST_MODE false
 #define DEBUG_MODE false
 #define TELEMETRY_ENABLED false
-#define REMOTE_PID_CONFIG_ENABLED true
+#define REMOTE_PID_CONFIG_ENABLED false
 
-//-----------CONFIGURATION-----------
+//----------- HARDWARE CONFIGURATION-----------
 #define MIN_THROTTLE 0
 #define MAX_THROTTLE 175
 #define THROTTLE_START_POINT 15
 #define THROTTLE_LIMIT_POINT 140
-
-double KP_roll_pitch = 0.30;
-double KI_roll_pitch = 0.001;
-double KD_roll_pitch = 80.00;
-
-double KP_yaw = 1.00;
-double KI_yaw = 2.00;
-double KD_yaw = 0.00;
-
-double YAW_INTEGRAL_LIMIT = 10.00;
-double ROLL_PITCH_INTEGRAL_LIMIT = 0.30;
-
-double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
-double MAX_YAW_CONTROL_GAIN = 15.00;
-
-double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
-double ANGLE_DEGREE_LIMIT_YAW = 5.00;
 
 #define MIN_RAW_RECEIVER_VALUE 300
 #define MAX_RAW_RECEIVER_VALUE 1700
@@ -40,6 +23,24 @@ double ANGLE_DEGREE_LIMIT_YAW = 5.00;
 
 #define LED_PIN 13
 #define BUZZER_PIN 12
+
+//----------- PID CONFIGURATION-----------
+double KP_roll_pitch = 0.30;
+double KI_roll_pitch = 0.001;
+double KD_roll_pitch = 80.00;
+
+double KP_yaw = 0.50;
+double KI_yaw = 2.00;
+double KD_yaw = 0.00;
+
+double YAW_INTEGRAL_LIMIT = 10.00;
+double ROLL_PITCH_INTEGRAL_LIMIT = 0.30;
+
+double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
+double MAX_YAW_CONTROL_GAIN = 15.00;
+
+double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
+double ANGLE_DEGREE_LIMIT_YAW = 5.00;
 
 //-----------GLOBAL VARIABLES-----------
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
