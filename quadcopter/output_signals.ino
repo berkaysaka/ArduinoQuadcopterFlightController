@@ -1,15 +1,20 @@
+#include <neotimer.h>
+
+Neotimer mytimer = Neotimer(1000); // 1 second timer
+
 void initializeOutputSignals(){
+  mytimer.start();
   pinMode(LED_PIN, OUTPUT);
-  digitalWrite(LED_PIN, HIGH);
   pinMode(BUZZER_PIN, OUTPUT);
-  noTone(BUZZER_PIN);
+
+  digitalWrite(LED_PIN, LOW);
+  tone(BUZZER_PIN,2000);
 }
 
 void syncOutputSignals(){
-  digitalWrite(LED_PIN, LOW);
-  tone(BUZZER_PIN,1000);
-  delay(500);
-  digitalWrite(LED_PIN, HIGH);
-  noTone(BUZZER_PIN);
-  delay(500);
+  if(mytimer.done()){
+    digitalWrite(LED_PIN, HIGH);
+    noTone(BUZZER_PIN);
+    mytimer.reset();
+  }
 }

@@ -1,20 +1,25 @@
+#include <avr/wdt.h>
+
 void setup() {
   if (TEST_MODE == true) {
     Serial.begin(115200);
+    initializeMotors();
     run_tests();
     return;
   } else if (DEBUG_MODE == true) {
     Serial.begin(2000000);
   }
-  if (TELEMETRY_ENABLED == true) {
-    Serial2.begin(38400);
+  if (TELEMETRY_ENABLED == true || REMOTE_PID_CONFIG_ENABLED == true) {
+    Serial2.begin(9600);
   }
-  //Serial.begin(115200);
+  wdt_enable(WDTO_500MS);
   initializeOutputSignals();
   initializeMotors();
   initializeReceiver();
-  initializeOutputSignals();
   initializeIMU();
+
+  wdt_disable();
+  wdt_enable(WDTO_60MS);
 }
 
 
@@ -29,17 +34,36 @@ void loop() {
 }
 
 void release_loop() {
+  syncOutputSignals();
   readReceiverValues();
-  calculateDesiredValuesWithSafetyChecks();
+  calculateDesiredOrientation();
   readIMUvalues();
   calculateMotorPowers();
+  applySafetyRules();
   spinMotors();
   if (TELEMETRY_ENABLED == true) {
     sendTelemetryInfo();
   }
+  if (REMOTE_PID_CONFIG_ENABLED == true) {
+    receivePidCommand();
+  }
+  wdt_reset();
 }
 
-
+void applySafetyRules(){
+  if (throttle < THROTTLE_START_POINT || receiver_failure == true || imu_failure == true){
+    frontLeftMotorPower = MIN_THROTTLE;
+    frontRightMotorPower = MIN_THROTTLE;
+    rearLeftMotorPower = MIN_THROTTLE;
+    rearRightMotorPower = MIN_THROTTLE;
+    desired_yaw_angle_change = 0;
+    desired_pitch_angle = 0;
+    desired_roll_angle = 0;
+  }
+  if(imu_failure == true){
+    Serial.println("imu_failure");
+  }
+}
 
 
 long diff;
@@ -78,7 +102,7 @@ void debug_loop() {
   totalreadReceiverValues += diff;
   debugtime = currentMicros;
 
-  calculateDesiredValuesWithSafetyChecks();
+  calculateDesiredOrientation();
   currentMicros = micros();
   diff = currentMicros - debugtime;
   if (diff != 0 && diff < mincalculateDesiredValuesWithSafetyChecks)
@@ -108,6 +132,7 @@ void debug_loop() {
   totalcalculateMotorPowers += diff;
 
   debugtime = currentMicros;
+  applySafetyRules();
   spinMotors();
   currentMicros = micros();
   diff = currentMicros - debugtime;
@@ -129,7 +154,7 @@ void debug_loop() {
     totalsendTelemetryInfo += diff;
   }
 
-  if (counter < 101)
+  if (counter < 1001)
     return;
 
   Serial.println("-readReceiverValues-" + String(totalreadReceiverValues / counter) + "-" + String(minreadReceiverValues) + "-" + String(maxreadReceiverValues));

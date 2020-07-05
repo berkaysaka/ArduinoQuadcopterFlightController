@@ -6,6 +6,8 @@
 MPU6050 mpu;
 #define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 
+unsigned long lastImuDataAvailableTime = 0;
+
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -23,52 +25,27 @@ VectorFloat gravity;    // [x, y, z]            gravity vector
 float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
-uint8_t teapotPacket[14] = { '$', 0x02, 0, 0, 0, 0, 0, 0, 0, 0, 0x00, 0x00, '\r', '\n' };
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
+
 void dmpDataReady() {
   mpuInterrupt = true;
 }
 
 void initializeIMU() {
-  ConfigureIMU();
-}
-
-void readIMUvalues() {
-  if (!dmpReady) return;
-
-  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
-
-    mpu.dmpGetQuaternion(&q, fifoBuffer);
-    mpu.dmpGetGravity(&gravity, &q);
-    mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    // pitch-roll swapped somehow, investigate.
-    double newYawAngle = ypr[0] * 180 / M_PI;
-    double newRollAngle = ypr[1] * 180 / M_PI;
-    double newPitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
-
-    if(newYawAngle == yawAngle && newRollAngle == rollAngle && newPitchAngle == pitchAngle){
-      return; //ignore if they are all equal.
-    }
-    
-    yawAngle = newYawAngle;
-    rollAngle = newRollAngle;
-    pitchAngle = newPitchAngle;
-
-    fresh_imu_data_available = true;
-  }
-}
-
-void ConfigureIMU() {
-#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-  Wire.begin();
-  TWBR = 24; // 400kHz I2C clock (200kHz if CPU is 8MHz)
-#elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-  Fastwire::setup(400, true);
-#endif
+  #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+    Wire.begin();
+    Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
+  #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+    Fastwire::setup(400, true);
+  #endif
+  
   mpu.initialize();
   pinMode(INTERRUPT_PIN, INPUT);
-  devStatus = mpu.dmpInitialize();
 
+  if(!mpu.testConnection()){
+    Serial.println("*imu test connection failed!");
+  }
+  devStatus = mpu.dmpInitialize();
   mpu.setXGyroOffset(91);
   mpu.setYGyroOffset(-92);
   mpu.setZGyroOffset(38);
@@ -82,7 +59,6 @@ void ConfigureIMU() {
     mpu.CalibrateGyro(6);
     mpu.PrintActiveOffsets();
     syncOutputSignals();*/
-    
     mpu.setDMPEnabled(true);
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
     mpuIntStatus = mpu.getIntStatus();
@@ -90,9 +66,44 @@ void ConfigureIMU() {
 
     packetSize = mpu.dmpGetFIFOPacketSize();
   } else {
+    Serial.println("*imu dmp initialize error!");
     // ERROR!
     // 1 = initial memory load failed
     // 2 = DMP configuration updates failed
     // (if it's going to break, usually the code will be 1)
+  }
+}
+
+void readIMUvalues() {
+  if (!dmpReady) return;
+  
+  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
+    mpu.dmpGetQuaternion(&q, fifoBuffer);
+    mpu.dmpGetGravity(&gravity, &q);
+    mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
+    // pitch-roll swapped somehow, investigate.
+    double newYawAngle = ypr[0] * 180 / M_PI;
+    double newRollAngle = ypr[1] * 180 / M_PI;
+    double newPitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+
+    prev_yawAngle = yawAngle;
+    prev_rollAngle = rollAngle;
+    prev_pitchAngle = pitchAngle;
+    
+    yawAngle = newYawAngle;
+    rollAngle = newRollAngle;
+    pitchAngle = newPitchAngle;
+
+    fresh_imu_data_available = true;
+    lastImuDataAvailableTime = millis();
+  }
+  if(lastImuDataAvailableTime == 0)
+    return; //not initialized yet;
+    
+  unsigned long imuDataUnavailableTime = millis() - lastImuDataAvailableTime;
+  if(imuDataUnavailableTime > 30){
+      imu_failure = true;
+  }else{
+      imu_failure = false;
   }
 }

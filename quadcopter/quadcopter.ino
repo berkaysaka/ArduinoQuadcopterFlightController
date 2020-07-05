@@ -1,42 +1,22 @@
-//-----------EXECUTION---------------
+//-----------EXECUTION MODES---------------
 #define TEST_MODE false
 #define DEBUG_MODE false
-#define TELEMETRY_ENABLED true
+#define TELEMETRY_ENABLED false
+#define REMOTE_PID_CONFIG_ENABLED false
 
-//-----------CONFIGURATION-----------
-#define ANGLE_DEGREE_LIMIT_PITCH_ROLL 20
-#define ANGLE_DEGREE_LIMIT_YAW 5.0
-
-#define YAW_ANGLE_BOOSTER 2.0
-
+//----------- HARDWARE CONFIGURATION-----------
 #define MIN_THROTTLE 0
 #define MAX_THROTTLE 175
 #define THROTTLE_START_POINT 15
 #define THROTTLE_LIMIT_POINT 140
 
-#define KP_roll_pitch 0.5
-#define KI_roll_pitch 0.01
-#define KD_roll_pitch 100.00
-
-#define KP_yaw 3.00
-#define KI_yaw 0.05
-#define KD_yaw 1200.00
-
-#define YAW_INTEGRAL_LIMIT 10.00
-#define ROLL_PITCH_INTEGRAL_LIMIT 0.3
-
-#define MAX_ROLL_PITCH_CONTROL_GAIN 30.00
-#define MAX_YAW_CONTROL_GAIN 25.00
-
-#define PID_SAMPLING_FREQUENCY 1 //milliseconds
-
 #define MIN_RAW_RECEIVER_VALUE 300
 #define MAX_RAW_RECEIVER_VALUE 1700
 
-#define FRONT_LEFT_MOTOR_PIN 7
-#define FRONT_RIGHT_MOTOR_PIN 5
-#define REAR_LEFT_MOTOR_PIN 6
-#define REAR_RIGHT_MOTOR_PIN 4
+#define FRONT_LEFT_MOTOR_PIN 4
+#define FRONT_RIGHT_MOTOR_PIN 6
+#define REAR_LEFT_MOTOR_PIN 5
+#define REAR_RIGHT_MOTOR_PIN 7
 
 #define MIN_MOTOR_PULSE_WIDTH 1000
 #define MAX_MOTOR_PULSE_WIDTH 2000
@@ -44,12 +24,33 @@
 #define LED_PIN 13
 #define BUZZER_PIN 12
 
+//----------- PID CONFIGURATION-----------
+double KP_roll_pitch = 0.30;
+double KI_roll_pitch = 0.001;
+double KD_roll_pitch = 80.00;
+
+double KP_yaw = 2.00;
+double KI_yaw = 0.50;
+double KD_yaw = 0.00;
+
+double YAW_INTEGRAL_LIMIT = 10.00;
+double ROLL_PITCH_INTEGRAL_LIMIT = 0.30;
+
+double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
+double MAX_YAW_CONTROL_GAIN = 20.00;
+
+double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
+double ANGLE_DEGREE_LIMIT_YAW = 5.00;
+
 //-----------GLOBAL VARIABLES-----------
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
 double pitchAngle, rollAngle, yawAngle;
+double prev_pitchAngle, prev_rollAngle, prev_yawAngle;
 int throttle;
-double desired_roll_angle, desired_pitch_angle, desired_yaw_angle;
+double desired_roll_angle, desired_pitch_angle, desired_yaw_angle_change;
 int throttleRaw, yawRaw, rollRaw, pitchRaw;
+bool receiverYawIsOnCenter;
 bool receiver_failure = false;
-bool fresh_imu_data_available = false;
+bool imu_failure = false;
 double roll_control_signal, pitch_control_signal, yaw_control_signal;
+int delta_time;
