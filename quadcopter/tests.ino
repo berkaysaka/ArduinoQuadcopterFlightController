@@ -14,10 +14,47 @@ void reset_test_parameters(){
 }
 void run_tests(){
   Serial.println("----------------RUNNING TESTS--------------");
-  test_calculate_motor_powers();
-  test_reduceMotorPowers();
-  test_calculateDesiredValuesWithSafetyChecks();
+  test_yaw();
+  //test_calculate_motor_powers();
+  //test_reduceMotorPowers();
+  //test_calculateDesiredValuesWithSafetyChecks();
   Serial.println("----------------FINISHED--------------");
+}
+
+
+void test_yaw(){
+  reset_test_parameters();
+  throttle = 100;
+  prev_yawAngle = 5;
+  yawAngle = 5;
+  desired_yaw_angle_change = 0;
+  for(int i=0; i<10; i++){
+    delay(4);
+    fresh_imu_data_available = true;
+    yawAngle -= 0.1;
+    calculateMotorPowers();
+    if(i>= 5)
+      prev_yawAngle = yawAngle;
+    Serial.print("frontLeftMotorPower:");
+    Serial.print(frontLeftMotorPower);
+    Serial.print("frontRightMotorPower:");
+    Serial.println(frontRightMotorPower);
+  }
+
+   for(int i=0; i<10; i++){
+    delay(4);
+    fresh_imu_data_available = true;
+    if(i % 2 == 0)
+      yawAngle += 0.1;
+    else
+      yawAngle -= 0.1;
+    calculateMotorPowers();
+    prev_yawAngle = yawAngle;
+    Serial.print("frontLeftMotorPower:");
+    Serial.print(frontLeftMotorPower);
+    Serial.print("frontRightMotorPower:");
+    Serial.println(frontRightMotorPower);
+  }
 }
 
 void test_calculate_motor_powers(){
