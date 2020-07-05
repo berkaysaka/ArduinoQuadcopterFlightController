@@ -1,6 +1,5 @@
 unsigned long last_time = millis(); 
 unsigned long current_time = millis();
-int delta_time;
 double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
 bool fresh_imu_data_available = false;
 
@@ -17,16 +16,22 @@ void calculateMotorPowers() {
   
   updateCurrentTimeVariables();
 
-  roll_control_signal = getControlSignal(desired_roll_angle - rollAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  pitch_control_signal = getControlSignal(desired_pitch_angle - pitchAngle, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
+  // calculate orientation errors (error: difference between desired orientation and actual orientation)
+  double rollError = desired_roll_angle - rollAngle;
+  double pitchError = desired_pitch_angle - pitchAngle;
   double yawError = desired_yaw_angle_change - (prev_yawAngle - yawAngle);
+
+  // calculate control gains based on errors
+  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
+  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
   yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
 
   // limit control gains
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   pitch_control_signal = constrain(pitch_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
   yaw_control_signal = constrain(yaw_control_signal, -MAX_YAW_CONTROL_GAIN, MAX_YAW_CONTROL_GAIN);
-    
+
+  // calculate power for each motor
   frontLeftMotorPower = round(throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
   frontRightMotorPower = round(throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
   rearLeftMotorPower = round(throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
@@ -50,7 +55,7 @@ void reduceMotorPowers(){ // to preserve balance if MAX_THROTTLE limit exceeds)
   }
 }
 
-void ensureMotorsAlwaysRun(){
+void ensureMotorsAlwaysRun(){ // because it takes much more time to spin a stopped motor
   frontLeftMotorPower = max(frontLeftMotorPower, THROTTLE_START_POINT);
   frontRightMotorPower = max(frontRightMotorPower, THROTTLE_START_POINT);
   rearLeftMotorPower = max(rearLeftMotorPower, THROTTLE_START_POINT);

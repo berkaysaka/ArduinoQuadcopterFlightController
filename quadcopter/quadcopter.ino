@@ -53,3 +53,4 @@ bool receiverYawIsOnCenter;
 bool receiver_failure = false;
 bool imu_failure = false;
 double roll_control_signal, pitch_control_signal, yaw_control_signal;
+int delta_time;
