@@ -26,17 +26,17 @@
 
 //----------- PID CONFIGURATION-----------
 double KP_roll_pitch = 0.30;
-double KI_roll_pitch = 0.001;
+double KI_roll_pitch = 0.0001;
 double KD_roll_pitch = 80.00;
 
 double KP_yaw = 2.00;
-double KI_yaw = 0.50;
+double KI_yaw = 0.10;
 double KD_yaw = 0.00;
 
 double YAW_INTEGRAL_LIMIT = 10.00;
 double MAX_YAW_CONTROL_GAIN = 20.00;
 
-double ROLL_PITCH_INTEGRAL_LIMIT = 0.30;
+double ROLL_PITCH_INTEGRAL_LIMIT = 1.00;
 double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
 
 double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
