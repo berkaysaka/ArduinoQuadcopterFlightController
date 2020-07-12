@@ -1,3 +1,4 @@
+// average flight time is 13 minutes
 //-----------EXECUTION MODES---------------
 #define TEST_MODE false
 #define DEBUG_MODE false
