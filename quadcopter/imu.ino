@@ -34,9 +34,8 @@ void dmpDataReady() {
 void initializeIMU() {
   #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
     Wire.begin();
-    Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
   #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-    Fastwire::setup(400, true);
+    Fastwire::setup(100, true);
   #endif
   
   mpu.initialize();
@@ -81,7 +80,9 @@ void readIMUvalues() {
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    // pitch-roll swapped somehow, investigate.
+
+    // normally the order of the orientation that we receive from ypr[] is yaw, pitch, roll.
+    // but since the IMU placed 90 degrees to the right, we need to make the adjustments below. (roll-pitch swap and *-1)
     double newYawAngle = ypr[0] * 180 / M_PI;
     double newRollAngle = ypr[1] * 180 / M_PI;
     double newPitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation

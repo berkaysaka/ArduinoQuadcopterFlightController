@@ -12,7 +12,7 @@ void setup() {
   if (TELEMETRY_ENABLED == true || REMOTE_PID_CONFIG_ENABLED == true) {
     Serial2.begin(9600);
   }
-  wdt_enable(WDTO_500MS);
+  wdt_enable(WDTO_1S);
   initializeOutputSignals();
   initializeMotors();
   initializeReceiver();
