@@ -26,7 +26,7 @@ void loop() {
     sendTelemetryInfo();
   }
   if (REMOTE_PID_CONFIG_ENABLED == true) {
-    receivePidCommand();
+    readRemotePidConfigurationCommand();
   }
   wdt_reset();
 }
