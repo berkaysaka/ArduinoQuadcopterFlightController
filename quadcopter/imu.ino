@@ -81,19 +81,13 @@ void readIMUvalues() {
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
 
+    prev_yawAngle = yawAngle;
+
     // normally the order of the orientation that we receive from ypr[] is yaw, pitch, roll.
     // but since the IMU placed 90 degrees to the right, we need to make the adjustments below. (roll-pitch swap and *-1)
-    double newYawAngle = ypr[0] * 180 / M_PI;
-    double newRollAngle = ypr[1] * 180 / M_PI;
-    double newPitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
-
-    prev_yawAngle = yawAngle;
-    prev_rollAngle = rollAngle;
-    prev_pitchAngle = pitchAngle;
-    
-    yawAngle = newYawAngle;
-    rollAngle = newRollAngle;
-    pitchAngle = newPitchAngle;
+    double yawAngle = ypr[0] * 180 / M_PI;
+    double rollAngle = ypr[1] * 180 / M_PI;
+    double pitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
 
     fresh_imu_data_available = true;
     lastImuDataAvailableTime = millis();

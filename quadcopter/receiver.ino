@@ -28,7 +28,6 @@ void readReceiverValues() {
   pitchRaw = constrain(sbus.channels[1], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
   throttleRaw = constrain(sbus.channels[2], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
   yawRaw = centralize(constrain(sbus.channels[3], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE));
-  receiverYawIsOnCenter = (yawRaw == ((MAX_RAW_RECEIVER_VALUE + MIN_RAW_RECEIVER_VALUE) / 2));
 }
 
 //prevent small receiver value changes to affect yaw while joystick is on the center

@@ -44,11 +44,10 @@ double ANGLE_DEGREE_LIMIT_YAW = 5.00;
 //-----------GLOBAL VARIABLES-----------
 int frontLeftMotorPower, frontRightMotorPower, rearLeftMotorPower, rearRightMotorPower;
 double pitchAngle, rollAngle, yawAngle;
-double prev_pitchAngle, prev_rollAngle, prev_yawAngle;
+double prev_yawAngle;
 int throttle;
 double desired_roll_angle, desired_pitch_angle, desired_yaw_angle_change;
 int throttleRaw, yawRaw, rollRaw, pitchRaw;
-bool receiverYawIsOnCenter;
 bool receiver_failure = false;
 bool imu_failure = false;
 double roll_control_signal, pitch_control_signal, yaw_control_signal;
