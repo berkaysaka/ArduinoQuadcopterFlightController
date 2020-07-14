@@ -1,4 +1,4 @@
-// average flight time is 13 minutes
+// average flight time is 13 minutes with 10x5 props, 3000 mAh 3S lipo battery
 //-----------EXECUTION MODES---------------
 #define TELEMETRY_ENABLED false
 #define REMOTE_PID_CONFIG_ENABLED false
