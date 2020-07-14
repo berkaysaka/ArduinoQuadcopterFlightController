@@ -26,9 +26,9 @@
 #define BUZZER_PIN 12
 
 //----------- PID CONFIGURATION-----------
-double KP_roll_pitch = 0.30;
-double KI_roll_pitch = 0.0001;
-double KD_roll_pitch = 100.00;
+double KP_roll_pitch = 0.25;
+double KI_roll_pitch = 0.00005;
+double KD_roll_pitch = 70.00;
 
 double KP_yaw = 1.50;
 double KI_yaw = 0.10;
@@ -37,7 +37,7 @@ double KD_yaw = 0.00;
 double YAW_INTEGRAL_LIMIT = 10.00;
 double MAX_YAW_CONTROL_GAIN = 20.00;
 
-double ROLL_PITCH_INTEGRAL_LIMIT = 1.00;
+double ROLL_PITCH_INTEGRAL_LIMIT = 2.00;
 double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
 
 double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
