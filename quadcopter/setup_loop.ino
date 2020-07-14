@@ -1,12 +1,12 @@
 #include <avr/wdt.h>
 
 void setup() {
-  if (TELEMETRY_ENABLED == true || REMOTE_PID_CONFIG_ENABLED == true) {
-    Serial2.begin(9600);
-  }
   wdt_enable(WDTO_1S);
-  initializeOutputSignals();
+  
   initializeMotors();
+  initializeTelemetry();
+  initializeRemotePidConfiguration();
+  initializeOutputSignals();  
   initializeReceiver();
   initializeIMU();
 
@@ -16,18 +16,17 @@ void setup() {
 
 void loop() {
   syncOutputSignals();
+  
   readReceiverValues();
   calculateDesiredOrientation();
   readIMUvalues();
   calculateMotorPowers();
   applySafetyRules();
   spinMotors();
-  if (TELEMETRY_ENABLED == true) {
-    sendTelemetryInfo();
-  }
-  if (REMOTE_PID_CONFIG_ENABLED == true) {
-    readRemotePidConfigurationCommand();
-  }
+  
+  sendTelemetryData();
+  readRemotePidConfigurationCommand();
+  
   wdt_reset();
 }
 
