@@ -1,7 +1,7 @@
 #include <avr/wdt.h>
 
 void setup() {
-  wdt_enable(WDTO_1S);
+  wdt_enable(WDTO_2S);
   
   initializeMotors();
   initializeTelemetry();
