@@ -4,9 +4,9 @@ void setup() {
   wdt_enable(WDTO_2S);
   
   initializeMotors();
+  initializeOutputSignals();
   initializeTelemetry();
   initializeRemotePidConfiguration();
-  initializeOutputSignals();  
   initializeReceiver();
   initializeIMU();
 
