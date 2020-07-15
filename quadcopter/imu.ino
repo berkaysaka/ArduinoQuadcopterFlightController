@@ -85,9 +85,9 @@ void readIMUvalues() {
 
     // normally the order of the orientation that we receive from ypr[] is yaw, pitch, roll.
     // but since the IMU placed 90 degrees to the right, we need to make the adjustments below. (roll-pitch swap and *-1)
-    double yawAngle = ypr[0] * 180 / M_PI;
-    double rollAngle = ypr[1] * 180 / M_PI;
-    double pitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+    yawAngle = ypr[0] * 180 / M_PI;
+    rollAngle = ypr[1] * 180 / M_PI;
+    pitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
 
     fresh_imu_data_available = true;
     lastImuDataAvailableTime = millis();
