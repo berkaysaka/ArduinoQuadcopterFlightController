@@ -1,8 +1,12 @@
-void calculateDesiredOrientation() {
-  throttle = map(throttleRaw, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, MIN_THROTTLE, THROTTLE_LIMIT_POINT);
-  desired_pitch_angle = calculateAskedAngle(pitchRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
-  desired_roll_angle = calculateAskedAngle(rollRaw, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
-  desired_yaw_angle_change = calculateAskedAngle(yawRaw, ANGLE_DEGREE_LIMIT_YAW);
+
+
+struct DesiredOrientation calculateDesiredOrientation(struct RawReceiverValues r) {
+  struct DesiredOrientation o;
+  o.Throttle = map(r.Throttle, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, MIN_THROTTLE, THROTTLE_LIMIT_POINT);
+  o.PitchAngle = calculateAskedAngle(r.Pitch, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
+  o.RollAngle = calculateAskedAngle(r.Roll, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
+  o.YawAngleChange = calculateAskedAngle(r.Yaw, ANGLE_DEGREE_LIMIT_YAW);
+  return o;
 }
 
 double calculateAskedAngle(int rawReceiverValue, int angleDegreeLimit) {

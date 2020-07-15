@@ -1,5 +1,6 @@
 #include <avr/wdt.h>
 
+
 void setup() {
   wdt_enable(WDTO_1S);
   
@@ -14,12 +15,17 @@ void setup() {
   wdt_enable(WDTO_60MS);
 }
 
+struct Orientation previousOrientation;
+struct Orientation actualOrientation;
+
 void loop() {
   syncOutputSignals();
   
-  readReceiverValues();
-  calculateDesiredOrientation();
-  readIMUvalues();
+  struct RawReceiverValues rawReceiverValues = readReceiverValues();
+  struct DesiredOrientation desiredOrientation = calculateDesiredOrientation(rawReceiverValues);
+  previousOrientation = actualOrientation;
+  actualOrientation = readIMUvalues();
+    
   calculateMotorPowers();
   applySafetyRules();
   spinMotors();

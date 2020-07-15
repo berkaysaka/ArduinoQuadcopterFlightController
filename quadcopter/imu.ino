@@ -73,7 +73,7 @@ void initializeIMU() {
   }
 }
 
-void readIMUvalues() {
+struct ActualOrientation readIMUvalues() {
   if (!dmpReady) return;
   
   if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
@@ -81,16 +81,16 @@ void readIMUvalues() {
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
 
-    prev_yawAngle = yawAngle;
-
     // normally the order of the orientation that we receive from ypr[] is yaw, pitch, roll.
     // but since the IMU placed 90 degrees to the right, we need to make the adjustments below. (roll-pitch swap and *-1)
-    yawAngle = ypr[0] * 180 / M_PI;
-    rollAngle = ypr[1] * 180 / M_PI;
-    pitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+    struct Orientation o;
+    o.YawAngle = ypr[0] * 180 / M_PI;
+    o.RollAngle = ypr[1] * 180 / M_PI;
+    o.PitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
 
     fresh_imu_data_available = true;
     lastImuDataAvailableTime = millis();
+    return o;
   }
   if(lastImuDataAvailableTime == 0)
     return; //not initialized yet;

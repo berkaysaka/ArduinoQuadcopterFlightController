@@ -8,7 +8,10 @@ void initializeReceiver() {
 
 unsigned long last_receiver_communication_time = millis();
 
-void readReceiverValues() {
+
+
+
+struct RawReceiverValues readReceiverValues() {
   sbus.FeedLine();
   if (sbus.toChannels != 1){
     if(millis() - last_receiver_communication_time > 1000){
@@ -24,10 +27,12 @@ void readReceiverValues() {
   sbus.UpdateChannels();
   sbus.toChannels = 0;
 
-  rollRaw = constrain(sbus.channels[0], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  pitchRaw = constrain(sbus.channels[1], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  throttleRaw = constrain(sbus.channels[2], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  yawRaw = centralize(constrain(sbus.channels[3], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE));
+  struct RawReceiverValues r;
+  r.Roll = constrain(sbus.channels[0], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
+  r.Pitch = constrain(sbus.channels[1], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
+  r.Throttle = constrain(sbus.channels[2], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
+  r.Yaw = centralize(constrain(sbus.channels[3], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE));
+  return r;
 }
 
 //prevent small receiver value changes to affect yaw while joystick is on the center
