@@ -15,9 +15,6 @@ void calculateMotorPowers() {
   double rollError = desired_roll_angle - rollAngle;
   double pitchError = desired_pitch_angle - pitchAngle;
   double yawError = desired_yaw_angle_change - (yawAngle - prev_yawAngle);
-  
-  // prevent sudden changes on yaw
-  yawError = constrain(yawError, -ANGLE_DEGREE_LIMIT_YAW, ANGLE_DEGREE_LIMIT_YAW);
     
   // calculate control gains based on errors
   roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
