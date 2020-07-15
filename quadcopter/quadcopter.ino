@@ -25,7 +25,7 @@
 
 //----------- PID CONFIGURATION-----------
 double KP_roll_pitch = 0.25;
-double KI_roll_pitch = 0.00005;
+double KI_roll_pitch = 0.00001;
 double KD_roll_pitch = 70.00;
 
 double KP_yaw = 1.50;
