@@ -7,7 +7,6 @@ void calculateMotorPowers() {
   if (fresh_imu_data_available == false){
     return;
   }
-    
   fresh_imu_data_available = false;
   
   updateCurrentTimeVariables();
