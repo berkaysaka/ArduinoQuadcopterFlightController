@@ -39,5 +39,11 @@ void applySafetyRules(){
     desired_yaw_angle_change = 0;
     desired_pitch_angle = 0;
     desired_roll_angle = 0;
+    roll_pid_i = 0; 
+    roll_last_error = 0;
+    pitch_pid_i = 0; 
+    pitch_last_error = 0;
+    yaw_pid_i = 0;
+    yaw_last_error = 0;
   }
 }
