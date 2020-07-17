@@ -36,29 +36,26 @@ void loop() {
   if (imu_values.DataAvailable){
     previousOrientation = actualOrientation;
     actualOrientation = imu_values.Orientation;
-    calculateMotorPowers(receiverCommands, previousOrientation, actualOrientation);
+    MotorPowers motorPowers = calculateMotorPowers(receiverCommands, previousOrientation, actualOrientation);
+    spinMotors(motorPowers);
   }
-
-  spinMotors();
   
-  sendTelemetryData();
+  sendTelemetryData(receiverCommands, actualOrientation);
   readRemotePidConfigurationCommand();
 }
 
 void runSafetyProtocol(){
-  if (throttle < THROTTLE_START_POINT || receiver_failure == true || imu_failure == true){
-    frontLeftMotorPower = MIN_THROTTLE;
-    frontRightMotorPower = MIN_THROTTLE;
-    rearLeftMotorPower = MIN_THROTTLE;
-    rearRightMotorPower = MIN_THROTTLE;
-    desired_yaw_angle_change = 0;
-    desired_pitch_angle = 0;
-    desired_roll_angle = 0;
+    struct MotorPowers motorPowers;
+    motorPowers.frontLeftMotorPower = MIN_THROTTLE;
+    motorPowers.frontRightMotorPower = MIN_THROTTLE;
+    motorPowers.rearLeftMotorPower = MIN_THROTTLE;
+    motorPowers.rearRightMotorPower = MIN_THROTTLE;
+    spinMotors(motorPowers);
+
     roll_pid_i = 0; 
     roll_last_error = 0;
     pitch_pid_i = 0; 
     pitch_last_error = 0;
     yaw_pid_i = 0;
     yaw_last_error = 0;
-  }
 }

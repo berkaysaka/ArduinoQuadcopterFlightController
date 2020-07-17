@@ -1,7 +1,7 @@
 unsigned long last_time = millis(); 
 unsigned long current_time = millis();
 
-void calculateMotorPowers(struct ReceiverCommands receiverCommands, struct Orientation previousOrientation, struct Orientation actualOrientation) { 
+struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands, struct Orientation previousOrientation, struct Orientation actualOrientation) { 
   updateCurrentTimeVariables();
 
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
@@ -20,34 +20,38 @@ void calculateMotorPowers(struct ReceiverCommands receiverCommands, struct Orien
   yaw_control_signal = constrain(yaw_control_signal, -MAX_YAW_CONTROL_GAIN, MAX_YAW_CONTROL_GAIN);
 
   // calculate power for each motor
-  frontLeftMotorPower = round(throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
-  frontRightMotorPower = round(throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
-  rearLeftMotorPower = round(throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
-  rearRightMotorPower = round(throttle - roll_control_signal - pitch_control_signal - yaw_control_signal);
+  struct MotorPowers motorPowers;
+  motorPowers.frontLeftMotorPower = round(receiverCommands.Throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
+  motorPowers.frontRightMotorPower = round(receiverCommands.Throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
+  motorPowers.rearLeftMotorPower = round(receiverCommands.Throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
+  motorPowers.rearRightMotorPower = round(receiverCommands.Throttle - roll_control_signal - pitch_control_signal - yaw_control_signal);
 
-  reduceMotorPowers();
-
-  ensureMotorsAlwaysRun();
+  motorPowers = reduceMotorPowers(motorPowers);
+  motorPowers = ensureMotorsAlwaysRun(motorPowers);
  
   updateLastTimeVariables();
+  
+  return motorPowers;
 }
 
-void reduceMotorPowers(){ // to preserve balance if MAX_THROTTLE limit exceeds)
-  int maxMotorPower = max(max(frontLeftMotorPower, frontRightMotorPower), max(rearLeftMotorPower, rearRightMotorPower));
+struct MotorPowers reduceMotorPowers(MotorPowers motorPowers){ // to preserve balance if MAX_THROTTLE limit exceeds)
+  int maxMotorPower = max(max(motorPowers.frontLeftMotorPower, motorPowers.frontRightMotorPower), max(motorPowers.rearLeftMotorPower, motorPowers.rearRightMotorPower));
   if (maxMotorPower > MAX_THROTTLE){
     double power_reduction_rate = (double)maxMotorPower / (double)MAX_THROTTLE;
-    frontLeftMotorPower = round((double)frontLeftMotorPower / power_reduction_rate);
-    frontRightMotorPower = round((double)frontRightMotorPower / power_reduction_rate);
-    rearLeftMotorPower = round((double)rearLeftMotorPower / power_reduction_rate);
-    rearRightMotorPower = round((double)rearRightMotorPower / power_reduction_rate);
+    motorPowers.frontLeftMotorPower = round((double)motorPowers.frontLeftMotorPower / power_reduction_rate);
+    motorPowers.frontRightMotorPower = round((double)motorPowers.frontRightMotorPower / power_reduction_rate);
+    motorPowers.rearLeftMotorPower = round((double)motorPowers.rearLeftMotorPower / power_reduction_rate);
+    motorPowers.rearRightMotorPower = round((double)motorPowers.rearRightMotorPower / power_reduction_rate);
   }
+  return motorPowers;
 }
 
-void ensureMotorsAlwaysRun(){ // because it takes much more time to spin a stopped motor
-  frontLeftMotorPower = max(frontLeftMotorPower, THROTTLE_START_POINT);
-  frontRightMotorPower = max(frontRightMotorPower, THROTTLE_START_POINT);
-  rearLeftMotorPower = max(rearLeftMotorPower, THROTTLE_START_POINT);
-  rearRightMotorPower = max(rearRightMotorPower, THROTTLE_START_POINT);
+struct MotorPowers ensureMotorsAlwaysRun(MotorPowers motorPowers){ // because it takes much more time to spin a stopped motor
+  motorPowers.frontLeftMotorPower = max(motorPowers.frontLeftMotorPower, THROTTLE_START_POINT);
+  motorPowers.frontRightMotorPower = max(motorPowers.frontRightMotorPower, THROTTLE_START_POINT);
+  motorPowers.rearLeftMotorPower = max(motorPowers.rearLeftMotorPower, THROTTLE_START_POINT);
+  motorPowers.rearRightMotorPower = max(motorPowers.rearRightMotorPower, THROTTLE_START_POINT);
+  return motorPowers;
 }
 
 void updateCurrentTimeVariables() {

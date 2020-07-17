@@ -1,23 +1,29 @@
 struct RawReceiverValues {
-   bool ReceiverError;
-   int Throttle;
-   int Yaw;
-   int Pitch;
-   int Roll;
+  bool ReceiverError;
+  int Throttle;
+  int Yaw;
+  int Pitch;
+  int Roll;
 };
 struct ReceiverCommands {
-   int Throttle;
-   double YawAngleChange;
-   double PitchAngle;
-   double RollAngle;
+  int Throttle;
+  double YawAngleChange;
+  double PitchAngle;
+  double RollAngle;
 };
 struct Orientation {
-   double YawAngle;
-   double PitchAngle;
-   double RollAngle;
+  double YawAngle;
+  double PitchAngle;
+  double RollAngle;
 };
 struct IMU_Values {
-   bool IMU_Error;
-   bool DataAvailable;
-   Orientation Orientation;
+  bool IMU_Error;
+  bool DataAvailable;
+  Orientation Orientation;
+};
+struct MotorPowers {
+  int frontLeftMotorPower;
+  int frontRightMotorPower;
+  int rearLeftMotorPower;
+  int rearRightMotorPower;
 };

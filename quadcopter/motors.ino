@@ -16,9 +16,9 @@ void initializeMotors() {
   rearRightMotor.write(0);
 }
 
-void spinMotors() {
-  frontLeftMotor.write(frontLeftMotorPower);
-  frontRightMotor.write(frontRightMotorPower);
-  rearLeftMotor.write(rearLeftMotorPower);
-  rearRightMotor.write(rearRightMotorPower);
+void spinMotors(struct MotorPowers motorPowers) {
+  frontLeftMotor.write(motorPowers.frontLeftMotorPower);
+  frontRightMotor.write(motorPowers.frontRightMotorPower);
+  rearLeftMotor.write(motorPowers.rearLeftMotorPower);
+  rearRightMotor.write(motorPowers.rearRightMotorPower);
 }
