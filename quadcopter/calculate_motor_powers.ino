@@ -1,5 +1,6 @@
 unsigned long last_time = millis(); 
 unsigned long current_time = millis();
+int delta_time;
 
 struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands, struct Orientation previousOrientation, struct Orientation actualOrientation) { 
   updateCurrentTimeVariables();

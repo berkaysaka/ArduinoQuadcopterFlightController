@@ -1,6 +1,5 @@
 #include <avr/wdt.h>
 
-
 void setup() {
   wdt_enable(WDTO_1S);
   

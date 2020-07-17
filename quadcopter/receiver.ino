@@ -1,15 +1,11 @@
 #include <FUTABA_SBUS.h>
 
 FUTABA_SBUS sbus;
+unsigned long last_receiver_communication_time = millis();
 
 void initializeReceiver() {
   sbus.begin();
 }
-
-unsigned long last_receiver_communication_time = millis();
-
-
-
 
 struct RawReceiverValues readReceiverValues() {
   struct RawReceiverValues r;

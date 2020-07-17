@@ -1,5 +1,3 @@
-
-
 struct ReceiverCommands convertToReceiverCommands(struct RawReceiverValues r) {
   struct ReceiverCommands o;
   o.Throttle = map(r.Throttle, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, MIN_THROTTLE, THROTTLE_LIMIT_POINT);
