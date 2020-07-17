@@ -22,7 +22,7 @@ void loop() {
   syncOutputSignals();
   
   struct RawReceiverValues rawReceiverValues = readReceiverValues();
-  struct DesiredOrientation desiredOrientation = calculateDesiredOrientation(rawReceiverValues);
+  struct ReceiverCommands receiverCommands = convertToReceiverCommands(rawReceiverValues);
   previousOrientation = actualOrientation;
   actualOrientation = readIMUvalues();
     

@@ -4,7 +4,7 @@ struct RawReceiverValues {
    int Pitch;
    int Roll;
 };
-struct DesiredOrientation {
+struct ReceiverCommands {
    int Throttle;
    double YawAngleChange;
    double PitchAngle;
@@ -14,5 +14,9 @@ struct Orientation {
    double YawAngle;
    double PitchAngle;
    double RollAngle;
-   double PreviousYawAngle;
+};
+struct IMUvalues {
+   bool IMU_Error;
+   bool DataAvailable;
+   Orientation Orientation;
 };
