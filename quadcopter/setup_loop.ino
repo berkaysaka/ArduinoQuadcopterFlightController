@@ -19,24 +19,33 @@ struct Orientation previousOrientation;
 struct Orientation actualOrientation;
 
 void loop() {
+  wdt_reset();
+  
   syncOutputSignals();
   
   struct RawReceiverValues rawReceiverValues = readReceiverValues();
   struct ReceiverCommands receiverCommands = convertToReceiverCommands(rawReceiverValues);
-  previousOrientation = actualOrientation;
-  actualOrientation = readIMUvalues();
-    
-  calculateMotorPowers();
-  applySafetyRules();
+  struct IMU_Values imu_values = readIMUvalues();
+  
+  if(rawReceiverValues.ReceiverError || receiverCommands.Throttle < THROTTLE_START_POINT || imu_values.IMU_Error)
+  {
+    runSafetyProtocol();
+    return;
+  }
+  
+  if (imu_values.DataAvailable){
+    previousOrientation = actualOrientation;
+    actualOrientation = imu_values.Orientation;
+    calculateMotorPowers(receiverCommands, previousOrientation, actualOrientation);
+  }
+
   spinMotors();
   
   sendTelemetryData();
   readRemotePidConfigurationCommand();
-  
-  wdt_reset();
 }
 
-void applySafetyRules(){
+void runSafetyProtocol(){
   if (throttle < THROTTLE_START_POINT || receiver_failure == true || imu_failure == true){
     frontLeftMotorPower = MIN_THROTTLE;
     frontRightMotorPower = MIN_THROTTLE;

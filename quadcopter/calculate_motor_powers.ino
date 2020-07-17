@@ -1,18 +1,13 @@
 unsigned long last_time = millis(); 
 unsigned long current_time = millis();
 
-void calculateMotorPowers() {
-  if (fresh_imu_data_available == false){
-    return;
-  }
-  fresh_imu_data_available = false;
-  
+void calculateMotorPowers(struct ReceiverCommands receiverCommands, struct Orientation previousOrientation, struct Orientation actualOrientation) { 
   updateCurrentTimeVariables();
 
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
-  double rollError = desired_roll_angle - rollAngle;
-  double pitchError = desired_pitch_angle - pitchAngle;
-  double yawError = desired_yaw_angle_change - (yawAngle - prev_yawAngle);
+  double rollError = receiverCommands.RollAngle - actualOrientation.RollAngle;
+  double pitchError = receiverCommands.PitchAngle - actualOrientation.PitchAngle;
+  double yawError = receiverCommands.YawAngleChange - (actualOrientation.YawAngle - previousOrientation.YawAngle);
     
   // calculate control gains based on errors
   roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);

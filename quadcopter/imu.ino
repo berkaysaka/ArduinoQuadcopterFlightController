@@ -73,9 +73,9 @@ void initializeIMU() {
   }
 }
 
-struct Orientation readIMUvalues() {
-  struct Orientation o;
-  
+struct IMU_Values readIMUvalues() {
+  struct IMU_Values o;
+  o.DataAvailable = false;
   if (!dmpReady) return o;
   
   if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
@@ -85,15 +85,11 @@ struct Orientation readIMUvalues() {
 
     // normally the order of the orientation that we receive from ypr[] is yaw, pitch, roll.
     // but since the IMU placed 90 degrees to the right, we need to make the adjustments below. (roll-pitch swap and *-1)
-    
-    o.YawAngle = ypr[0] * 180 / M_PI;
-    o.RollAngle = ypr[1] * 180 / M_PI;
-    o.PitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+    o.Orientation.YawAngle = ypr[0] * 180 / M_PI;
+    o.Orientation.RollAngle = ypr[1] * 180 / M_PI;
+    o.Orientation.PitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
     o.DataAvailable = true;
-    o.IMU_Error = false;
-    
     lastImuDataAvailableTime = millis();
-    return o;
   }
   else if(lastImuDataAvailableTime == 0){
     return o; //not initialized yet;
@@ -101,8 +97,10 @@ struct Orientation readIMUvalues() {
   
   unsigned long imuDataUnavailableTime = millis() - lastImuDataAvailableTime;
   if(imuDataUnavailableTime > 30){
-      imu_failure = true;
+      o.IMU_Error = true;
   }else{
-      imu_failure = false;
+      o.IMU_Error = false;
   }
+
+  return o;
 }
