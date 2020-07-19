@@ -13,7 +13,6 @@ uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
 uint16_t fifoCount;     // count of all bytes currently in FIFO
 uint8_t fifoBuffer[64]; // FIFO storage buffer
 
-// orientation/motion vars
 Quaternion q;           // [w, x, y, z]         quaternion container
 VectorInt16 aa;         // [x, y, z]            accel sensor measurements
 VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
@@ -50,24 +49,13 @@ void initializeIMU() {
   mpu.setYAccelOffset(1620);
   mpu.setZAccelOffset(397);
 
-  // make sure it worked (returns 0 if so)
   if (devStatus == 0) {
-    /*mpu.CalibrateAccel(6);
-    mpu.CalibrateGyro(6);
-    mpu.PrintActiveOffsets();
-    syncOutputSignals();*/
     mpu.setDMPEnabled(true);
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
     mpuIntStatus = mpu.getIntStatus();
     dmpReady = true;
 
     packetSize = mpu.dmpGetFIFOPacketSize();
-  } else {
-    Serial.println("*imu dmp initialize error!");
-    // ERROR!
-    // 1 = initial memory load failed
-    // 2 = DMP configuration updates failed
-    // (if it's going to break, usually the code will be 1)
   }
 }
 
