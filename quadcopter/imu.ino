@@ -30,7 +30,7 @@ unsigned long last_time = 0;
 
 void initializeIMU() {
   #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-    Wire.begin();
+    Wire.begin(100);
   #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
     Fastwire::setup(100, true);
   #endif
