@@ -1,6 +1,6 @@
 struct ReceiverCommands convertToReceiverCommands(struct RawReceiverValues r) {
   struct ReceiverCommands o;
-  o.Throttle = map(r.Throttle, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, MIN_THROTTLE, THROTTLE_LIMIT_POINT);
+  o.Throttle = map(r.Throttle, MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE, 0, THROTTLE_LIMIT_POINT);
   o.PitchAngle = calculateAskedAngle(r.Pitch, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
   o.RollAngle = calculateAskedAngle(r.Roll, ANGLE_DEGREE_LIMIT_PITCH_ROLL);
   o.YawAngleChange = calculateAskedAngle(r.Yaw, ANGLE_DEGREE_LIMIT_YAW);

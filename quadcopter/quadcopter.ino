@@ -4,8 +4,6 @@
 #define REMOTE_PID_CONFIG_ENABLED false
 
 //----------- HARDWARE CONFIGURATION-----------
-#define MIN_THROTTLE 0
-#define MAX_THROTTLE 180
 #define THROTTLE_START_POINT 15
 #define THROTTLE_LIMIT_POINT 150
 
@@ -40,7 +38,3 @@ double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
 
 double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
 double ANGLE_DEGREE_LIMIT_YAW = 5.00;
-
-//-----------GLOBAL VARIABLES-----------
-double roll_control_signal, pitch_control_signal, yaw_control_signal;
-double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
