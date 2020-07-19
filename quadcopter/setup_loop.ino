@@ -16,9 +16,13 @@ void setup() {
 
 struct Orientation previousOrientation;
 struct Orientation actualOrientation;
+unsigned long last_time; 
 
 void loop() {
   wdt_reset();
+  
+  unsigned long current_time = millis();
+  int delta_time = current_time - last_time;
   
   syncOutputSignals();
   
@@ -28,22 +32,24 @@ void loop() {
   
   if(rawReceiverValues.ReceiverError || receiverCommands.Throttle < THROTTLE_START_POINT || imu_values.IMU_Error)
   {
-    runSafetyProtocol();
+    runSafetyProtocol(current_time);
     return;
   }
   
   if (imu_values.DataAvailable){
     previousOrientation = actualOrientation;
     actualOrientation = imu_values.Orientation;
-    MotorPowers motorPowers = calculateMotorPowers(receiverCommands, previousOrientation, actualOrientation);
+    MotorPowers motorPowers = calculateMotorPowers(receiverCommands, previousOrientation, actualOrientation, delta_time);
     spinMotors(motorPowers);
   }
   
   sendTelemetryData(receiverCommands, actualOrientation);
   readRemotePidConfigurationCommand();
+
+  last_time = current_time;
 }
 
-void runSafetyProtocol(){
+void runSafetyProtocol(unsigned long current_time){
     struct MotorPowers motorPowers;
     motorPowers.frontLeftMotorPower = MIN_THROTTLE;
     motorPowers.frontRightMotorPower = MIN_THROTTLE;
@@ -51,6 +57,8 @@ void runSafetyProtocol(){
     motorPowers.rearRightMotorPower = MIN_THROTTLE;
     spinMotors(motorPowers);
 
+    last_time = current_time;
+    
     roll_pid_i = 0; 
     roll_last_error = 0;
     pitch_pid_i = 0; 

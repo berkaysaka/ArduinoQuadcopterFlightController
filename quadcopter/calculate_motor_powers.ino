@@ -1,19 +1,13 @@
-unsigned long last_time = millis(); 
-unsigned long current_time = millis();
-int delta_time;
-
-struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands, struct Orientation previousOrientation, struct Orientation actualOrientation) { 
-  updateCurrentTimeVariables();
-
+struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands, struct Orientation previousOrientation, struct Orientation actualOrientation, int delta_time) { 
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
   double rollError = receiverCommands.RollAngle - actualOrientation.RollAngle;
   double pitchError = receiverCommands.PitchAngle - actualOrientation.PitchAngle;
   double yawError = receiverCommands.YawAngleChange - (actualOrientation.YawAngle - previousOrientation.YawAngle);
     
   // calculate control gains based on errors
-  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
+  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT, delta_time);
+  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT, delta_time);
+  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT, delta_time);
 
   // limit control gains
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
@@ -29,8 +23,6 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
 
   motorPowers = reduceMotorPowers(motorPowers);
   motorPowers = ensureMotorsAlwaysRun(motorPowers);
- 
-  updateLastTimeVariables();
   
   return motorPowers;
 }
@@ -53,13 +45,4 @@ struct MotorPowers ensureMotorsAlwaysRun(MotorPowers motorPowers){ // because it
   motorPowers.rearLeftMotorPower = max(motorPowers.rearLeftMotorPower, THROTTLE_START_POINT);
   motorPowers.rearRightMotorPower = max(motorPowers.rearRightMotorPower, THROTTLE_START_POINT);
   return motorPowers;
-}
-
-void updateCurrentTimeVariables() {
-  current_time = millis();
-  delta_time = (current_time - last_time);
-}
-
-void updateLastTimeVariables() {
-  last_time = current_time;
 }
