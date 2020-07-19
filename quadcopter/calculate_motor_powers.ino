@@ -54,7 +54,7 @@ struct MotorPowers reduceMotorPowers(MotorPowers motorPowers) { // to preserve b
   return motorPowers;
 }
 
-struct MotorPowers keepMotorsAlwaysRunning(MotorPowers motorPowers){ // because it takes much more time to spin a stopped motor
+struct MotorPowers keepMotorsAlwaysRunning(MotorPowers motorPowers) { // because it takes much more time to spin a stopped motor
   motorPowers.frontLeftMotorPower = max(motorPowers.frontLeftMotorPower, THROTTLE_START_POINT);
   motorPowers.frontRightMotorPower = max(motorPowers.frontRightMotorPower, THROTTLE_START_POINT);
   motorPowers.rearLeftMotorPower = max(motorPowers.rearLeftMotorPower, THROTTLE_START_POINT);
