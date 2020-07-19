@@ -108,7 +108,7 @@ struct IMU_Values readIMUvalues() {
   }
   
   unsigned long imuDataUnavailableTime = millis() - lastImuDataAvailableTime;
-  if(imuDataUnavailableTime > 30){
+  if(imuDataUnavailableTime > 100){
       o.IMU_Error = true;
   }else{
       o.IMU_Error = false;
