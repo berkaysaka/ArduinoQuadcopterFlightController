@@ -77,6 +77,6 @@ void readRemotePidConfigurationCommand()
     } else {
       Serial.println("unknown pid command:" + cmd);
     }
-    wdt_enable(WDTO_60MS);
+    wdt_enable(PROGRAM_LOOP_TIMEOUT);
   }
 }

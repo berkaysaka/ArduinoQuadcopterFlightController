@@ -1,7 +1,7 @@
 #include <avr/wdt.h>
 
 void setup() {
-  wdt_enable(WDTO_1S);
+  wdt_enable(PROGRAM_STARTUP_TIMEOUT);
 
   initializeMotors();
   initializeOutputSignals();
@@ -11,7 +11,7 @@ void setup() {
   initializeIMU();
 
   wdt_disable();
-  wdt_enable(WDTO_60MS);
+  wdt_enable(PROGRAM_LOOP_TIMEOUT);
 }
 
 void loop() {
