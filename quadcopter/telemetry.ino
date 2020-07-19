@@ -1,7 +1,7 @@
 unsigned long _lastTime = millis();
 
 void initializeTelemetry(){
-  if (REMOTE_PID_CONFIG_ENABLED == false) 
+  if (TELEMETRY_ENABLED == false) 
     return;
 
   if (Serial2) //if Serial2 already ready, do nothing

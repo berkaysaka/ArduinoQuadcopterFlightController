@@ -14,8 +14,6 @@ void setup() {
   wdt_enable(WDTO_60MS);
 }
 
-
-
 void loop() {
   wdt_reset();
 

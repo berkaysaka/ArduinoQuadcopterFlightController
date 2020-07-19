@@ -1,7 +1,7 @@
 #include <avr/wdt.h>
 
 void initializeRemotePidConfiguration(){
-  if (TELEMETRY_ENABLED == false) 
+  if (REMOTE_PID_CONFIG_ENABLED == false) 
     return;
 
   if (Serial2) //if Serial2 already ready, do nothing
