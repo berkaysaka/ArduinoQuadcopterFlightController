@@ -13,12 +13,12 @@ struct RawReceiverValues readReceiverValues() {
   sbus.FeedLine();
   if (sbus.toChannels != 1){
     if(millis() - last_receiver_communication_time > RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS){
-      r.ReceiverError = true;
+      r.ReceiverCommunicationError = true;
     }
     return;
   }else{
     last_receiver_communication_time = millis();
-    r.ReceiverError = false;
+    r.ReceiverCommunicationError = false;
   }
 
   sbus.UpdateServos();

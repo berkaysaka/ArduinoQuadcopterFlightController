@@ -99,9 +99,9 @@ struct IMU_Values readIMUvalues() {
   }
   
   if(delta_time > IMU_COMMUNICATION_TIMEOUT_IN_MILLISECONDS){
-      o.IMU_Error = true;
+      o.IMU_CommunicationError = true;
   }else{
-      o.IMU_Error = false;
+      o.IMU_CommunicationError = false;
   }
 
   return o;
