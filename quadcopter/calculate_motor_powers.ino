@@ -1,23 +1,28 @@
-unsigned long last_time = millis(); 
-unsigned long current_time = millis();
+double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
+double roll_control_signal, pitch_control_signal, yaw_control_signal;
 
-void calculateMotorPowers() {
-  if (fresh_imu_data_available == false){
-    return;
-  }
-  fresh_imu_data_available = false;
-  
-  updateCurrentTimeVariables();
+void resetPidVariables() {
+  roll_pid_i = 0;
+  roll_last_error = 0;
+  pitch_pid_i = 0;
+  pitch_last_error = 0;
+  yaw_pid_i = 0;
+  yaw_last_error = 0;
+}
 
+struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands, struct IMU_Values imu_values) {
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
-  double rollError = desired_roll_angle - rollAngle;
-  double pitchError = desired_pitch_angle - pitchAngle;
-  double yawError = desired_yaw_angle_change - (yawAngle - prev_yawAngle);
-    
+  double rollError = receiverCommands.RollAngle - imu_values.CurrentOrientation.RollAngle;
+  double pitchError = receiverCommands.PitchAngle - imu_values.CurrentOrientation.PitchAngle;
+  double yawError = receiverCommands.YawAngleChange - (imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle);
+
+  // prevent sudden changes on yaw. huge yaw difference causes altitude gain
+  yawError = constrain(yawError, -ANGLE_DEGREE_LIMIT_YAW, ANGLE_DEGREE_LIMIT_YAW);
+
   // calculate control gains based on errors
-  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT);
-  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT);
+  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTime);
+  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTime);
+  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT, imu_values.DeltaTime);
 
   // limit control gains
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);
@@ -25,41 +30,34 @@ void calculateMotorPowers() {
   yaw_control_signal = constrain(yaw_control_signal, -MAX_YAW_CONTROL_GAIN, MAX_YAW_CONTROL_GAIN);
 
   // calculate power for each motor
-  frontLeftMotorPower = round(throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
-  frontRightMotorPower = round(throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
-  rearLeftMotorPower = round(throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
-  rearRightMotorPower = round(throttle - roll_control_signal - pitch_control_signal - yaw_control_signal);
+  struct MotorPowers motorPowers;
+  motorPowers.frontLeftMotorPower = round(receiverCommands.Throttle + roll_control_signal + pitch_control_signal - yaw_control_signal);
+  motorPowers.frontRightMotorPower = round(receiverCommands.Throttle - roll_control_signal + pitch_control_signal + yaw_control_signal);
+  motorPowers.rearLeftMotorPower = round(receiverCommands.Throttle + roll_control_signal - pitch_control_signal + yaw_control_signal);
+  motorPowers.rearRightMotorPower = round(receiverCommands.Throttle - roll_control_signal - pitch_control_signal - yaw_control_signal);
 
-  reduceMotorPowers();
+  motorPowers = reduceMotorPowers(motorPowers);
+  motorPowers = keepMotorsAlwaysRunning(motorPowers);
 
-  ensureMotorsAlwaysRun();
- 
-  updateLastTimeVariables();
+  return motorPowers;
 }
 
-void reduceMotorPowers(){ // to preserve balance if MAX_THROTTLE limit exceeds)
-  int maxMotorPower = max(max(frontLeftMotorPower, frontRightMotorPower), max(rearLeftMotorPower, rearRightMotorPower));
-  if (maxMotorPower > MAX_THROTTLE){
-    double power_reduction_rate = (double)maxMotorPower / (double)MAX_THROTTLE;
-    frontLeftMotorPower = round((double)frontLeftMotorPower / power_reduction_rate);
-    frontRightMotorPower = round((double)frontRightMotorPower / power_reduction_rate);
-    rearLeftMotorPower = round((double)rearLeftMotorPower / power_reduction_rate);
-    rearRightMotorPower = round((double)rearRightMotorPower / power_reduction_rate);
+struct MotorPowers reduceMotorPowers(MotorPowers motorPowers) { // to preserve balance if MAX_THROTTLE limit exceeds)
+  int maxMotorPower = max(max(motorPowers.frontLeftMotorPower, motorPowers.frontRightMotorPower), max(motorPowers.rearLeftMotorPower, motorPowers.rearRightMotorPower));
+  if (maxMotorPower > 180) {
+    double power_reduction_rate = (double)maxMotorPower / (double)180;
+    motorPowers.frontLeftMotorPower = round((double)motorPowers.frontLeftMotorPower / power_reduction_rate);
+    motorPowers.frontRightMotorPower = round((double)motorPowers.frontRightMotorPower / power_reduction_rate);
+    motorPowers.rearLeftMotorPower = round((double)motorPowers.rearLeftMotorPower / power_reduction_rate);
+    motorPowers.rearRightMotorPower = round((double)motorPowers.rearRightMotorPower / power_reduction_rate);
   }
+  return motorPowers;
 }
 
-void ensureMotorsAlwaysRun(){ // because it takes much more time to spin a stopped motor
-  frontLeftMotorPower = max(frontLeftMotorPower, THROTTLE_START_POINT);
-  frontRightMotorPower = max(frontRightMotorPower, THROTTLE_START_POINT);
-  rearLeftMotorPower = max(rearLeftMotorPower, THROTTLE_START_POINT);
-  rearRightMotorPower = max(rearRightMotorPower, THROTTLE_START_POINT);
-}
-
-void updateCurrentTimeVariables() {
-  current_time = millis();
-  delta_time = (current_time - last_time);
-}
-
-void updateLastTimeVariables() {
-  last_time = current_time;
+struct MotorPowers keepMotorsAlwaysRunning(MotorPowers motorPowers) { // because it takes much more time to spin a stopped motor
+  motorPowers.frontLeftMotorPower = max(motorPowers.frontLeftMotorPower, THROTTLE_START_POINT);
+  motorPowers.frontRightMotorPower = max(motorPowers.frontRightMotorPower, THROTTLE_START_POINT);
+  motorPowers.rearLeftMotorPower = max(motorPowers.rearLeftMotorPower, THROTTLE_START_POINT);
+  motorPowers.rearRightMotorPower = max(motorPowers.rearRightMotorPower, THROTTLE_START_POINT);
+  return motorPowers;
 }

@@ -1,7 +1,7 @@
 unsigned long _lastTime = millis();
 
 void initializeTelemetry(){
-  if (REMOTE_PID_CONFIG_ENABLED == false) 
+  if (TELEMETRY_ENABLED == false) 
     return;
 
   if (Serial2) //if Serial2 already ready, do nothing
@@ -11,7 +11,7 @@ void initializeTelemetry(){
   while(!Serial2){} // wait for Serial2 port to be ready
 }
 
-void sendTelemetryData() {
+void sendTelemetryData(struct ReceiverCommands receiverCommands, struct IMU_Values imu_values) {
   if (TELEMETRY_ENABLED == false)
     return;
     
@@ -22,13 +22,13 @@ void sendTelemetryData() {
 
   Serial2.println(
     String(_currentTime)
-    + "\t" + pitchAngle
-    + "\t" + rollAngle
-    + "\t" + yawAngle
-    + "\t" + throttle
-    + "\t" + desired_pitch_angle
-    + "\t" + desired_roll_angle
-    + "\t" + desired_yaw_angle_change
+    + "\t" + imu_values.CurrentOrientation.PitchAngle
+    + "\t" + imu_values.CurrentOrientation.RollAngle
+    + "\t" + imu_values.CurrentOrientation.YawAngle
+    + "\t" + receiverCommands.Throttle
+    + "\t" + receiverCommands.PitchAngle
+    + "\t" + receiverCommands.RollAngle
+    + "\t" + receiverCommands.YawAngleChange
     + "\t" + pitch_control_signal
     + "\t" + roll_control_signal
     + "\t" + yaw_control_signal

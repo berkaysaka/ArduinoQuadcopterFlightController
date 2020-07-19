@@ -1,33 +1,35 @@
 #include <FUTABA_SBUS.h>
 
 FUTABA_SBUS sbus;
+unsigned long last_receiver_communication_time = millis();
 
 void initializeReceiver() {
   sbus.begin();
 }
 
-unsigned long last_receiver_communication_time = millis();
-
-void readReceiverValues() {
+struct RawReceiverValues readReceiverValues() {
+  struct RawReceiverValues r;
+  
   sbus.FeedLine();
   if (sbus.toChannels != 1){
     if(millis() - last_receiver_communication_time > 1000){
-      receiver_failure = true;
+      r.ReceiverError = true;
     }
     return;
   }else{
     last_receiver_communication_time = millis();
-    receiver_failure = false;
+    r.ReceiverError = false;
   }
 
   sbus.UpdateServos();
   sbus.UpdateChannels();
   sbus.toChannels = 0;
-
-  rollRaw = constrain(sbus.channels[0], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  pitchRaw = constrain(sbus.channels[1], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  throttleRaw = constrain(sbus.channels[2], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  yawRaw = centralize(constrain(sbus.channels[3], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE));
+  
+  r.Roll = constrain(sbus.channels[0], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
+  r.Pitch = constrain(sbus.channels[1], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
+  r.Throttle = constrain(sbus.channels[2], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
+  r.Yaw = centralize(constrain(sbus.channels[3], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE));
+  return r;
 }
 
 //prevent small receiver value changes to affect yaw while joystick is on the center
