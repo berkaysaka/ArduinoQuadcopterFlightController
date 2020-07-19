@@ -19,10 +19,10 @@
 #define MIN_MOTOR_PULSE_WIDTH 1000
 #define MAX_MOTOR_PULSE_WIDTH 2000
 
-//----------- LIMITS (0-180)-----------
-#define THROTTLE_START_POINT 15
-#define THROTTLE_LIMIT_POINT 150
-double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00;
+//----------- LIMITS -----------
+#define THROTTLE_START_POINT 15  // between 0-180
+#define THROTTLE_LIMIT_POINT 150 // between 0-180
+double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00; // max tilt angle limit in degrees
 double ANGLE_DEGREE_LIMIT_YAW = 5.00;
 double MAX_YAW_CONTROL_GAIN = 20.00;
 double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
