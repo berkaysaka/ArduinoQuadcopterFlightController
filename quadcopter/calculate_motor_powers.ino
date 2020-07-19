@@ -1,13 +1,13 @@
-struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands, struct Orientation previousOrientation, struct Orientation actualOrientation, int delta_time) { 
+struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands, struct IMU_Values imu_values) { 
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
-  double rollError = receiverCommands.RollAngle - actualOrientation.RollAngle;
-  double pitchError = receiverCommands.PitchAngle - actualOrientation.PitchAngle;
-  double yawError = receiverCommands.YawAngleChange - (actualOrientation.YawAngle - previousOrientation.YawAngle);
+  double rollError = receiverCommands.RollAngle - imu_values.CurrentOrientation.RollAngle;
+  double pitchError = receiverCommands.PitchAngle - imu_values.CurrentOrientation.PitchAngle;
+  double yawError = receiverCommands.YawAngleChange - (imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle);
     
   // calculate control gains based on errors
-  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT, delta_time);
-  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT, delta_time);
-  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT, delta_time);
+  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTime);
+  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTime);
+  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT, imu_values.DeltaTime);
 
   // limit control gains
   roll_control_signal = constrain(roll_control_signal, -MAX_ROLL_PITCH_CONTROL_GAIN, MAX_ROLL_PITCH_CONTROL_GAIN);

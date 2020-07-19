@@ -11,7 +11,7 @@ void initializeTelemetry(){
   while(!Serial2){} // wait for Serial2 port to be ready
 }
 
-void sendTelemetryData(struct ReceiverCommands receiverCommands, struct Orientation orientation) {
+void sendTelemetryData(struct ReceiverCommands receiverCommands, struct IMU_Values imu_values) {
   if (TELEMETRY_ENABLED == false)
     return;
     
@@ -22,9 +22,9 @@ void sendTelemetryData(struct ReceiverCommands receiverCommands, struct Orientat
 
   Serial2.println(
     String(_currentTime)
-    + "\t" + orientation.PitchAngle
-    + "\t" + orientation.RollAngle
-    + "\t" + orientation.YawAngle
+    + "\t" + imu_values.CurrentOrientation.PitchAngle
+    + "\t" + imu_values.CurrentOrientation.RollAngle
+    + "\t" + imu_values.CurrentOrientation.YawAngle
     + "\t" + receiverCommands.Throttle
     + "\t" + receiverCommands.PitchAngle
     + "\t" + receiverCommands.RollAngle

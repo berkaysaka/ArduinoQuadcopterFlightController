@@ -6,8 +6,6 @@
 MPU6050 mpu;
 #define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 
-unsigned long lastImuDataAvailableTime = 0;
-
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
@@ -26,6 +24,12 @@ float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
+
+
+unsigned long lastImuDataAvailableTime = 0;
+struct Orientation previousOrientation;
+unsigned long last_time; 
+
 
 void dmpDataReady() {
   mpuInterrupt = true;
@@ -83,13 +87,21 @@ struct IMU_Values readIMUvalues() {
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
 
+    unsigned long current_time = millis();
+    int delta_time = current_time - last_time;
+    
     // normally the order of the orientation that we receive from ypr[] is yaw, pitch, roll.
     // but since the IMU placed 90 degrees to the right, we need to make the adjustments below. (roll-pitch swap and *-1)
-    o.Orientation.YawAngle = ypr[0] * 180 / M_PI;
-    o.Orientation.RollAngle = ypr[1] * 180 / M_PI;
-    o.Orientation.PitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+    o.CurrentOrientation.YawAngle = ypr[0] * 180 / M_PI;
+    o.CurrentOrientation.RollAngle = ypr[1] * 180 / M_PI;
+    o.CurrentOrientation.PitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+    o.PreviousOrientation = previousOrientation;
     o.DataAvailable = true;
+    o.DeltaTime = delta_time;
+    
+    previousOrientation = o.CurrentOrientation;
     lastImuDataAvailableTime = millis();
+    last_time = current_time;
   }
   else if(lastImuDataAvailableTime == 0){
     return o; //not initialized yet;

@@ -19,7 +19,9 @@ struct Orientation {
 struct IMU_Values {
   bool IMU_Error;
   bool DataAvailable;
-  Orientation Orientation;
+  int DeltaTime;
+  struct Orientation CurrentOrientation;
+  struct Orientation PreviousOrientation;
 };
 struct MotorPowers {
   int frontLeftMotorPower;
