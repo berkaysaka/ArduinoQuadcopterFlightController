@@ -37,6 +37,7 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   motorPowers.rearRightMotorPower = round(receiverCommands.Throttle - roll_control_signal - pitch_control_signal - yaw_control_signal);
 
   motorPowers = reduceMotorPowers(motorPowers);
+  motorPowers = keepMotorsAlwaysRunning(motorPowers);
 
   return motorPowers;
 }
@@ -50,5 +51,13 @@ struct MotorPowers reduceMotorPowers(MotorPowers motorPowers) { // to preserve b
     motorPowers.rearLeftMotorPower = round((double)motorPowers.rearLeftMotorPower / power_reduction_rate);
     motorPowers.rearRightMotorPower = round((double)motorPowers.rearRightMotorPower / power_reduction_rate);
   }
+  return motorPowers;
+}
+
+struct MotorPowers keepMotorsAlwaysRunning(MotorPowers motorPowers){ // because it takes much more time to spin a stopped motor
+  motorPowers.frontLeftMotorPower = max(motorPowers.frontLeftMotorPower, THROTTLE_START_POINT);
+  motorPowers.frontRightMotorPower = max(motorPowers.frontRightMotorPower, THROTTLE_START_POINT);
+  motorPowers.rearLeftMotorPower = max(motorPowers.rearLeftMotorPower, THROTTLE_START_POINT);
+  motorPowers.rearRightMotorPower = max(motorPowers.rearRightMotorPower, THROTTLE_START_POINT);
   return motorPowers;
 }
