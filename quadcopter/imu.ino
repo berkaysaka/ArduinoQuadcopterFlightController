@@ -42,12 +42,12 @@ void initializeIMU() {
     Serial.println("*imu test connection failed!");
   }
   devStatus = mpu.dmpInitialize();
-  mpu.setXGyroOffset(91);
-  mpu.setYGyroOffset(-92);
-  mpu.setZGyroOffset(38);
-  mpu.setXAccelOffset(182);
-  mpu.setYAccelOffset(1620);
-  mpu.setZAccelOffset(397);
+  mpu.setXGyroOffset(GYRO_OFFSET_X);
+  mpu.setYGyroOffset(GYRO_OFFSET_Y);
+  mpu.setZGyroOffset(GYRO_OFFSET_Z);
+  mpu.setXAccelOffset(ACCEL_OFFSET_X);
+  mpu.setYAccelOffset(ACCEL_OFFSET_Y);
+  mpu.setZAccelOffset(ACCEL_OFFSET_Z);
 
   if (devStatus == 0) {
     mpu.setDMPEnabled(true);

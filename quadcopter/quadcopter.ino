@@ -12,6 +12,14 @@
 #define BUZZER_PIN 12
 #define INTERRUPT_PIN 2
 
+//----------- IMU -----------
+#define GYRO_OFFSET_X 91
+#define GYRO_OFFSET_Y -92
+#define GYRO_OFFSET_Z 38
+#define ACCEL_OFFSET_X 182
+#define ACCEL_OFFSET_Y 1620
+#define ACCEL_OFFSET_Z 397
+
 //----------- RECEIVER -----------
 #define MIN_RAW_RECEIVER_VALUE 300
 #define MAX_RAW_RECEIVER_VALUE 1700
