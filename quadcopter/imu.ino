@@ -4,7 +4,6 @@
 #include "Wire.h"
 #endif
 MPU6050 mpu;
-#define INTERRUPT_PIN 2  // use pin 2 on Arduino Uno & most boards
 
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
@@ -22,18 +21,13 @@ VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measure
 VectorFloat gravity;    // [x, y, z]            gravity vector
 float euler[3];         // [psi, theta, phi]    Euler angle container
 float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
-
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
-
-
-unsigned long lastImuDataAvailableTime = 0;
-struct Orientation previousOrientation;
-unsigned long last_time; 
-
-
 void dmpDataReady() {
   mpuInterrupt = true;
 }
+
+struct Orientation previousOrientation;
+unsigned long last_time = 0; 
 
 void initializeIMU() {
   #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
@@ -80,15 +74,16 @@ void initializeIMU() {
 struct IMU_Values readIMUvalues() {
   struct IMU_Values o;
   o.DataAvailable = false;
-  if (!dmpReady) return o;
-  
+  if (!dmpReady || last_time == 0) 
+    return o;
+
+  unsigned long current_time = millis();
+  unsigned long delta_time = current_time - last_time;
+    
   if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-
-    unsigned long current_time = millis();
-    int delta_time = current_time - last_time;
     
     // normally the order of the orientation that we receive from ypr[] is yaw, pitch, roll.
     // but since the IMU placed 90 degrees to the right, we need to make the adjustments below. (roll-pitch swap and *-1)
@@ -100,15 +95,10 @@ struct IMU_Values readIMUvalues() {
     o.DeltaTime = delta_time;
     
     previousOrientation = o.CurrentOrientation;
-    lastImuDataAvailableTime = millis();
     last_time = current_time;
   }
-  else if(lastImuDataAvailableTime == 0){
-    return o; //not initialized yet;
-  }
   
-  unsigned long imuDataUnavailableTime = millis() - lastImuDataAvailableTime;
-  if(imuDataUnavailableTime > 100){
+  if(delta_time > IMU_COMMUNICATION_TIMEOUT_IN_MILLISECONDS){
       o.IMU_Error = true;
   }else{
       o.IMU_Error = false;

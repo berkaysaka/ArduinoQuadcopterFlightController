@@ -12,7 +12,7 @@ struct RawReceiverValues readReceiverValues() {
   
   sbus.FeedLine();
   if (sbus.toChannels != 1){
-    if(millis() - last_receiver_communication_time > 1000){
+    if(millis() - last_receiver_communication_time > RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS){
       r.ReceiverError = true;
     }
     return;
@@ -35,8 +35,7 @@ struct RawReceiverValues readReceiverValues() {
 //prevent small receiver value changes to affect yaw while joystick is on the center
 int centralize(int val) {
   int center = (MAX_RAW_RECEIVER_VALUE + MIN_RAW_RECEIVER_VALUE) / 2;
-  int tolerance = 10;
-  if (abs(val - center) <= tolerance)
+  if (abs(val - center) <= RECEIVER_DEAD_BAND)
     return center;
   else
     return val;
