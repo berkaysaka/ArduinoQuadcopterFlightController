@@ -41,12 +41,6 @@ void loop() {
 }
 
 void runSafetyProtocol() {
-  struct MotorPowers motorPowers;
-  motorPowers.frontLeftMotorPower = 0;
-  motorPowers.frontRightMotorPower = 0;
-  motorPowers.rearLeftMotorPower = 0;
-  motorPowers.rearRightMotorPower = 0;
-  spinMotors(motorPowers);
-
+  stopMotors();
   resetPidVariables();
 }
