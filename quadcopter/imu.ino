@@ -62,7 +62,7 @@ void initializeIMU() {
 struct IMU_Values readIMUvalues() {
   struct IMU_Values o;
   o.DataAvailable = false;
-  if (!dmpReady || last_time == 0) 
+  if (!dmpReady) 
     return o;
 
   unsigned long current_time = millis();
@@ -83,6 +83,11 @@ struct IMU_Values readIMUvalues() {
     o.DeltaTime = delta_time;
     
     previousOrientation = o.CurrentOrientation;
+    if (last_time == 0){
+      last_time = current_time;
+      o.IMU_CommunicationError = true;
+      return o;
+    }
     last_time = current_time;
   }
   
