@@ -1,12 +1,12 @@
 #include <FUTABA_SBUS.h>
 
 FUTABA_SBUS sbus;
-unsigned long last_receiver_communication_time = 0;
 
+unsigned long last_receiver_communication_time = 0;
 int previousRoll;
 int previousPitch;
-int previousYaw;
 int previousThrottle;
+int previousYaw;
 
 void initializeReceiver() {
   sbus.begin();
@@ -17,9 +17,8 @@ struct RawReceiverValues readReceiverValues() {
   
   sbus.FeedLine();
   if (sbus.toChannels != 1){
-    bool isCommunicationTimeout = (millis() - last_receiver_communication_time) > RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS;
-    if(last_receiver_communication_time == 0 || isCommunicationTimeout){
-      r.ReceiverCommunicationError = true;
+    if((millis() - last_receiver_communication_time) > RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS){
+      r.ReceiverCommunicationError = true; //receiver communication failure  
     }else{
       r.ReceiverCommunicationError = false;
       r.Roll = previousRoll;
@@ -29,13 +28,17 @@ struct RawReceiverValues readReceiverValues() {
     }
     return r;
   }
+  sbus.UpdateServos();
+  sbus.UpdateChannels();
+  if (sbus.failsafe_status != 0){
+    r.ReceiverCommunicationError = true; //transmitter signal lost
+    return r;
+  }
+  sbus.toChannels = 0;
+  
   last_receiver_communication_time = millis();
   r.ReceiverCommunicationError = false;
 
-  sbus.UpdateServos();
-  sbus.UpdateChannels();
-  sbus.toChannels = 0;
-  
   r.Roll = constrain(sbus.channels[0], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
   r.Pitch = constrain(sbus.channels[1], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
   r.Throttle = constrain(sbus.channels[2], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
