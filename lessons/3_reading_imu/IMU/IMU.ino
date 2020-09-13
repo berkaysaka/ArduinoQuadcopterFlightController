@@ -44,9 +44,14 @@ void initializeIMU() {
 
   devStatus = mpu.dmpInitialize();
 
+  mpu.setXAccelOffset(-616);
+  mpu.setYAccelOffset(943);
+  mpu.setZAccelOffset(1396);
+  mpu.setXGyroOffset(130);
+  mpu.setYGyroOffset(29);
+  mpu.setZGyroOffset(19);
+
   if (devStatus == 0) {
-    mpu.CalibrateAccel(6);
-    mpu.CalibrateGyro(6);
     mpu.setDMPEnabled(true);
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
     mpuIntStatus = mpu.getIntStatus();
