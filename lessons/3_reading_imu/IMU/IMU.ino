@@ -44,12 +44,12 @@ void initializeIMU() {
 
   devStatus = mpu.dmpInitialize();
 
-  mpu.setXAccelOffset(-616);
-  mpu.setYAccelOffset(943);
-  mpu.setZAccelOffset(1396);
-  mpu.setXGyroOffset(130);
-  mpu.setYGyroOffset(29);
-  mpu.setZGyroOffset(19);
+  mpu.setXAccelOffset(-590);
+  mpu.setYAccelOffset(921);
+  mpu.setZAccelOffset(1394);
+  mpu.setXGyroOffset(131);
+  mpu.setYGyroOffset(28);
+  mpu.setZGyroOffset(18);
 
   if (devStatus == 0) {
     mpu.setDMPEnabled(true);
