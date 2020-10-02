@@ -7,7 +7,7 @@ void setup() {
 
 void loop() {
   struct ReceiverCommands receiverCommands = GetReceiverCommands();
-  struct IMU_Values imuValues = getIMUOrientation();
+  struct IMU_Values imuValues = GetIMU_Values();
   if(receiverCommands.Error || imuValues.Error || receiverCommands.Throttle < 20){
     stopMotors();
     return;

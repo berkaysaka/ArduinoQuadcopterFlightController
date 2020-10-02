@@ -59,7 +59,7 @@ void initializeIMU() {
   }
 }
 
-struct IMU_Values getIMUOrientation() {
+struct IMU_Values GetIMU_Values() {
   struct IMU_Values o;
   o.NewDataAvailable = false;
   if (!dmpReady) 
