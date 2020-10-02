@@ -12,10 +12,6 @@
 #define GYRO_OFFSET_Y -91
 #define GYRO_OFFSET_Z 39
 
-//#define KP_roll 0.60
-//#define KI_roll 0.00005
-//#define KD_roll 300.00
-
 #define KP_roll 1.00
 #define KI_roll 0.0005
 #define KD_roll 400.00
