@@ -28,7 +28,6 @@ struct Orientation {
   double YawAngle;
   double PitchAngle;
   double RollAngle;
-  bool Error;
 };
 
 struct IMU_Values {
