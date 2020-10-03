@@ -12,6 +12,9 @@
 #define GYRO_OFFSET_Y -91
 #define GYRO_OFFSET_Z 39
 
+#define MIN_MOTOR_PULSE_WIDTH 1000
+#define MAX_MOTOR_PULSE_WIDTH 2000
+
 #define KP_roll 1.00
 #define KI_roll 0.0005
 #define KD_roll 400.00

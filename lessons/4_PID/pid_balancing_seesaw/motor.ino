@@ -4,8 +4,8 @@ Servo leftMotor;
 Servo rightMotor;
 
 void initializeMotor(){
-  leftMotor.attach(4, 1000, 2000);
-  rightMotor.attach(5, 1000, 2000);
+  leftMotor.attach(4, MIN_MOTOR_PULSE_WIDTH, MAX_MOTOR_PULSE_WIDTH);
+  rightMotor.attach(5, MIN_MOTOR_PULSE_WIDTH, MAX_MOTOR_PULSE_WIDTH);
   stopMotors();
 }
 

@@ -10,6 +10,7 @@ void loop() {
   struct IMU_Values imuValues = GetIMU_Values();
   if(receiverCommands.Error || imuValues.Error || receiverCommands.Throttle < 20){
     stopMotors();
+    resetPidVariables();
     return;
   }
 
