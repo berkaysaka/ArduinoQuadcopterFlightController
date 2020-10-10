@@ -38,7 +38,6 @@ struct IMU_Values {
   bool NewDataAvailable;
   unsigned long DeltaTime;
   struct Orientation CurrentOrientation;
-  struct Orientation PreviousOrientation;
 };
 
 struct MotorPowers {

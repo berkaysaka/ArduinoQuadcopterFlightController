@@ -25,7 +25,6 @@ void dmpDataReady() {
   mpuInterrupt = true;
 }
 
-struct Orientation previousOrientation;
 unsigned long last_time = 0; 
 
 void initializeIMU() {
@@ -76,11 +75,9 @@ struct IMU_Values GetIMU_Values() {
     o.CurrentOrientation.YawAngle = ypr[0] * 180 / M_PI;
     o.CurrentOrientation.RollAngle = ypr[1] * 180 / M_PI * -1; //-1 for changing rotation
     o.CurrentOrientation.PitchAngle = ypr[2] * 180 / M_PI;
-    o.PreviousOrientation = previousOrientation;
     o.NewDataAvailable = true;
     o.DeltaTime = delta_time;
     
-    previousOrientation = o.CurrentOrientation;
     if (last_time == 0){
       last_time = current_time;
       o.Error = true;
