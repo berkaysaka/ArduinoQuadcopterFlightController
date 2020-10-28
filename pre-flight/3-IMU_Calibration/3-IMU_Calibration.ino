@@ -8,7 +8,7 @@ MPU6050 mpu;
 uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
   Wire.begin();
   Wire.setClock(400000);
