@@ -8,10 +8,17 @@ Servo rearRightMotor;
 void setup() {
   Serial.begin(9600);
 
+  
+  Serial.println("press enter to start calibration");
+  
+  while(!Serial.available()){
+    // wait for command
+  }
+
   Serial.println("attaching motors");
   frontLeftMotor.attach(4, 1000, 2000);
-  frontRightMotor.attach(5, 1000, 2000);
-  rearLeftMotor.attach(6, 1000, 2000);
+  frontRightMotor.attach(6, 1000, 2000);
+  rearLeftMotor.attach(5, 1000, 2000);
   rearRightMotor.attach(7, 1000, 2000);
 
   if(!rearRightMotor.attached()){
@@ -30,13 +37,7 @@ void setup() {
     Serial.println("a problem occured while attaching to the motor 4(front left)");
     return;
   }
-  
-  Serial.println("press enter to start calibration");
-  
-  while(!Serial.available()){
-    // wait for command
-  }
-  
+
   Serial.println("ESC calibration started");
   Serial.println("setting high value...");
   frontLeftMotor.write(180);
@@ -49,7 +50,7 @@ void setup() {
   frontRightMotor.write(0);
   rearLeftMotor.write(0);
   rearRightMotor.write(0);
-  delay(6000);
+  delay(5000);
   Serial.println("ESC calibration completed");
 
   Serial.println("testing motor1(rear right)");
