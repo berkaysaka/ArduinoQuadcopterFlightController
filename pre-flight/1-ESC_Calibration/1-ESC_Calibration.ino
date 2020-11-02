@@ -7,8 +7,6 @@ Servo rearRightMotor;
 
 void setup() {
   Serial.begin(9600);
-
-  
   Serial.println("press enter to start calibration");
   
   while(!Serial.available()){
@@ -44,7 +42,7 @@ void setup() {
   frontRightMotor.write(180);
   rearLeftMotor.write(180);
   rearRightMotor.write(180);
-  delay(2000);
+  delay(3000);
   Serial.println("setting low value...");
   frontLeftMotor.write(0);
   frontRightMotor.write(0);
