@@ -1,15 +1,9 @@
-struct RawReceiverValues {
-  bool ReceiverCommunicationError;
-  int Throttle;
-  int Yaw;
-  int Pitch;
-  int Roll;
-};
 struct ReceiverCommands {
   int Throttle;
   double YawAngleChange;
   double PitchAngle;
   double RollAngle;
+  bool Error;
 };
 struct Orientation {
   double YawAngle;

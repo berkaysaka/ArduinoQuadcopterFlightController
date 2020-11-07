@@ -21,8 +21,8 @@
 #define ACCEL_OFFSET_Z 397
 
 //----------- RECEIVER -----------
-#define MIN_RAW_RECEIVER_VALUE 300
-#define MAX_RAW_RECEIVER_VALUE 1700
+#define RECEIVER_MIN_VALUE 306
+#define RECEIVER_MAX_VALUE 1693
 #define RECEIVER_DEAD_BAND 10
 
 //----------- ESC's -----------
@@ -38,7 +38,7 @@
 //----------- LIMITS -----------
 #define THROTTLE_START_POINT 15  // between 0-180
 #define THROTTLE_LIMIT_POINT 150 // between 0-180
-double ANGLE_DEGREE_LIMIT_PITCH_ROLL = 20.00; // max tilt angle limit in degrees
+double QUADCOPTER_MAX_TILT_ANGLE = 20.00; // roll, pitch tilt angle limit in degrees
 double ANGLE_DEGREE_LIMIT_YAW = 5.00;
 double MAX_YAW_CONTROL_GAIN = 20.00;
 double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;

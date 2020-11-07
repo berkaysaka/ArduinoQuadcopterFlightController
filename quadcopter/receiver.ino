@@ -1,60 +1,58 @@
 #include <FUTABA_SBUS.h>
 
-FUTABA_SBUS sbus;
+FUTABA_SBUS sBus;
 
-unsigned long last_receiver_communication_time = 0;
-int previousRoll;
-int previousPitch;
-int previousThrottle;
-int previousYaw;
+double prevRollAngle = 0;
+double prevPitchAngle = 0;
+double prevThrottle = 0;
+double prevYawAngleChange = 0;
 
-void initializeReceiver() {
-  sbus.begin();
+unsigned long receiver_last_communication_time = millis();
+
+void initializeReceiver(){
+  sBus.begin();
 }
 
-struct RawReceiverValues readReceiverValues() {
-  struct RawReceiverValues r;
-  
-  sbus.FeedLine();
-  if (sbus.toChannels != 1){
-    if((millis() - last_receiver_communication_time) > RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS){
-      r.ReceiverCommunicationError = true; //receiver communication failure  
-    }else{
-      r.ReceiverCommunicationError = false;
-      r.Roll = previousRoll;
-      r.Pitch = previousPitch;
-      r.Throttle = previousThrottle;
-      r.Yaw = previousYaw;
+struct ReceiverCommands GetReceiverCommands(){
+  struct ReceiverCommands cmd;
+  cmd.RollAngle = prevRollAngle;
+  cmd.PitchAngle = prevPitchAngle;
+  cmd.Throttle = prevThrottle;
+  cmd.YawAngleChange = prevYawAngleChange;
+  cmd.Error = false;
+
+  sBus.FeedLine();
+  if (sBus.toChannels == 1){
+    sBus.UpdateServos();
+    sBus.UpdateChannels();
+
+    if(sBus.Failsafe() != 0){
+      cmd.Error = true;
+      return cmd;
     }
-    return r;
-  }
-  sbus.UpdateServos();
-  sbus.UpdateChannels();
-  if (sbus.failsafe_status != 0){
-    r.ReceiverCommunicationError = true; //transmitter signal lost
-    return r;
-  }
-  sbus.toChannels = 0;
-  
-  last_receiver_communication_time = millis();
-  r.ReceiverCommunicationError = false;
 
-  r.Roll = constrain(sbus.channels[0], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  r.Pitch = constrain(sbus.channels[1], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  r.Throttle = constrain(sbus.channels[2], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE);
-  r.Yaw = centralize(constrain(sbus.channels[3], MIN_RAW_RECEIVER_VALUE, MAX_RAW_RECEIVER_VALUE));
+    receiver_last_communication_time = millis();
+    sBus.toChannels = 0;
 
-  previousRoll = r.Roll;
-  previousPitch = r.Pitch;
-  previousThrottle = r.Throttle;
-  previousYaw = r.Yaw;
-    
-  return r;
+    cmd.RollAngle = map(sBus.channels[0], RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
+    cmd.PitchAngle = map(sBus.channels[1], RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
+    cmd.Throttle = map(sBus.channels[2], RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, 0, THROTTLE_LIMIT_POINT);
+    cmd.YawAngleChange = map(sBus.channels[3], RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
+
+    prevRollAngle = cmd.RollAngle;
+    prevPitchAngle = cmd.PitchAngle;
+    prevThrottle = cmd.Throttle;
+    prevYawAngleChange = cmd.YawAngleChange;
+  }else if(millis() - RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS > receiver_last_communication_time){
+    cmd.Error = true;
+  }
+
+  return cmd;
 }
 
 //prevent small receiver value changes to affect yaw while joystick is on the center
 int centralize(int val) {
-  int center = (MAX_RAW_RECEIVER_VALUE + MIN_RAW_RECEIVER_VALUE) / 2;
+  int center = (RECEIVER_MAX_VALUE + RECEIVER_MIN_VALUE) / 2;
   if (abs(val - center) <= RECEIVER_DEAD_BAND)
     return center;
   else
