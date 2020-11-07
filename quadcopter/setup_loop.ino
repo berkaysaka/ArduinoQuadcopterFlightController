@@ -22,7 +22,7 @@ void loop() {
   struct ReceiverCommands receiverCommands = GetReceiverCommands();
   struct IMU_Values imu_values = readIMUvalues();
 
-  if (receiverCommands.Error || receiverCommands.Throttle < THROTTLE_START_POINT || imu_values.IMU_CommunicationError)
+  if (receiverCommands.Error || receiverCommands.Throttle < THROTTLE_START_POINT || imu_values.Error)
   {
     runSafetyProtocol();
     return;

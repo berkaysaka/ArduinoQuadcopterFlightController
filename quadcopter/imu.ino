@@ -85,16 +85,16 @@ struct IMU_Values readIMUvalues() {
     previousOrientation = o.CurrentOrientation;
     if (last_time == 0){
       last_time = current_time;
-      o.IMU_CommunicationError = true;
+      o.Error = true;
       return o;
     }
     last_time = current_time;
   }
   
   if(delta_time > IMU_COMMUNICATION_TIMEOUT_IN_MILLISECONDS){
-      o.IMU_CommunicationError = true;
+      o.Error = true;
   }else{
-      o.IMU_CommunicationError = false;
+      o.Error = false;
   }
 
   return o;

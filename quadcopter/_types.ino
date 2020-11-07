@@ -1,9 +1,9 @@
 struct ReceiverCommands {
+  bool Error;
   int Throttle;
   double YawAngleChange;
   double PitchAngle;
   double RollAngle;
-  bool Error;
 };
 struct Orientation {
   double YawAngle;
@@ -11,7 +11,7 @@ struct Orientation {
   double RollAngle;
 };
 struct IMU_Values {
-  bool IMU_CommunicationError;
+  bool Error;
   bool DataAvailable;
   int DeltaTime;
   struct Orientation CurrentOrientation;
