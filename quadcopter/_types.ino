@@ -1,4 +1,5 @@
 struct ReceiverCommands {
+  bool Armed;
   bool Error;
   int Throttle;
   double YawAngleChange;

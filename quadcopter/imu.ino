@@ -73,11 +73,9 @@ struct IMU_Values readIMUvalues() {
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
     
-    // normally the order of the orientation that we receive from ypr[] is yaw, pitch, roll.
-    // but since the IMU placed 90 degrees to the right, we need to make the adjustments below. (roll-pitch swap and *-1)
     o.CurrentOrientation.YawAngle = ypr[0] * 180 / M_PI;
     o.CurrentOrientation.RollAngle = ypr[1] * 180 / M_PI;
-    o.CurrentOrientation.PitchAngle = ypr[2] * 180 / M_PI * -1; //-1 for changing rotation
+    o.CurrentOrientation.PitchAngle = ypr[2] * 180 / M_PI * -1; // -1 is for changing rotation in order to align with receiver values
     o.PreviousOrientation = previousOrientation;
     o.DataAvailable = true;
     o.DeltaTime = delta_time;

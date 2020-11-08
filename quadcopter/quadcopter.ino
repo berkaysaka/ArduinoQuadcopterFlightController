@@ -20,10 +20,11 @@
 #define ACCEL_OFFSET_Y 1620
 #define ACCEL_OFFSET_Z 397
 
-//----------- RECEIVER -----------
+//----------- RECEIVER & TRANSMITTER -----------
 #define RECEIVER_MIN_VALUE 306
 #define RECEIVER_MAX_VALUE 1693
-#define RECEIVER_DEAD_BAND 10
+#define TRANSMITTER_YAW_DEAD_BAND 10
+#define TRANSMITTER_ARMING_DURATION_IN_MILLISECONDS 500
 
 //----------- ESC's -----------
 #define MIN_MOTOR_PULSE_WIDTH 1000
@@ -36,8 +37,8 @@
 #define PROGRAM_LOOP_TIMEOUT WDTO_120MS // Watch Dog Timer parameter
 
 //----------- LIMITS -----------
-#define THROTTLE_START_POINT 15  // between 0-180
-#define THROTTLE_LIMIT_POINT 150 // between 0-180
+#define THROTTLE_START_POINT 20  // between 0-180
+#define THROTTLE_LIMIT_POINT 180 // between 0-180
 double QUADCOPTER_MAX_TILT_ANGLE = 20.00; // roll, pitch tilt angle limit in degrees
 double ANGLE_DEGREE_LIMIT_YAW = 5.00;
 double MAX_YAW_CONTROL_GAIN = 20.00;
