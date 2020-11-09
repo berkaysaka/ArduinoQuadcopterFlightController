@@ -12,13 +12,14 @@ void setup() {
 
   wdt_disable();
   wdt_enable(PROGRAM_LOOP_TIMEOUT);
+
+  quadcopter_initialization_completed();
 }
 
 void loop() {
   wdt_reset();
-
   syncOutputSignals();
-
+  
   struct ReceiverCommands receiverCommands = GetReceiverCommands();
   struct IMU_Values imu_values = readIMUvalues();
 

@@ -97,6 +97,7 @@ bool getArmStatus(ReceiverRawValues rawValues) {
     } else {
       if (millis() - armingStartTime >= TRANSMITTER_ARMING_DURATION_IN_MILLISECONDS) {
         armed = true;
+        quadcopter_armed();
       }
     }
   } else if (isDisarming(rawValues) && armed) {
@@ -107,6 +108,7 @@ bool getArmStatus(ReceiverRawValues rawValues) {
     } else {
       if (millis() - disarmingStartTime >= TRANSMITTER_ARMING_DURATION_IN_MILLISECONDS) {
         armed = false;
+        quadcopter_disarmed();
       }
     }
   } else {
@@ -146,7 +148,7 @@ bool isYawStickPositionAtFullLeft(ReceiverRawValues rawValues) {
 }
 
 bool isYawStickPositionAtFullRight(ReceiverRawValues rawValues) {
-  if (abs(rawValues.ChannelValues[3] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
+  if (abs(rawValues.ChannelValues[3] - RECEIVER_MAX_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
     return true;
   }
   return false;

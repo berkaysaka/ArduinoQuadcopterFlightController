@@ -1,20 +1,69 @@
-#include <neotimer.h>
-
-Neotimer mytimer = Neotimer(1000); // 1 second timer
+#include <TaskManagerIO.h>
 
 void initializeOutputSignals() {
-  mytimer.start();
   pinMode(LED_PIN, OUTPUT);
   pinMode(BUZZER_PIN, OUTPUT);
-
   digitalWrite(LED_PIN, LOW);
-  tone(BUZZER_PIN, 2000);
+  noTone(BUZZER_PIN);
 }
 
 void syncOutputSignals() {
-  if (mytimer.done()) {
+  taskManager.runLoop();
+}
+
+void quadcopter_initialization_completed() {
+  blink_led();
+  taskManager.execute([] {
+    tone(BUZZER_PIN, 2000);
+    taskManager.scheduleOnce(1000, [] {
+      noTone(BUZZER_PIN);
+    });
+  });
+}
+
+bool ledIsOn = false;
+int ledBlinkTaskId;
+
+void blink_led() {
+  ledBlinkTaskId = taskManager.scheduleFixedRate(500, [] {
+    if (ledIsOn) {
+      digitalWrite(LED_PIN, LOW);
+    } else{
+      digitalWrite(LED_PIN, HIGH);
+    }
+    ledIsOn = !ledIsOn;
+  });
+}
+
+void quadcopter_armed() {
+  taskManager.cancelTask(ledBlinkTaskId);
+  taskManager.execute([] {
     digitalWrite(LED_PIN, HIGH);
-    noTone(BUZZER_PIN);
-    mytimer.reset();
-  }
+    tone(BUZZER_PIN, 500);
+    taskManager.scheduleOnce(500, [] {
+      tone(BUZZER_PIN, 1000);
+      taskManager.scheduleOnce(500, [] {
+        tone(BUZZER_PIN, 1500);
+        taskManager.scheduleOnce(500, [] {
+          noTone(BUZZER_PIN);
+        });
+      });
+    });
+  });
+}
+
+void quadcopter_disarmed() {
+  blink_led();
+  taskManager.execute([] {
+    tone(BUZZER_PIN, 1500);
+    taskManager.scheduleOnce(500, [] {
+      tone(BUZZER_PIN, 1000);
+      taskManager.scheduleOnce(500, [] {
+        tone(BUZZER_PIN, 500);
+        taskManager.scheduleOnce(500, [] {
+          noTone(BUZZER_PIN);
+        });
+      });
+    });
+  });
 }

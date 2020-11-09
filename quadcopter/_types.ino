@@ -1,7 +1,7 @@
 struct ReceiverRawValues {
   bool NewDataAvailable;
   bool TransmitterCommunicationFailure;
-  int ChannelValues[];
+  int ChannelValues[4];
 };
 struct ReceiverCommands {
   bool Armed;
