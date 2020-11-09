@@ -89,7 +89,7 @@ bool getArmStatus(ReceiverRawValues rawValues) {
     return armed;
   }
 
-  if (isArming(rawValues)) {
+  if (isArming(rawValues) && !armed) {
     hasDisarmingStarted = false;
     if (!hasArmingStarted) {
       armingStartTime = millis();
@@ -99,7 +99,7 @@ bool getArmStatus(ReceiverRawValues rawValues) {
         armed = true;
       }
     }
-  } else if (isDisarming(rawValues)) {
+  } else if (isDisarming(rawValues) && armed) {
     hasArmingStarted = false;
     if (!hasDisarmingStarted) {
       disarmingStartTime = millis();
