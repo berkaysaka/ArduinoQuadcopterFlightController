@@ -1,3 +1,8 @@
+struct ReceiverRawValues {
+  bool NewDataAvailable;
+  bool TransmitterCommunicationFailure;
+  int ChannelValues[];
+};
 struct ReceiverCommands {
   bool Armed;
   bool Error;
