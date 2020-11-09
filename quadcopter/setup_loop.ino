@@ -1,7 +1,7 @@
 #include <avr/wdt.h>
 
 void setup() {
-  wdt_enable(PROGRAM_STARTUP_TIMEOUT);
+  wdt_enable(PROGRAM_TIMEOUT_IN_MILLISECONDS);
 
   initializeMotors();
   initializeOutputSignals();
@@ -9,10 +9,7 @@ void setup() {
   initializeRemotePidConfiguration();
   initializeReceiver();
   initializeIMU();
-
-  wdt_disable();
-  wdt_enable(PROGRAM_LOOP_TIMEOUT);
-
+  
   quadcopter_initialization_completed();
 }
 

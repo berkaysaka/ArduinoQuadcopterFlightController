@@ -34,8 +34,7 @@
 //----------- TIMEOUTS -----------
 #define IMU_COMMUNICATION_TIMEOUT_IN_MILLISECONDS 100
 #define RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS 500
-#define PROGRAM_STARTUP_TIMEOUT WDTO_1S // Watch Dog Timer parameter
-#define PROGRAM_LOOP_TIMEOUT WDTO_120MS // Watch Dog Timer parameter
+#define PROGRAM_TIMEOUT_IN_MILLISECONDS WDTO_1S // Watch Dog Timer parameter
 
 //----------- LIMITS -----------
 #define THROTTLE_START_POINT 20  // between 0-180
