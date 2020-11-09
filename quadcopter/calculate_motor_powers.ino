@@ -41,7 +41,7 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   return motorPowers;
 }
 
-struct MotorPowers reduceMotorPowers(MotorPowers motorPowers) { // to preserve balance if MAX_THROTTLE limit exceeds)
+struct MotorPowers reduceMotorPowers(MotorPowers motorPowers) { // to preserve balance if throttle limit exceeds the max value (180)
   int maxMotorPower = max(max(motorPowers.frontLeftMotorPower, motorPowers.frontRightMotorPower), max(motorPowers.rearLeftMotorPower, motorPowers.rearRightMotorPower));
   if (maxMotorPower > 180) {
     double power_reduction_rate = (double)maxMotorPower / (double)180;
