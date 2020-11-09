@@ -41,8 +41,6 @@
 #define THROTTLE_LIMIT_POINT 180 // between 0-180
 double QUADCOPTER_MAX_TILT_ANGLE = 20.00; // roll, pitch tilt angle limit in degrees
 double QUADCOPTER_MAX_YAW_ANGLE_CHANGE = 5.00;
-double MAX_YAW_CONTROL_GAIN = 20.00;
-double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
 
 //----------- PID CONFIGURATION-----------
 double KP_roll_pitch = 0.25;
@@ -55,3 +53,6 @@ double KD_yaw = 0.00;
 
 double YAW_INTEGRAL_LIMIT = 10.00;
 double ROLL_PITCH_INTEGRAL_LIMIT = 2.00;
+
+double MAX_YAW_CONTROL_GAIN = 20.00;
+double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
