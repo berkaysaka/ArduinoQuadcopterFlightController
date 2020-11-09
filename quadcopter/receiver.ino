@@ -20,10 +20,10 @@ struct ReceiverCommands GetReceiverCommands() {
     receiver_last_communication_time = millis();
 
     struct ReceiverCommands cmd;
-    cmd.RollAngle = map(receiverRawValues.ChannelValues[0], RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
-    cmd.PitchAngle = map(receiverRawValues.ChannelValues[1], RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
-    cmd.Throttle = map(receiverRawValues.ChannelValues[2], RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, 0, THROTTLE_LIMIT_POINT);
-    cmd.YawAngleChange = map(ignoreDeadBand(receiverRawValues.ChannelValues[3]), RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
+    cmd.RollAngle = map(receiverRawValues.ChannelValues[0], TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
+    cmd.PitchAngle = map(receiverRawValues.ChannelValues[1], TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
+    cmd.Throttle = map(receiverRawValues.ChannelValues[2], TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, 0, THROTTLE_LIMIT_POINT);
+    cmd.YawAngleChange = map(ignoreDeadBand(receiverRawValues.ChannelValues[3]), TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, -QUADCOPTER_MAX_YAW_ANGLE_CHANGE, QUADCOPTER_MAX_YAW_ANGLE_CHANGE);
     cmd.Armed = getArmStatus(receiverRawValues);
     cmd.Error = false;
 
@@ -44,7 +44,7 @@ struct ReceiverCommands getFailureReceiverCommand() {
 
 //prevent small receiver value changes to affect yaw while joystick is on the center
 int ignoreDeadBand(int val) {
-  int center = (RECEIVER_MAX_VALUE + RECEIVER_MIN_VALUE) / 2;
+  int center = (TRANSMITTER_JOYSTICK_MIN_VALUE + TRANSMITTER_JOYSTICK_MAX_VALUE) / 2;
   if (abs(val - center) <= TRANSMITTER_JOYSTICK_DEAD_BAND)
     return center;
   else
@@ -134,21 +134,21 @@ bool isDisarming(ReceiverRawValues rawValues) {
 }
 
 bool isThrottleStickPositonAtFullDown(ReceiverRawValues rawValues) {
-  if (abs(rawValues.ChannelValues[2] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
+  if (abs(rawValues.ChannelValues[2] - TRANSMITTER_JOYSTICK_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
     return true;
   }
   return false;
 }
 
 bool isYawStickPositionAtFullLeft(ReceiverRawValues rawValues) {
-  if (abs(rawValues.ChannelValues[3] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
+  if (abs(rawValues.ChannelValues[3] - TRANSMITTER_JOYSTICK_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
     return true;
   }
   return false;
 }
 
 bool isYawStickPositionAtFullRight(ReceiverRawValues rawValues) {
-  if (abs(rawValues.ChannelValues[3] - RECEIVER_MAX_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
+  if (abs(rawValues.ChannelValues[3] - TRANSMITTER_JOYSTICK_MAX_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
     return true;
   }
   return false;
