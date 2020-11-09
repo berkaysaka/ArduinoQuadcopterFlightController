@@ -30,7 +30,7 @@ void loop() {
     return;
   }
 
-  if (imu_values.DataAvailable) {
+  if (imu_values.NewDataAvailable) {
     MotorPowers motorPowers = calculateMotorPowers(receiverCommands, imu_values);
     spinMotors(motorPowers);
   }

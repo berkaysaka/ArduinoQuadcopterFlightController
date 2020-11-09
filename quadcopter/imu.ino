@@ -61,7 +61,7 @@ void initializeIMU() {
 
 struct IMU_Values readIMUvalues() {
   struct IMU_Values o;
-  o.DataAvailable = false;
+  o.NewDataAvailable = false;
   if (!dmpReady)
     return o;
 
@@ -77,7 +77,7 @@ struct IMU_Values readIMUvalues() {
     o.CurrentOrientation.RollAngle = ypr[1] * 180 / M_PI;
     o.CurrentOrientation.PitchAngle = ypr[2] * 180 / M_PI * -1; // -1 is for changing rotation in order to align with receiver values
     o.PreviousOrientation = previousOrientation;
-    o.DataAvailable = true;
+    o.NewDataAvailable = true;
     o.DeltaTime = delta_time;
 
     previousOrientation = o.CurrentOrientation;
