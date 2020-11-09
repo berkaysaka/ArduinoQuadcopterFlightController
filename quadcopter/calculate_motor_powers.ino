@@ -5,7 +5,8 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
   double rollError = receiverCommands.RollAngle - imu_values.CurrentOrientation.RollAngle;
   double pitchError = receiverCommands.PitchAngle - imu_values.CurrentOrientation.PitchAngle;
-  double yawError = receiverCommands.YawAngleChange - (imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle);
+  double imuYawAngleChange = imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle;
+  double yawError = receiverCommands.YawAngleChange - imuYawAngleChange;
 
   // prevent sudden changes on yaw. huge yaw difference causes altitude gain
   yawError = constrain(yawError, -QUADCOPTER_MAX_YAW_ANGLE_CHANGE, QUADCOPTER_MAX_YAW_ANGLE_CHANGE);
