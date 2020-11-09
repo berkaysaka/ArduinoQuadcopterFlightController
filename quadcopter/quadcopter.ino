@@ -12,7 +12,7 @@
 #define BUZZER_PIN 12
 #define INTERRUPT_PIN 2
 
-//----------- IMU -----------
+//----------- IMU CALIBRATION -----------
 #define GYRO_OFFSET_X 91
 #define GYRO_OFFSET_Y -92
 #define GYRO_OFFSET_Z 38

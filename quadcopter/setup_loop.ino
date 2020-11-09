@@ -24,7 +24,8 @@ void loop() {
 
   if (receiverCommands.Error || receiverCommands.Throttle < THROTTLE_START_POINT || !receiverCommands.Armed || imu_values.Error)
   {
-    runSafetyProtocol();
+    stopMotors();
+    resetPidVariables();
     return;
   }
 
@@ -35,9 +36,4 @@ void loop() {
 
   sendTelemetryData(receiverCommands, imu_values);
   readRemotePidConfigurationCommand();
-}
-
-void runSafetyProtocol() {
-  stopMotors();
-  resetPidVariables();
 }
