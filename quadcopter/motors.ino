@@ -21,7 +21,7 @@ void spinMotors(struct MotorPowers motorPowers) {
   rearRightMotor.write(motorPowers.rearRightMotorPower);
 }
 
-void stopMotors(){
+void stopMotors() {
   frontLeftMotor.write(0);
   frontRightMotor.write(0);
   rearLeftMotor.write(0);

@@ -6,17 +6,17 @@ struct ReceiverCommands prevReceiverCommands;
 bool armed = false;
 unsigned long receiver_last_communication_time = millis();
 
-void initializeReceiver(){
+void initializeReceiver() {
   sBus.begin();
 }
 
-struct ReceiverCommands GetReceiverCommands(){
+struct ReceiverCommands GetReceiverCommands() {
   struct ReceiverRawValues receiverRawValues = getReceiverRawValues();
-  if(receiverRawValues.TransmitterCommunicationFailure){
+  if (receiverRawValues.TransmitterCommunicationFailure) {
     return getFailureReceiverCommand();
   }
 
-  if (receiverRawValues.NewDataAvailable){
+  if (receiverRawValues.NewDataAvailable) {
     receiver_last_communication_time = millis();
 
     struct ReceiverCommands cmd;
@@ -26,17 +26,17 @@ struct ReceiverCommands GetReceiverCommands(){
     cmd.YawAngleChange = map(ignoreDeadBand(receiverRawValues.ChannelValues[3]), RECEIVER_MIN_VALUE, RECEIVER_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
     cmd.Armed = getArmStatus(receiverRawValues);
     cmd.Error = false;
-    
+
     prevReceiverCommands = cmd;
     return cmd;
-  }else if(millis() - RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS > receiver_last_communication_time){
+  } else if (millis() - RECEIVER_COMMUNICATION_TIMEOUT_IN_MILLISECONDS > receiver_last_communication_time) {
     return getFailureReceiverCommand();
-  }else{
-    return prevReceiverCommands; 
+  } else {
+    return prevReceiverCommands;
   }
 }
 
-struct ReceiverCommands getFailureReceiverCommand(){
+struct ReceiverCommands getFailureReceiverCommand() {
   struct ReceiverCommands cmd;
   cmd.Error = true;
   return cmd;
@@ -52,26 +52,26 @@ int ignoreDeadBand(int val) {
 }
 
 
-struct ReceiverRawValues getReceiverRawValues(){
+struct ReceiverRawValues getReceiverRawValues() {
   struct ReceiverRawValues v;
   v.NewDataAvailable = false;
   v.TransmitterCommunicationFailure = false;
-  
+
   sBus.FeedLine();
-  if (sBus.toChannels == 1){
+  if (sBus.toChannels == 1) {
     sBus.UpdateServos();
     sBus.UpdateChannels();
 
     v.NewDataAvailable = true;
-    if(sBus.Failsafe() != 0){
+    if (sBus.Failsafe() != 0) {
       v.TransmitterCommunicationFailure = true;
       return v;
     }
 
     sBus.toChannels = 0;
     int i = 0;
-    for(int16_t channelValue : sBus.channels){
-      v.ChannelValues[i] = channelValue; 
+    for (int16_t channelValue : sBus.channels) {
+      v.ChannelValues[i] = channelValue;
       i++;
     }
   }
@@ -84,32 +84,32 @@ bool hasDisarmingStarted = false;
 unsigned long armingStartTime;
 unsigned long disarmingStartTime;
 
-bool getArmStatus(ReceiverRawValues rawValues){
-  if(!rawValues.NewDataAvailable || rawValues.TransmitterCommunicationFailure){
+bool getArmStatus(ReceiverRawValues rawValues) {
+  if (!rawValues.NewDataAvailable || rawValues.TransmitterCommunicationFailure) {
     return armed;
   }
-  
-  if(isArming(rawValues)){
+
+  if (isArming(rawValues)) {
     hasDisarmingStarted = false;
-    if(!hasArmingStarted){
+    if (!hasArmingStarted) {
       armingStartTime = millis();
       hasArmingStarted = true;
-    }else{
-      if(millis() - armingStartTime >= TRANSMITTER_ARMING_DURATION_IN_MILLISECONDS){
+    } else {
+      if (millis() - armingStartTime >= TRANSMITTER_ARMING_DURATION_IN_MILLISECONDS) {
         armed = true;
       }
     }
-  }else if(isDisarming(rawValues)){
+  } else if (isDisarming(rawValues)) {
     hasArmingStarted = false;
-    if(!hasDisarmingStarted){
+    if (!hasDisarmingStarted) {
       disarmingStartTime = millis();
       hasDisarmingStarted = true;
-    }else{
-      if(millis() - disarmingStartTime >= TRANSMITTER_ARMING_DURATION_IN_MILLISECONDS){
+    } else {
+      if (millis() - disarmingStartTime >= TRANSMITTER_ARMING_DURATION_IN_MILLISECONDS) {
         armed = false;
       }
     }
-  }else{
+  } else {
     hasArmingStarted = false;
     hasDisarmingStarted = false;
   }
@@ -117,36 +117,36 @@ bool getArmStatus(ReceiverRawValues rawValues){
   return armed;
 }
 
-bool isArming(ReceiverRawValues rawValues){
-  if(isThrottleStickPositonAtFullDown(rawValues) && isYawStickPositionAtFullRight(rawValues)){
+bool isArming(ReceiverRawValues rawValues) {
+  if (isThrottleStickPositonAtFullDown(rawValues) && isYawStickPositionAtFullRight(rawValues)) {
     return true;
   }
   return false;
 }
 
-bool isDisarming(ReceiverRawValues rawValues){
-  if(isThrottleStickPositonAtFullDown(rawValues) && isYawStickPositionAtFullLeft(rawValues)){
+bool isDisarming(ReceiverRawValues rawValues) {
+  if (isThrottleStickPositonAtFullDown(rawValues) && isYawStickPositionAtFullLeft(rawValues)) {
     return true;
   }
   return false;
 }
 
-bool isThrottleStickPositonAtFullDown(ReceiverRawValues rawValues){
-  if(abs(rawValues.ChannelValues[2] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE){
+bool isThrottleStickPositonAtFullDown(ReceiverRawValues rawValues) {
+  if (abs(rawValues.ChannelValues[2] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
     return true;
   }
   return false;
 }
 
-bool isYawStickPositionAtFullLeft(ReceiverRawValues rawValues){
-  if(abs(rawValues.ChannelValues[3] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE){
+bool isYawStickPositionAtFullLeft(ReceiverRawValues rawValues) {
+  if (abs(rawValues.ChannelValues[3] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
     return true;
   }
   return false;
 }
 
-bool isYawStickPositionAtFullRight(ReceiverRawValues rawValues){
-  if(abs(rawValues.ChannelValues[3] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE){
+bool isYawStickPositionAtFullRight(ReceiverRawValues rawValues) {
+  if (abs(rawValues.ChannelValues[3] - RECEIVER_MIN_VALUE) < TRANSMITTER_ARMING_JOYSTICK_TOLERANCE) {
     return true;
   }
   return false;

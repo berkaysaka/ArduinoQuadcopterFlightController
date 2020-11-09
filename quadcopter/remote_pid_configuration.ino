@@ -1,21 +1,21 @@
 #include <avr/wdt.h>
 
-void initializeRemotePidConfiguration(){
-  if (REMOTE_PID_CONFIG_ENABLED == false) 
+void initializeRemotePidConfiguration() {
+  if (REMOTE_PID_CONFIG_ENABLED == false)
     return;
 
   if (Serial2) //if Serial2 already ready, do nothing
     return;
-   
+
   Serial2.begin(9600);
-  while(!Serial2){} // wait for Serial2 port to be ready
+  while (!Serial2) {} // wait for Serial2 port to be ready
 }
 
 void readRemotePidConfigurationCommand()
 {
   if (REMOTE_PID_CONFIG_ENABLED == false)
     return;
-    
+
   if (Serial2.available()) {
     wdt_disable();
     String cmd = "";

@@ -26,19 +26,19 @@ void dmpDataReady() {
 }
 
 struct Orientation previousOrientation;
-unsigned long last_time = 0; 
+unsigned long last_time = 0;
 
 void initializeIMU() {
-  #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-    Wire.begin(100);
-  #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
-    Fastwire::setup(100, true);
-  #endif
-  
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+  Wire.begin(100);
+#elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+  Fastwire::setup(100, true);
+#endif
+
   mpu.initialize();
   pinMode(INTERRUPT_PIN, INPUT);
 
-  if(!mpu.testConnection()){
+  if (!mpu.testConnection()) {
     Serial.println("*imu test connection failed!");
   }
   devStatus = mpu.dmpInitialize();
@@ -62,37 +62,37 @@ void initializeIMU() {
 struct IMU_Values readIMUvalues() {
   struct IMU_Values o;
   o.DataAvailable = false;
-  if (!dmpReady) 
+  if (!dmpReady)
     return o;
 
   unsigned long current_time = millis();
   unsigned long delta_time = current_time - last_time;
-    
-  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
+
+  if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet
     mpu.dmpGetQuaternion(&q, fifoBuffer);
     mpu.dmpGetGravity(&gravity, &q);
     mpu.dmpGetYawPitchRoll(ypr, &q, &gravity);
-    
+
     o.CurrentOrientation.YawAngle = ypr[0] * 180 / M_PI;
     o.CurrentOrientation.RollAngle = ypr[1] * 180 / M_PI;
     o.CurrentOrientation.PitchAngle = ypr[2] * 180 / M_PI * -1; // -1 is for changing rotation in order to align with receiver values
     o.PreviousOrientation = previousOrientation;
     o.DataAvailable = true;
     o.DeltaTime = delta_time;
-    
+
     previousOrientation = o.CurrentOrientation;
-    if (last_time == 0){
+    if (last_time == 0) {
       last_time = current_time;
       o.Error = true;
       return o;
     }
     last_time = current_time;
   }
-  
-  if(delta_time > IMU_COMMUNICATION_TIMEOUT_IN_MILLISECONDS){
-      o.Error = true;
-  }else{
-      o.Error = false;
+
+  if (delta_time > IMU_COMMUNICATION_TIMEOUT_IN_MILLISECONDS) {
+    o.Error = true;
+  } else {
+    o.Error = false;
   }
 
   return o;
