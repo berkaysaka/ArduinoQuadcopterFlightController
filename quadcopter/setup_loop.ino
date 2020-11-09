@@ -18,7 +18,7 @@ void loop() {
   syncOutputSignals();
   
   struct ReceiverCommands receiverCommands = GetReceiverCommands();
-  struct IMU_Values imu_values = readIMUvalues();
+  struct IMU_Values imu_values = GetIMUvalues();
 
   if (receiverCommands.Error || receiverCommands.Throttle < THROTTLE_START_POINT || !receiverCommands.Armed || imu_values.Error)
   {

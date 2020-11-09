@@ -52,7 +52,7 @@ void initializeIMU() {
   }
 }
 
-struct IMU_Values readIMUvalues() {
+struct IMU_Values GetIMUvalues() {
   struct IMU_Values o;
   o.NewDataAvailable = false;
 
