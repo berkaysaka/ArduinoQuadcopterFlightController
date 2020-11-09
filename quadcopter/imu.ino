@@ -5,21 +5,17 @@
 #endif
 MPU6050 mpu;
 
+// orientation/motion vars
+Quaternion q;           // [w, x, y, z]         quaternion container
+VectorFloat gravity;    // [x, y, z]            gravity vector
+float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
+
 // MPU control/status vars
 bool dmpReady = false;  // set true if DMP init was successful
 uint8_t mpuIntStatus;   // holds actual interrupt status byte from MPU
 uint8_t devStatus;      // return status after each device operation (0 = success, !0 = error)
-uint16_t packetSize;    // expected DMP packet size (default is 42 bytes)
-uint16_t fifoCount;     // count of all bytes currently in FIFO
 uint8_t fifoBuffer[64]; // FIFO storage buffer
 
-Quaternion q;           // [w, x, y, z]         quaternion container
-VectorInt16 aa;         // [x, y, z]            accel sensor measurements
-VectorInt16 aaReal;     // [x, y, z]            gravity-free accel sensor measurements
-VectorInt16 aaWorld;    // [x, y, z]            world-frame accel sensor measurements
-VectorFloat gravity;    // [x, y, z]            gravity vector
-float euler[3];         // [psi, theta, phi]    Euler angle container
-float ypr[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 volatile bool mpuInterrupt = false;     // indicates whether MPU interrupt pin has gone high
 void dmpDataReady() {
   mpuInterrupt = true;
@@ -30,7 +26,8 @@ unsigned long last_time = 0;
 
 void initializeIMU() {
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
-  Wire.begin(100);
+  Wire.begin();
+  Wire.setClock(100000);
 #elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
   Fastwire::setup(100, true);
 #endif
@@ -38,10 +35,8 @@ void initializeIMU() {
   mpu.initialize();
   pinMode(INTERRUPT_PIN, INPUT);
 
-  if (!mpu.testConnection()) {
-    Serial.println("*imu test connection failed!");
-  }
   devStatus = mpu.dmpInitialize();
+  
   mpu.setXGyroOffset(GYRO_OFFSET_X);
   mpu.setYGyroOffset(GYRO_OFFSET_Y);
   mpu.setZGyroOffset(GYRO_OFFSET_Z);
@@ -54,14 +49,18 @@ void initializeIMU() {
     attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
     mpuIntStatus = mpu.getIntStatus();
     dmpReady = true;
-
-    packetSize = mpu.dmpGetFIFOPacketSize();
   }
 }
 
 struct IMU_Values readIMUvalues() {
   struct IMU_Values o;
   o.NewDataAvailable = false;
+
+  if(!mpu.testConnection()){
+    o.Error = true;
+    return o;
+  }
+  
   if (!dmpReady)
     return o;
 

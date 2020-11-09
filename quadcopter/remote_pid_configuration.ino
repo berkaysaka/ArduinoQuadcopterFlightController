@@ -52,7 +52,7 @@ void readRemotePidConfigurationCommand()
       MAX_ROLL_PITCH_CONTROL_GAIN = pidValues[8];
       MAX_YAW_CONTROL_GAIN = pidValues[9];
       QUADCOPTER_MAX_TILT_ANGLE = pidValues[10];
-      ANGLE_DEGREE_LIMIT_YAW = pidValues[11];
+      QUADCOPTER_MAX_YAW_ANGLE_CHANGE = pidValues[11];
 
       Serial2.print("<pidconfighasbeenset></pidconfighasbeenset>");
       Serial.println("<pidconfighasbeenset>");
@@ -70,7 +70,7 @@ void readRemotePidConfigurationCommand()
         + "\t" + String(MAX_ROLL_PITCH_CONTROL_GAIN)
         + "\t" + String(MAX_YAW_CONTROL_GAIN)
         + "\t" + String(QUADCOPTER_MAX_TILT_ANGLE)
-        + "\t" + String(ANGLE_DEGREE_LIMIT_YAW)
+        + "\t" + String(QUADCOPTER_MAX_YAW_ANGLE_CHANGE)
         + String("</pidconfig>")
       );
       Serial.println("<pidconfig>");

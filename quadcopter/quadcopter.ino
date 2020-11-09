@@ -40,7 +40,7 @@
 #define THROTTLE_START_POINT 20  // between 0-180
 #define THROTTLE_LIMIT_POINT 180 // between 0-180
 double QUADCOPTER_MAX_TILT_ANGLE = 20.00; // roll, pitch tilt angle limit in degrees
-double ANGLE_DEGREE_LIMIT_YAW = 5.00;
+double QUADCOPTER_MAX_YAW_ANGLE_CHANGE = 5.00;
 double MAX_YAW_CONTROL_GAIN = 20.00;
 double MAX_ROLL_PITCH_CONTROL_GAIN = 30.00;
 

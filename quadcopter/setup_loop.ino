@@ -28,7 +28,7 @@ void loop() {
   }
 
   if (imu_values.NewDataAvailable) {
-    MotorPowers motorPowers = calculateMotorPowers(receiverCommands, imu_values);
+    struct MotorPowers motorPowers = calculateMotorPowers(receiverCommands, imu_values);
     spinMotors(motorPowers);
   }
 

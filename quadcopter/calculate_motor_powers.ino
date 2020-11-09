@@ -1,15 +1,6 @@
 double roll_pid_i, roll_last_error, pitch_pid_i, pitch_last_error, yaw_pid_i, yaw_last_error;
 double roll_control_signal, pitch_control_signal, yaw_control_signal;
 
-void resetPidVariables() {
-  roll_pid_i = 0;
-  roll_last_error = 0;
-  pitch_pid_i = 0;
-  pitch_last_error = 0;
-  yaw_pid_i = 0;
-  yaw_last_error = 0;
-}
-
 struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands, struct IMU_Values imu_values) {
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
   double rollError = receiverCommands.RollAngle - imu_values.CurrentOrientation.RollAngle;
@@ -17,7 +8,7 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   double yawError = receiverCommands.YawAngleChange - (imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle);
 
   // prevent sudden changes on yaw. huge yaw difference causes altitude gain
-  yawError = constrain(yawError, -ANGLE_DEGREE_LIMIT_YAW, ANGLE_DEGREE_LIMIT_YAW);
+  yawError = constrain(yawError, -QUADCOPTER_MAX_YAW_ANGLE_CHANGE, QUADCOPTER_MAX_YAW_ANGLE_CHANGE);
 
   // calculate control gains based on errors
   roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTime);
@@ -51,4 +42,13 @@ struct MotorPowers reduceMotorPowers(MotorPowers motorPowers) { // to preserve b
     motorPowers.rearRightMotorPower = round((double)motorPowers.rearRightMotorPower / power_reduction_rate);
   }
   return motorPowers;
+}
+
+void resetPidVariables() {
+  roll_pid_i = 0;
+  roll_last_error = 0;
+  pitch_pid_i = 0;
+  pitch_last_error = 0;
+  yaw_pid_i = 0;
+  yaw_last_error = 0;
 }
