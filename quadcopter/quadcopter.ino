@@ -13,12 +13,12 @@
 #define INTERRUPT_PIN 2
 
 //----------- IMU CALIBRATION -----------
-#define GYRO_OFFSET_X 91
-#define GYRO_OFFSET_Y -92
+#define ACCEL_OFFSET_X 90
+#define ACCEL_OFFSET_Y 1611
+#define ACCEL_OFFSET_Z 430
+#define GYRO_OFFSET_X 68
+#define GYRO_OFFSET_Y -104
 #define GYRO_OFFSET_Z 38
-#define ACCEL_OFFSET_X 182
-#define ACCEL_OFFSET_Y 1620
-#define ACCEL_OFFSET_Z 397
 
 //----------- RECEIVER & TRANSMITTER -----------
 #define TRANSMITTER_JOYSTICK_MIN_VALUE 306
