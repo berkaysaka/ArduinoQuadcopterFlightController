@@ -8,9 +8,6 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   double imuYawAngleChange = imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle;
   double yawError = receiverCommands.YawAngleChange - imuYawAngleChange;
 
-  // prevent sudden changes on yaw. huge yaw difference causes altitude gain
-  yawError = constrain(yawError, -QUADCOPTER_MAX_YAW_ANGLE_CHANGE, QUADCOPTER_MAX_YAW_ANGLE_CHANGE);
-
   // calculate control gains based on errors
   roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTime);
   pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTime);
