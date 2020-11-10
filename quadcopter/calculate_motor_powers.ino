@@ -5,7 +5,7 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
   double rollError = receiverCommands.RollAngle - imu_values.CurrentOrientation.RollAngle;
   double pitchError = receiverCommands.PitchAngle - imu_values.CurrentOrientation.PitchAngle;
-  double imuYawAngleChange = imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle;
+  double imuYawAngleChange = fix360degrees(imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle);
   double yawError = receiverCommands.YawAngleChange - imuYawAngleChange;
 
   // calculate control gains based on errors
@@ -47,4 +47,14 @@ void resetPidVariables() {
   pitch_last_error = 0;
   yaw_pid_i = 0;
   yaw_last_error = 0;
+}
+
+double fix360degrees(double val){
+  if(val > 180){
+    return val - 360;
+  }else if(val < -180){
+    return val + 360;
+  }else{
+    return val;
+  }
 }
