@@ -5,7 +5,9 @@ double getControlSignal(double error, double kp, double ki, double kd, double& p
 
   pid_i += error * delta_time;
   double integral_signal = constrain(ki * pid_i, -integral_limit, integral_limit);
-  pid_i = integral_signal / ki;
+  if (ki != 0) {
+    pid_i = integral_signal / ki;
+  }
 
   double control_signal = (kp * pid_p) + integral_signal + (kd * pid_d);
   last_error = error;
