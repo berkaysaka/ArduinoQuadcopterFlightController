@@ -37,7 +37,7 @@
 #define PROGRAM_TIMEOUT_IN_MILLISECONDS WDTO_1S // Watch Dog Timer parameter
 
 //----------- LIMITS -----------
-#define THROTTLE_START_POINT 20  // between 0-180
+#define THROTTLE_START_POINT 10  // between 0-180
 #define THROTTLE_LIMIT_POINT 180 // between 0-180
 double QUADCOPTER_MAX_TILT_ANGLE = 20.00; // roll, pitch tilt angle limit in degrees
 double QUADCOPTER_MAX_YAW_ANGLE_CHANGE = 5.00;
