@@ -65,7 +65,8 @@ struct IMU_Values GetIMUvalues() {
     return o;
 
   unsigned long current_time = millis();
-  unsigned long delta_time = current_time - last_time;
+  unsigned long delta_time_in_milliseconds = current_time - last_time;
+  double delta_time_in_seconds = (double)delta_time_in_milliseconds / 1000.0;
 
   if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet
     mpu.dmpGetQuaternion(&q, fifoBuffer);
@@ -77,7 +78,7 @@ struct IMU_Values GetIMUvalues() {
     o.CurrentOrientation.PitchAngle = ypr[2] * 180 / M_PI * -1; // -1 is for changing rotation in order to align with receiver values
     o.PreviousOrientation = previousOrientation;
     o.NewDataAvailable = true;
-    o.DeltaTime = delta_time;
+    o.DeltaTimeInSeconds = delta_time_in_seconds;
 
     previousOrientation = o.CurrentOrientation;
     if (last_time == 0) {
@@ -88,7 +89,7 @@ struct IMU_Values GetIMUvalues() {
     last_time = current_time;
   }
 
-  if (delta_time > IMU_COMMUNICATION_TIMEOUT_IN_MILLISECONDS) {
+  if (delta_time_in_milliseconds > IMU_COMMUNICATION_TIMEOUT_IN_MILLISECONDS) {
     o.Error = true;
   } else {
     o.Error = false;

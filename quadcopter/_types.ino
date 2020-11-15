@@ -19,7 +19,7 @@ struct Orientation {
 struct IMU_Values {
   bool Error;
   bool NewDataAvailable;
-  int DeltaTime;
+  double DeltaTimeInSeconds;
   struct Orientation CurrentOrientation;
   struct Orientation PreviousOrientation;
 };
