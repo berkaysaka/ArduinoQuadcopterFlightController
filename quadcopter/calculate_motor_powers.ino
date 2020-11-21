@@ -12,8 +12,9 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, imu_values.DeltaTimeInSeconds);
   yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, imu_values.DeltaTimeInSeconds);
 
-  roll_control_signal = constrain(roll_control_signal, -ROLL_PITCH_CONTROL_LIMIT, ROLL_PITCH_CONTROL_LIMIT);
-  pitch_control_signal = constrain(pitch_control_signal, -ROLL_PITCH_CONTROL_LIMIT, ROLL_PITCH_CONTROL_LIMIT);
+  // limit roll-pitch control signals
+  roll_control_signal = constrain(roll_control_signal, -ROLL_PITCH_CONTROL_SIGNAL_LIMIT, ROLL_PITCH_CONTROL_SIGNAL_LIMIT);
+  pitch_control_signal = constrain(pitch_control_signal, -ROLL_PITCH_CONTROL_SIGNAL_LIMIT, ROLL_PITCH_CONTROL_SIGNAL_LIMIT);
 
   // calculate power for each motor
   struct MotorPowers motorPowers;

@@ -49,4 +49,4 @@ double KI_yaw = 0.20;
 double KD_yaw = 0.00;
 
 //----------- PID CONTROL LIMITS-----------
-double ROLL_PITCH_CONTROL_LIMIT = KP_roll_pitch * QUADCOPTER_MAX_TILT_ANGLE * 2;
+double ROLL_PITCH_CONTROL_SIGNAL_LIMIT = KP_roll_pitch * QUADCOPTER_MAX_TILT_ANGLE * 2;
