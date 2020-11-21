@@ -5,8 +5,6 @@ void setup() {
 
   initializeMotors();
   initializeOutputSignals();
-  initializeTelemetry();
-  initializeRemotePidConfiguration();
   initializeReceiver();
   initializeIMU();
   
@@ -19,7 +17,7 @@ void loop() {
   
   struct ReceiverCommands receiverCommands = GetReceiverCommands();
   struct IMU_Values imu_values = GetIMUvalues();
-
+  
   if (receiverCommands.Error || receiverCommands.Throttle < THROTTLE_START_POINT || !receiverCommands.Armed || imu_values.Error)
   {
     stopMotors();
@@ -31,7 +29,4 @@ void loop() {
     struct MotorPowers motorPowers = calculateMotorPowers(receiverCommands, imu_values);
     spinMotors(motorPowers);
   }
-
-  sendTelemetryData(receiverCommands, imu_values);
-  readRemotePidConfigurationCommand();
 }
