@@ -5,16 +5,15 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   // calculate orientation errors (error: difference between desired orientation and actual orientation)
   double rollError = receiverCommands.RollAngle - imu_values.CurrentOrientation.RollAngle;
   double pitchError = receiverCommands.PitchAngle - imu_values.CurrentOrientation.PitchAngle;
-  double imuYawAngleChange = fix360degrees(imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle);
-  double yawError = receiverCommands.YawAngleChange - imuYawAngleChange;
+  double yawError = calculateYawError(receiverCommands, imu_values);
 
   // calculate control gains based on errors
-  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTimeInSeconds);
-  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, ROLL_PITCH_INTEGRAL_LIMIT, imu_values.DeltaTimeInSeconds);
-  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, YAW_INTEGRAL_LIMIT, imu_values.DeltaTimeInSeconds);
+  roll_control_signal = getControlSignal(rollError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, roll_pid_i, roll_last_error, imu_values.DeltaTimeInSeconds);
+  pitch_control_signal = getControlSignal(pitchError, KP_roll_pitch, KI_roll_pitch, KD_roll_pitch, pitch_pid_i, pitch_last_error, imu_values.DeltaTimeInSeconds);
+  yaw_control_signal = getControlSignal(yawError, KP_yaw, KI_yaw, KD_yaw, yaw_pid_i, yaw_last_error, imu_values.DeltaTimeInSeconds);
 
-  // limit yaw control gain
-  yaw_control_signal = constrain(yaw_control_signal, -MAX_YAW_CONTROL_GAIN, MAX_YAW_CONTROL_GAIN);
+  roll_control_signal = constrain(roll_control_signal, -ROLL_PITCH_CONTROL_LIMIT, ROLL_PITCH_CONTROL_LIMIT);
+  pitch_control_signal = constrain(pitch_control_signal, -ROLL_PITCH_CONTROL_LIMIT, ROLL_PITCH_CONTROL_LIMIT);
 
   // calculate power for each motor
   struct MotorPowers motorPowers;
@@ -26,6 +25,14 @@ struct MotorPowers calculateMotorPowers(struct ReceiverCommands receiverCommands
   motorPowers = reduceMotorPowers(motorPowers);
 
   return motorPowers;
+}
+
+double calculateYawError(struct ReceiverCommands receiverCommands, struct IMU_Values imu_values) {
+  double imuYawAngleChangeInDeltaTime = fix360degrees(imu_values.CurrentOrientation.YawAngle - imu_values.PreviousOrientation.YawAngle);
+  double imuYawAngleChangePerSecond = imuYawAngleChangeInDeltaTime / imu_values.DeltaTimeInSeconds;
+  double yawError = receiverCommands.YawAngleChange - imuYawAngleChangePerSecond;
+  yawError = constrain(yawError, -QUADCOPTER_MAX_YAW_ANGLE_CHANGE_PER_SECOND, QUADCOPTER_MAX_YAW_ANGLE_CHANGE_PER_SECOND);
+  return yawError;
 }
 
 struct MotorPowers reduceMotorPowers(MotorPowers motorPowers) { // to preserve balance if throttle limit exceeds the max value (180)
@@ -49,12 +56,12 @@ void resetPidVariables() {
   yaw_last_error = 0;
 }
 
-double fix360degrees(double val){
-  if(val > 180){
+double fix360degrees(double val) {
+  if (val > 180) {
     return val - 360;
-  }else if(val < -180){
+  } else if (val < -180) {
     return val + 360;
-  }else{
+  } else {
     return val;
   }
 }

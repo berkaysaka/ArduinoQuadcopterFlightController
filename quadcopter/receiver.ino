@@ -23,7 +23,7 @@ struct ReceiverCommands GetReceiverCommands() {
     cmd.RollAngle = map_double(receiverRawValues.ChannelValues[0], TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
     cmd.PitchAngle = map_double(receiverRawValues.ChannelValues[1], TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, -QUADCOPTER_MAX_TILT_ANGLE, QUADCOPTER_MAX_TILT_ANGLE);
     cmd.Throttle = map_double(receiverRawValues.ChannelValues[2], TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, 0, THROTTLE_LIMIT_POINT);
-    cmd.YawAngleChange = map_double(ignoreDeadBand(receiverRawValues.ChannelValues[3]), TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, -QUADCOPTER_MAX_YAW_ANGLE_CHANGE, QUADCOPTER_MAX_YAW_ANGLE_CHANGE);
+    cmd.YawAngleChange = map_double(ignoreDeadBand(receiverRawValues.ChannelValues[3]), TRANSMITTER_JOYSTICK_MIN_VALUE, TRANSMITTER_JOYSTICK_MAX_VALUE, -QUADCOPTER_MAX_YAW_ANGLE_CHANGE_PER_SECOND, QUADCOPTER_MAX_YAW_ANGLE_CHANGE_PER_SECOND);
     cmd.Armed = getArmStatus(receiverRawValues);
     cmd.Error = false;
 

@@ -27,7 +27,7 @@ void readRemotePidConfigurationCommand()
       cmd.replace("</setpid>", "");
       double r = 0;
       int t = 0;
-      double pidValues[11];
+      double pidValues[8];
       for (int i = 0; i < cmd.length(); i++)
       {
         if (cmd.charAt(i) == '\t' || i == cmd.length() - 1)
@@ -47,11 +47,8 @@ void readRemotePidConfigurationCommand()
       KP_yaw = pidValues[3];
       KI_yaw = pidValues[4];
       KD_yaw = pidValues[5];
-      YAW_INTEGRAL_LIMIT = pidValues[6];
-      ROLL_PITCH_INTEGRAL_LIMIT = pidValues[7];
-      MAX_YAW_CONTROL_GAIN = pidValues[8];
-      QUADCOPTER_MAX_TILT_ANGLE = pidValues[9];
-      QUADCOPTER_MAX_YAW_ANGLE_CHANGE = pidValues[10];
+      QUADCOPTER_MAX_TILT_ANGLE = pidValues[6];
+      QUADCOPTER_MAX_YAW_ANGLE_CHANGE_PER_SECOND = pidValues[7];
 
       Serial2.print("<pidconfighasbeenset></pidconfighasbeenset>");
       Serial.println("<pidconfighasbeenset>");
@@ -64,11 +61,8 @@ void readRemotePidConfigurationCommand()
         + "\t" + String(KP_yaw)
         + "\t" + String(KI_yaw, 6)
         + "\t" + String(KD_yaw)
-        + "\t" + String(YAW_INTEGRAL_LIMIT)
-        + "\t" + String(ROLL_PITCH_INTEGRAL_LIMIT)
-        + "\t" + String(MAX_YAW_CONTROL_GAIN)
         + "\t" + String(QUADCOPTER_MAX_TILT_ANGLE)
-        + "\t" + String(QUADCOPTER_MAX_YAW_ANGLE_CHANGE)
+        + "\t" + String(QUADCOPTER_MAX_YAW_ANGLE_CHANGE_PER_SECOND)
         + String("</pidconfig>")
       );
       Serial.println("<pidconfig>");
