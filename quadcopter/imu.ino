@@ -36,7 +36,7 @@ void initializeIMU() {
   pinMode(INTERRUPT_PIN, INPUT);
 
   devStatus = mpu.dmpInitialize();
-  
+
   mpu.setXGyroOffset(GYRO_OFFSET_X);
   mpu.setYGyroOffset(GYRO_OFFSET_Y);
   mpu.setZGyroOffset(GYRO_OFFSET_Z);
@@ -56,11 +56,11 @@ struct IMU_Values GetIMUvalues() {
   struct IMU_Values o;
   o.NewDataAvailable = false;
 
-  if(!mpu.testConnection()){
+  if (!mpu.testConnection()) {
     o.Error = true;
     return o;
   }
-  
+
   if (!dmpReady)
     return o;
 

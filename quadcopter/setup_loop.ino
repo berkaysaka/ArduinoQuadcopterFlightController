@@ -7,17 +7,17 @@ void setup() {
   initializeOutputSignals();
   initializeReceiver();
   initializeIMU();
-  
+
   quadcopter_initialization_completed();
 }
 
 void loop() {
   wdt_reset();
   syncOutputSignals();
-  
+
   struct ReceiverCommands receiverCommands = GetReceiverCommands();
   struct IMU_Values imu_values = GetIMUvalues();
-  
+
   if (receiverCommands.Error || receiverCommands.Throttle < THROTTLE_START_POINT || !receiverCommands.Armed || imu_values.Error)
   {
     stopMotors();
