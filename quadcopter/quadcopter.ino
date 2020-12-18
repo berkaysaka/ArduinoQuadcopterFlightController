@@ -41,11 +41,11 @@ double QUADCOPTER_MAX_YAW_ANGLE_CHANGE_PER_SECOND = 180.00;
 
 //----------- PID CONFIGURATION-----------
 double KP_roll_pitch = 0.30;
-double KI_roll_pitch = 0.01;
+double KI_roll_pitch = 0.10;
 double KD_roll_pitch = 0.10;
 
-double KP_yaw = 0.50;
-double KI_yaw = 0.20;
+double KP_yaw = 0.40;
+double KI_yaw = 0.50;
 double KD_yaw = 0.00;
 
 //----------- PID CONTROL LIMITS-----------
